@@ -9,5 +9,8 @@
 | `spec/wireframes/` | Concept B screen sources (reference only) |
 | `art/` | All images + `art-manifest.json`; new uploads go in `art/incoming/` |
 | `data/` | Trip content: facts, itinerary, packing lists, greetings, art schedule, emergency numbers |
+| `index.html`, `app/`, `sw.js`, `manifest.webmanifest` | The app (plain static site, no build step) |
+| `fonts/`, `icons/` | Self-hosted fonts (OFL licences included) and app icons |
+| `tools/` | Layout check at the four phone sizes; Chinese font subsetting |
 
 The app itself sits at the root of `main` and is published by GitHub Pages.

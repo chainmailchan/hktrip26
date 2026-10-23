@@ -8,7 +8,8 @@ Family trip app (PWA) for Chan, Belle, Mama and Papa: Hong Kong and Shenzhen, 17
 - `spec/KICKOFF.md`: the phase 1 brief. `spec/PHONE.md`: Chan's own guide for working from his phone.
 - `art/` + `art/art-manifest.json`: every image and how it is shown. `art/incoming/`: new images Chan uploads; optimise them into `art/` and update the manifest.
 - `data/`: all trip content (trip facts, itinerary, packing lists, greetings, art schedule, emergency numbers). **Trip content goes in data files, never in code.**
-- The app itself is served by GitHub Pages from the root of `main`.
+- The app itself is served by GitHub Pages from the root of `main`: `index.html`, `app/` (code and styles), `sw.js` (offline cache, update on next open), `manifest.webmanifest`, `fonts/`, `icons/`.
+- `tools/check.mjs`: layout check at the four phone sizes (`NODE_PATH="$(npm root -g)" node tools/check.mjs`). `tools/subset-noto.py`: rebuild the Chinese font after greetings change.
 
 ## How Chan works
 - Chan mostly works **from the Claude app on his iPhone** in cloud sessions. Each session starts fresh, from `main`, with no memory of earlier sessions. The spec and this file are the memory.
@@ -22,6 +23,7 @@ Family trip app (PWA) for Chan, Belle, Mama and Papa: Hong Kong and Shenzhen, 17
 - Design rules (spec §4): no text under 17 px; primary buttons 60–64 px; words, never icon-only buttons; no panels behind text (use the halo); never stretch art; respect reduce-motion; tapping outside any dialog closes it.
 - Test layouts at all four phones: 393 × 852 (Mama, iPhone 14 Pro), 384 × 832 (Papa, Galaxy S24+), 402 × 874 (Belle, iPhone 16 Pro), 440 × 956 (Chan, iPhone 16 Pro Max).
 - Keep data use small (Mama and Papa have 3 GB in China): conditional requests on polls; never re-download art.
+- Phones keep each image forever once downloaded: a changed image needs a new file name (and a manifest entry).
 - Never commit phone numbers, tokens, booking references or passport details. (The Telegram invite link is allowed [stated].)
 - **From 15 Nov to 24 Nov: data-only changes** (itinerary, announcements, images) unless Chan explicitly asks for a code change [proposal].
 
