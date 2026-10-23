@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.18, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.19, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -142,6 +142,8 @@ Top to bottom:
 3. One line: "Need a toilet, a rest, or want us to wait? Just say so in the group."
 4. **Call buttons**: Mama and Papa see Call Chan · Call Belle; admins see the other three. Numbers live on the phone only (§5.5).
 5. **Emergency numbers**: a quiet underlined link at the bottom → dialog listing the current city's numbers (HK **999** [source: Discover Hong Kong]; SZ **110** police, **120** ambulance, **119** fire [source: National Health Commission of the PRC]). Then **three confirmations** [stated]: "Call 999?" → "Is this an emergency?" → "Last step: tap the red button to call 999." The large easy target is always **"No, go back"**; the confirm button moves below → above → beside so repeated tapping can't get through. The last button is a real `tel:` link [assumption: iPhone and Android each add their own confirmation; verify].
+  - "Yes" sits at the left and the red button at the right, so a quick second tap never lands on the next confirm (the wireframe's full-width "Yes" overlapped the red button) [proposal].
+  - Outside the trip dates (e.g. pre-trip, in Singapore) the dialog lists both cities' numbers [proposal].
 - **Every dialog closes when you tap outside it** [stated].
 - Telegram in Shenzhen depends on roaming data (§5.2); calling is the fallback.
 
@@ -154,6 +156,7 @@ Top to bottom:
 - From **Sat 31 Oct** until the morning of 17 Nov; switches to trip mode automatically [proposal].
 - Greeting, "Saturday 31 October · Singapore", **"17 days to Hong Kong"**, the viewer's packing progress, announcement, **"Packing list"** button at the bottom, and a second line with the other list's progress (admins) [wireframe].
 - Art: placeholder suitcase line art until Chan supplies a drawing.
+- Before a phone is set up, the first progress line is Mama & Papa's list and the second Chan & Belle's [proposal]. "Singapore" and the city names come from `data/trip.json` (`home_city`, `cities`).
 
 ### F10. Packing lists [stated] (`Packing`)
 - **Two lists**: Chan & Belle (full) and Mama & Papa (essentials only) [stated]. Seed items in `data/packing.json`.
@@ -161,6 +164,7 @@ Top to bottom:
 - Groups open one at a time; each item is a large checkbox row with an optional note.
 - **All four phones can tick** [stated, 23 Oct]; ticks sync through the `live` branch (§5.3). Only Chan and Belle change the items [stated].
 - **Pack by Sat 14 Nov** [stated].
+- Phase 1 is read-only: the boxes are drawn but can't be ticked, with the line "You can tick things off after Chan sets up your phone." [proposal]. On phones not yet set up the tabs read "Mama & Papa | Chan & Belle", Mama & Papa first [stated: kickoff].
 - Sourced notes inside the items: Singapore Airlines power banks from 15 Apr 2026: at most 2 per person, cabin bag only, ≤100 Wh without approval, no use or charging onboard [source: Singapore Airlines advisory]. Mainland China uses plug types A, C and I; Hong Kong uses Type G like Singapore [source: Trip.com China plug guide].
 
 ### F11. Greetings [stated]
@@ -210,10 +214,13 @@ Full table in `art/art-manifest.json`. Summary:
   - *paper*: ink text #22211F, secondary #5F5A4E, ink button with paper-coloured text, Help #A8382C.
   - *navy*: cream text #F4ECDC, secondary #C9CFE0, cream button with navy text, Help #F4A28C.
 - Art format for new images [proposal]: 9 : 19.5 portrait, 1320 × 2868 px, JPEG ~80%, <700 KB; keep the top ~40% and bottom ~15% calm and the outer ~8% each side free of anything important.
+- **Phones keep each image forever once downloaded, so a changed image needs a new file name** [proposal].
+- **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview".
 
 ### 4.3 Type [stated + proposal]
 - Body: **Figtree**. Chinese: **Noto Sans HK**. Date lines and screen titles: **Barlow Condensed** (current default from the test bench; final typeface is Chan's call, Q33). Self-host all fonts (§5.2).
 - Sizes: greeting 54 px (44 px for long ones); weather 20 px; announcement 19 px; labels ≥17 px; buttons 18–19 px bold. Never below 17 px.
+- Self-hosted in `fonts/` (≈77 KB in all). Noto Sans HK holds only the greeting characters; after greetings change, re-run `tools/subset-noto.py` (new characters still show, in the phone's own Chinese font, until then).
 
 ### 4.4 Touch and accessibility
 - Primary buttons 60–64 px tall; everything else ≥48 px (most 52–56 px). Plain taps only: no swipes, long-presses or pinches.
@@ -239,6 +246,7 @@ Full table in `art/art-manifest.json`. Summary:
 - **iPhone:** Safari → Share → Add to Home Screen.
 - **GitHub Pages:** on GitHub Free the repo must be public, and the Pages site is **always public** [source: GitHub Docs]. Treat everything as public (§5.6).
 - **Updates:** the installed app picks up new versions the next time it is opened online, so trip features can ship after the setup visit [assumption: implement "update on next open" in the service worker and verify on both platforms].
+  - Built in phase 1 (`sw.js`): everything is served from the phone. Each time the app opens, the app and data files are re-checked with conditional requests (unchanged files return 304, no download); if anything changed, the new set is stored and shows on the next open. Art, fonts and icons download once at install (≈4.4 MB in all) and never again [proposal].
 
 ### 5.2 Mainland China network
 - Google services and Telegram are blocked on mainland local networks (hotel Wi-Fi, Chinese SIMs) but generally work over **international roaming** [source: intotravelchina.com, 2026].
@@ -282,7 +290,7 @@ Full table in `art/art-manifest.json`. Summary:
 ## 6. Data model
 Seed files are in `data/`:
 - `people.json`: four people and roles.
-- `trip.json`: dates, pre-trip start, pack-by date, Telegram link placeholder, hotels, flights.
+- `trip.json`: dates, pre-trip start, pack-by date, home city and city names, Telegram link placeholder, hotels, flights.
 - `itinerary.json`: eight days with placeholder stops (only travel items are real); places come with the itinerary.
 - `packing.json`: the two lists (groups → items with optional notes).
 - `greetings.json`: time windows and phrase pools.
@@ -340,6 +348,10 @@ Seed files are in `data/`:
 | Q35 | Source of the street maps (attribution) | Open |
 | Q36 | Telegram group invite link | Chan to create; **OK in the public repo** [stated]; removal reminder set for 28 Nov |
 | Q37 | Pre-trip art (suitcase placeholder) | Chan may supply a drawing |
+| Q38 | App name and icon | Open [proposal]: "HK trip" under the icon, "HK & Shenzhen trip" in full; icon cropped from the moonlit-harbour drawing |
+| Q39 | iPhone status bar: art runs behind it (§4.5), so iOS draws the clock in white, which may be faint on the cream screens | Open [assumption: check on Mama's phone once installed]; fallback is a solid cream status bar |
+| Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | Open, before phase 2 [proposal: a "Set up this phone" button inside the app that scans the code with the camera] |
+| Q41 | Phone tokens can write to the whole repo, including the app code on `main` | Open, before phase 2 [proposal: keep live data in a second, tiny repo so the four tokens can only touch that] |
 
 ---
 
@@ -373,6 +385,7 @@ Seed files are in `data/`:
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.19 (24 Oct 2026):** Phase 1 built: PWA shell (manifest, icons, service worker with update on next open), self-hosted fonts, pre-trip home (F9), read-only packing lists (F10), greetings (F11), Help with the emergency flow (F7), art engine with a hidden preview (§4.2), and `tools/check.mjs` (layout check at the four phone sizes). `home_city` and `cities` added to `data/trip.json`. Build proposals noted in F7, F9, F10, §4.2, §4.3, §5.1. New open items Q38–Q41.
 - **v0.18 (24 Oct 2026):** Phone workflow: repo layout (`CLAUDE.md`, `spec/`, `art/`, `data/`, app at the root of `main`), cloud-session and PR flow, repo copy of the spec is the master, data-only changes from 15 Nov.
 - **v0.17 (24 Oct 2026):** Phones and SIMs answered (Q1, Q3); greeting phrases added (F11) with pre-trip and flight-day pools; afternoon art slot with one image per day; screen sizes for all four phones; data-saving note; Telegram link allowed in public repo with a 28 Nov removal reminder.
 - **v0.16 (23 Oct 2026):** Concept B merged as the build direction. Scope cut to three jobs plus the pre-trip phase. Removed: family strip, statuses, Family screen, lost alert, Find My, cab request, Now/Next map panel, Days list, tabs, rendered maps. Added: art system and manifest, greetings, pre-trip home, packing lists with ticks on all phones, Help with Telegram, Chan's street maps, screen-size rules, build phases, seed data files.

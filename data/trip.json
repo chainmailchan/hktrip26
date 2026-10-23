@@ -4,6 +4,11 @@
   "end": "2026-11-24",
   "pretrip_start": "2026-10-31",
   "pack_by": "2026-11-14",
+  "home_city": "Singapore",
+  "cities": {
+    "HK": "Hong Kong",
+    "SZ": "Shenzhen"
+  },
   "telegram_group_url": "https://t.me/+TRIP_GROUP_INVITE_PLACEHOLDER",
   "hotels": [
     {
