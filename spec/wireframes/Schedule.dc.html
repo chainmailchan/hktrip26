@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Schedule</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&amp;family=EB+Garamond:wght@500;600&amp;family=Figtree:wght@400;600;700;800&amp;family=Noto+Sans+HK:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#22211F}a:hover{color:#000000}
+@keyframes fadein{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.fadein{animation:fadein .35s ease-out both}
+@media (prefers-reduced-motion: reduce){.fadein{animation:none}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; overflow: hidden; background: #F3F0EA; color: #22211F; font-family: 'Figtree', 'Noto Sans HK', sans-serif; display: flex; flex-direction: column; padding: 20px 24px 16px">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px">
+    <a href="Main.dc.html" style="height: 52px; padding: 0 18px; border: 1.5px solid #22211F; border-radius: 26px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; text-decoration: none"><span aria-hidden="true">←</span>Home</a>
+    <button type="button" style="min-height: 56px; padding: 0 4px 0 16px; border: none; background: transparent; color: #A8382C; font-family: inherit; font-size: 18px; font-weight: 700; cursor: pointer">Help</button>
+  </div>
+
+  <sc-for list="{{days}}" as="d" hint-placeholder-count="8">
+    <section style="border-top: 1px solid #DAD5CB">
+      <button type="button" onClick="{{d.toggle}}" aria-expanded="{{d.open}}" style="width: 100%; min-height: 60px; display: flex; justify-content: space-between; align-items: center; background: transparent; border: none; padding: 0; font-family: inherit; color: #22211F; cursor: pointer; text-align: left">
+        <span style="font-family: {{display}}; font-size: 30px; font-weight: 800; letter-spacing: 0.01em; text-transform: uppercase; line-height: 1">{{d.name}}</span>
+        <span style="font-size: 17px; color: #5F5C56">{{d.meta}}</span>
+      </button>
+      <sc-if value="{{d.open}}" hint-placeholder-val="{{ false }}">
+        <div class="fadein" style="padding: 0 0 12px; display: flex; flex-direction: column">
+          <div style="font-size: 17px; color: #5F5C56; margin-bottom: 4px">{{d.sub}}</div>
+          <sc-for list="{{d.items}}" as="it" hint-placeholder-count="4">
+            <a href="Place.dc.html" style="min-height: 50px; display: flex; align-items: center; gap: 14px; text-decoration: none; color: #22211F; border-top: 1px dashed #DAD5CB">
+              <span style="width: 54px; flex-shrink: 0; font-size: 17px; color: #5F5C56">{{it.time}}</span>
+              <span style="font-size: 20px; font-weight: 600">{{it.name}}</span>
+            </a>
+          </sc-for>
+          <div style="min-height: 44px; display: flex; align-items: center; gap: 14px; border-top: 1px dashed #DAD5CB; font-size: 17px; color: #5F5C56">
+            <span style="width: 54px; flex-shrink: 0">Tonight</span>
+            <span style="font-weight: 700; color: #22211F">{{d.hotel}}</span>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"displayFont":{"editor":"enum","options":["Figtree","Barlow Condensed","EB Garamond"],"default":"Figtree","section":"Type"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { open: 1 };
+  }
+  renderVals() {
+    const f = this.props.displayFont ?? 'Figtree';
+    const tbd = [{ time: '', name: 'Plans coming soon' }];
+    const sample = [
+      { time: '10:00', name: 'Victoria Peak' },
+      { time: '12:45', name: 'Dim sum lunch' },
+      { time: '15:00', name: '[Afternoon]' },
+      { time: '19:00', name: '[Dinner]' }
+    ];
+    const list = [
+      { name: 'Tuesday', meta: '17 · Hong Kong', sub: '17 November · fly in on SQ882', items: [{ time: '', name: 'Land, then to North Point' }] },
+      { name: 'Wednesday', meta: '18 · Hong Kong', sub: '18 November · tentative (example plan)', items: sample },
+      { name: 'Thursday', meta: '19 · Hong Kong', sub: '19 November · tentative', items: tbd },
+      { name: 'Friday', meta: '20 · to Shenzhen', sub: '20 November · tentative', items: [{ time: '', name: 'Train: West Kowloon to Futian' }] },
+      { name: 'Saturday', meta: '21 · Shenzhen', sub: '21 November · tentative', items: tbd },
+      { name: 'Sunday', meta: '22 · Shenzhen', sub: '22 November · tentative', items: tbd },
+      { name: 'Monday', meta: '23 · Shenzhen', sub: '23 November · tentative', items: tbd },
+      { name: 'Tuesday', meta: '24 · fly home', sub: '24 November · SQ883 at 15:10', items: [{ time: '', name: 'Ferry: Shekou to the airport' }] }
+    ];
+    const hotels = ['The Stellar', 'The Stellar', 'The Stellar', 'The Mercury Garden', 'The Mercury Garden', 'The Mercury Garden', 'The Mercury Garden', 'Home to Singapore'];
+    const days = list.map((d, i) => ({
+      ...d,
+      hotel: hotels[i],
+      open: this.state.open === i,
+      toggle: () => this.setState({ open: this.state.open === i ? -1 : i })
+    }));
+    return { display: "'" + f + "', sans-serif", days };
+  }
+}
+</script>
+</body>
+</html>

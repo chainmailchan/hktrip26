@@ -1,0 +1,110 @@
+{
+  "_note": "PLACEHOLDER days. Only the travel items are real; everything marked placeholder will be replaced when Chan sends the itinerary.",
+  "days": [
+    {
+      "date": "2026-11-17",
+      "city": "HK",
+      "label": "Hong Kong",
+      "stops": [
+        {
+          "time": "",
+          "name": "Fly in on SQ882"
+        },
+        {
+          "time": "",
+          "name": "Land, then to North Point",
+          "placeholder": true
+        }
+      ]
+    },
+    {
+      "date": "2026-11-18",
+      "city": "HK",
+      "label": "Hong Kong",
+      "stops": [
+        {
+          "time": "",
+          "name": "Plans coming soon",
+          "placeholder": true
+        }
+      ]
+    },
+    {
+      "date": "2026-11-19",
+      "city": "HK",
+      "label": "Hong Kong",
+      "stops": [
+        {
+          "time": "",
+          "name": "Plans coming soon",
+          "placeholder": true
+        }
+      ]
+    },
+    {
+      "date": "2026-11-20",
+      "city": "SZ",
+      "label": "to Shenzhen",
+      "stops": [
+        {
+          "time": "",
+          "name": "Train: West Kowloon to Futian"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-21",
+      "city": "SZ",
+      "label": "Shenzhen",
+      "stops": [
+        {
+          "time": "",
+          "name": "Plans coming soon",
+          "placeholder": true
+        }
+      ]
+    },
+    {
+      "date": "2026-11-22",
+      "city": "SZ",
+      "label": "Shenzhen",
+      "stops": [
+        {
+          "time": "",
+          "name": "Plans coming soon",
+          "placeholder": true
+        }
+      ]
+    },
+    {
+      "date": "2026-11-23",
+      "city": "SZ",
+      "label": "Shenzhen",
+      "stops": [
+        {
+          "time": "",
+          "name": "Plans coming soon",
+          "placeholder": true
+        }
+      ]
+    },
+    {
+      "date": "2026-11-24",
+      "city": "HK",
+      "label": "fly home",
+      "stops": [
+        {
+          "time": "",
+          "name": "Ferry: Shekou to the airport"
+        },
+        {
+          "time": "15:10",
+          "name": "SQ883 home"
+        }
+      ]
+    }
+  ],
+  "places": {
+    "_note": "Place records (about lines, travel steps, map focus, card art) come with the itinerary."
+  }
+}

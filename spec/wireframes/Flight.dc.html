@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home, flight day</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&amp;family=EB+Garamond:wght@500;600&amp;family=Figtree:wght@400;600;700;800&amp;family=Noto+Sans+HK:wght@500;700&amp;display=swap">
+<style>
+body{margin:0; background: linear-gradient(180deg, #c1672a 0%, #28211a 100%); }
+a{color:#F4ECDC}a:hover{color:#FFFFFF}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes drift{from{transform:scale(1.04)}to{transform:scale(1)}}
+.fadein{animation:fadein 1.2s ease-out both}
+.drift{animation:drift 12s ease-out both}
+@media (prefers-reduced-motion: reduce){.fadein,.drift{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #18264F; color: #F4ECDC; font-family: 'Figtree', 'Noto Sans HK', sans-serif">
+
+  <div class="fadein" style="position: absolute; top: 0; left: 0; width: 390px; height: 844px; overflow: hidden">
+    <img class="drift" src="../../art/home-flight.jpg" alt="" style="position: absolute; top: 0; left: 0; width: 390px; height: 844px; object-fit: cover; object-position: center">
+    <div style="position: absolute; top: 0; left: 0; width: 390px; height: 844px; background: {{wash}}"></div>
+  </div>
+
+  <div style="position: relative; height: 844px; box-sizing: border-box; padding: 36px 24px 18px; display: flex; flex-direction: column; text-shadow: 0 0 2px #18264F, 0 0 6px #18264F, 0 0 12px #18264F">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <h1 lang="zh-Hant" style="margin: 0; font-family: 'Noto Sans HK', sans-serif; font-size: 54px; font-weight: 700; line-height: 1.05; letter-spacing: 0.04em; color: #F4ECDC">早晨</h1>
+        <div style="font-family: {{display}}; font-size: 18px; color: #C9CFE0">Tuesday 17 November · SQ882 to Hong Kong</div>
+      </div>
+      <a href="Help.dc.html" style="min-height: 56px; padding: 0 2px 0 10px; color: #F4A28C; font-size: 18px; font-weight: 700; text-decoration: none; display: flex; align-items: center">Help</a>
+    </div>
+
+    <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 2px">
+      <div style="font-size: 20px">Hong Kong today: [temperature], [sky]</div>
+      <div style="font-size: 20px; font-weight: 700">Keep a jacket handy on the plane.</div>
+    </div>
+
+    <section aria-label="Announcement from Chan" style="margin-top: 18px; padding-top: 12px; border-top: 1px solid rgba(244, 236, 220, 0.25); display: flex; flex-direction: column; gap: 4px">
+      <div style="font-size: 17px; font-weight: 700; color: #F4ECDC">Announcement · from Chan</div>
+      <div style="font-size: 19px; font-weight: 600; line-height: 1.35">After landing, stay together at arrivals. We go straight to the hotel.</div>
+    </section>
+
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 6px">
+      <a href="Schedule.dc.html" style="text-shadow: none; height: 60px; border-radius: 30px; background: #F4ECDC; color: #18264F; font-size: 19px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center">Today's plan</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;soften&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:70,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;default&quot;:20,&quot;section&quot;:&quot;Art&quot;},&quot;displayFont&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Figtree&quot;,&quot;Barlow Condensed&quot;,&quot;EB Garamond&quot;],&quot;default&quot;:&quot;Barlow Condensed&quot;,&quot;section&quot;:&quot;Type&quot;},&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  renderVals() {
+    const f = this.props.displayFont ?? 'Barlow Condensed';
+    const s = (this.props.soften ?? 20) / 100;
+    return { display: "'" + f + "', sans-serif", wash: 'rgba(24, 38, 84, ' + s + ')' };
+  }
+}
+</script>
+</body>
+</html>

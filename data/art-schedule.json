@@ -1,0 +1,66 @@
+{
+  "_note": "Which home image shows when. Pairings are stated by Chan; times are proposals. Afternoon art is per day [stated 24 Oct]: Chan will supply one image per day; until a day has one, the morning image stays up.",
+  "default": [
+    {
+      "id": "morning",
+      "from": "05:00",
+      "to": "12:00",
+      "image": "home-morning-hk.jpg"
+    },
+    {
+      "id": "afternoon",
+      "from": "12:00",
+      "to": "17:30",
+      "image": "per_day",
+      "fallback": "home-morning-hk.jpg"
+    },
+    {
+      "id": "evening",
+      "from": "17:30",
+      "to": "22:00",
+      "image": "home-evening-moonlit-harbour.jpg"
+    },
+    {
+      "id": "late",
+      "from": "22:00",
+      "to": "05:00",
+      "image": "home-night-victoria-harbour.jpg"
+    }
+  ],
+  "afternoon_by_day": {
+    "2026-11-17": null,
+    "2026-11-18": null,
+    "2026-11-19": null,
+    "2026-11-20": null,
+    "2026-11-21": null,
+    "2026-11-22": null,
+    "2026-11-23": null,
+    "2026-11-24": null,
+    "_candidates": [
+      "day-repulse-bay.jpg",
+      "day-victoria-peak.jpg",
+      "day-shenzhen-city.jpg"
+    ],
+    "_note": "Chan to assign once the itinerary is set; existing day drawings are likely afternoon images [assumption]"
+  },
+  "pretrip": {
+    "image": null,
+    "_note": "placeholder suitcase line art until Chan supplies a drawing"
+  },
+  "overrides": [
+    {
+      "date": "2026-11-17",
+      "from": "00:00",
+      "to": "14:00",
+      "image": "home-flight.jpg",
+      "_note": "proposal: until after landing"
+    },
+    {
+      "date": "2026-11-24",
+      "from": "12:00",
+      "to": "23:59",
+      "image": "home-flight.jpg",
+      "_note": "proposal: from the ferry onwards"
+    }
+  ]
+}

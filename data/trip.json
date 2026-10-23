@@ -1,0 +1,52 @@
+{
+  "_note": "Facts from APP_SPEC §1a. Hotel dates are an assumption until checked against the bookings (Q28).",
+  "start": "2026-11-17",
+  "end": "2026-11-24",
+  "pretrip_start": "2026-10-31",
+  "pack_by": "2026-11-14",
+  "telegram_group_url": "https://t.me/+TRIP_GROUP_INVITE_PLACEHOLDER",
+  "hotels": [
+    {
+      "id": "hk",
+      "city": "HK",
+      "name": "The Stellar",
+      "address": "68 Chun Yeung Street, North Point, Hong Kong Island",
+      "check_in": "15:00",
+      "check_out": "11:00",
+      "nights": [
+        "2026-11-17",
+        "2026-11-18",
+        "2026-11-19"
+      ]
+    },
+    {
+      "id": "sz",
+      "city": "SZ",
+      "name": "The Mercury Garden",
+      "full_name": "The Mercury Garden Shenzhen Nanshan, A Tribute Portfolio Hotel",
+      "address": "13 Keji Road, Nanshan District, Shenzhen 518057",
+      "check_in": "15:00",
+      "check_out": "12:00",
+      "nights": [
+        "2026-11-20",
+        "2026-11-21",
+        "2026-11-22",
+        "2026-11-23"
+      ]
+    }
+  ],
+  "flights": [
+    {
+      "code": "SQ882",
+      "date": "2026-11-17",
+      "departs": "08:25 SGT",
+      "note": "Trip.com lists 08:40; re-check on 10 Nov (Q30)"
+    },
+    {
+      "code": "SQ883",
+      "date": "2026-11-24",
+      "departs": "15:10 HKT",
+      "from": "HKG"
+    }
+  ]
+}

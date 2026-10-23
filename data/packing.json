@@ -1,0 +1,116 @@
+{
+  "_note": "Draft lists. Only Chan and Belle edit the items; all four phones can tick. Power-bank and plug notes are sourced (APP_SPEC F10).",
+  "lists": {
+    "cb": {
+      "title": "Chan & Belle",
+      "groups": [
+        {
+          "id": "docs",
+          "name": "Documents and phones",
+          "items": [
+            {
+              "id": "passports",
+              "name": "Passports"
+            },
+            {
+              "id": "phones",
+              "name": "Phones and chargers"
+            },
+            {
+              "id": "uber",
+              "name": "Uber and DiDi set up"
+            },
+            {
+              "id": "roaming",
+              "name": "China roaming on all four phones",
+              "note": "Check Mama and Papa’s SIM plan"
+            }
+          ]
+        },
+        {
+          "id": "power",
+          "name": "Power",
+          "items": [
+            {
+              "id": "pbank",
+              "name": "Power banks, at most 2 each",
+              "note": "Cabin bag only. Not allowed to use them on the plane."
+            },
+            {
+              "id": "adapter",
+              "name": "Plug adapter for Shenzhen",
+              "note": "Hong Kong plugs are the same as Singapore’s"
+            }
+          ]
+        },
+        {
+          "id": "clothes",
+          "name": "Clothes and comfort",
+          "items": [
+            {
+              "id": "shoes",
+              "name": "Walking shoes"
+            },
+            {
+              "id": "jacket",
+              "name": "Light jacket"
+            },
+            {
+              "id": "umbrella",
+              "name": "Small umbrella"
+            }
+          ]
+        },
+        {
+          "id": "family",
+          "name": "Health and family",
+          "items": [
+            {
+              "id": "meds",
+              "name": "Daily medication",
+              "note": "In the cabin bag"
+            },
+            {
+              "id": "airtag",
+              "name": "AirTag shared with Mama and Belle",
+              "note": "In Find My"
+            }
+          ]
+        }
+      ]
+    },
+    "mp": {
+      "title": "Mama & Papa",
+      "groups": [
+        {
+          "id": "must",
+          "name": "Must bring",
+          "items": [
+            {
+              "id": "passports",
+              "name": "Passports"
+            },
+            {
+              "id": "phones",
+              "name": "Phones and chargers"
+            },
+            {
+              "id": "meds",
+              "name": "Daily medication",
+              "note": "In your cabin bag"
+            },
+            {
+              "id": "airtag",
+              "name": "AirTag",
+              "note": "In Mama’s handbag"
+            },
+            {
+              "id": "shoes",
+              "name": "Comfortable walking shoes"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

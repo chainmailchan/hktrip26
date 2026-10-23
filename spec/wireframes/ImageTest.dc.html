@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Image test bench</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&amp;family=EB+Garamond:wght@500;600&amp;family=Figtree:wght@400;600;700;800&amp;family=Noto+Sans+HK:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#22211F}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="{{frameStyle}}">
+
+  <img src="{{img}}" alt="" style="{{imgStyle}}">
+  <div style="{{washStyle}}"></div>
+
+  <div style="{{contentStyle}}">
+
+    <div style="{{topStyle}}">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h1 lang="zh-Hant" style="{{greetStyle}}">{{greeting}}</h1>
+          <div style="font-family: {{display}}; font-size: 18px; color: {{sub}}">{{place}}</div>
+        </div>
+        <a href="Help.dc.html" style="min-height: 56px; padding: 0 2px 0 10px; color: {{helpColour}}; font-size: 18px; font-weight: 700; text-decoration: none; display: flex; align-items: center">Help</a>
+      </div>
+      <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 2px">
+        <div style="font-size: 20px">Today 23°, sunny</div>
+        <div style="font-size: 20px; font-weight: 700">Light layers today.</div>
+      </div>
+      <section aria-label="Announcement from Chan" style="margin-top: 16px; padding-top: 12px; border-top: 1px solid {{rule}}; display: flex; flex-direction: column; gap: 4px">
+        <div style="{{labelStyle}}">Announcement · from Chan</div>
+        <div style="font-size: 19px; font-weight: 600; line-height: 1.35">Meet in the lobby at 9:30.</div>
+      </section>
+    </div>
+
+    <div style="{{bottomStyle}}">
+      <a href="Schedule.dc.html" style="{{buttonStyle}}">Today's plan</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;image&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Hong Kong morning&quot;,&quot;Victoria Peak&quot;,&quot;Victoria Harbour&quot;,&quot;Repulse Bay&quot;,&quot;Shenzhen city&quot;,&quot;Flight (blue)&quot;,&quot;Evening harbour&quot;],&quot;default&quot;:&quot;Hong Kong morning&quot;,&quot;section&quot;:&quot;Art&quot;},&quot;layout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Art at bottom, text in the sky&quot;,&quot;Art fills screen&quot;],&quot;default&quot;:&quot;Art at bottom, text in the sky&quot;,&quot;section&quot;:&quot;Art&quot;},&quot;adjustArt&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:-200,&quot;max&quot;:300,&quot;step&quot;:10,&quot;unit&quot;:&quot;px&quot;,&quot;default&quot;:0,&quot;section&quot;:&quot;Art&quot;},&quot;artSize&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:100,&quot;max&quot;:180,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;default&quot;:100,&quot;section&quot;:&quot;Art&quot;},&quot;cropAt&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Top&quot;,&quot;Middle&quot;,&quot;Bottom&quot;],&quot;default&quot;:&quot;Middle&quot;,&quot;section&quot;:&quot;Art&quot;},&quot;soften&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:70,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;default&quot;:30,&quot;section&quot;:&quot;Art&quot;},&quot;panel&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:0,&quot;max&quot;:95,&quot;step&quot;:5,&quot;unit&quot;:&quot;%&quot;,&quot;default&quot;:0,&quot;section&quot;:&quot;Layout&quot;},&quot;halo&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;On&quot;,&quot;Off&quot;],&quot;default&quot;:&quot;On&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Ink black&quot;,&quot;Harbour navy&quot;,&quot;Deep red&quot;,&quot;Forest green&quot;],&quot;default&quot;:&quot;Ink black&quot;,&quot;section&quot;:&quot;Colour&quot;},&quot;greeting&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;早晨&quot;,&quot;餓冇？&quot;,&quot;做咩唔瞓覺？&quot;],&quot;default&quot;:&quot;早晨&quot;,&quot;section&quot;:&quot;Text&quot;},&quot;displayFont&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Figtree&quot;,&quot;Barlow Condensed&quot;,&quot;EB Garamond&quot;],&quot;default&quot;:&quot;Barlow Condensed&quot;,&quot;section&quot;:&quot;Type&quot;},&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  renderVals() {
+    const images = {
+      'Hong Kong morning': { src: '../../art/home-morning-hk.jpg', paper: '#F7EAD1', rgb: '247, 234, 209', h: 585, place: 'Wednesday 18 November · Hong Kong', up: 0 },
+      'Victoria Peak': { src: '../../art/day-victoria-peak.jpg', paper: '#F4E9D2', rgb: '244, 233, 210', h: 731, up: -10 },
+      'Victoria Harbour': { src: '../../art/home-night-victoria-harbour.jpg', paper: '#F1E6D0', rgb: '241, 230, 208', h: 627, up: 120 },
+      'Repulse Bay': { src: '../../art/day-repulse-bay.jpg', paper: '#F3E9D3', rgb: '243, 233, 211', h: 585, up: 140 },
+      'Shenzhen city': { src: '../../art/day-shenzhen-city.jpg', paper: '#F4E8D0', rgb: '244, 232, 208', h: 512, place: 'Saturday 21 November · Shenzhen', up: 110 },
+      'Evening harbour': { src: '../../art/home-evening-moonlit-harbour.jpg', paper: '#022761', rgb: '2, 39, 97', h: 844, fillOnly: true, dark: true, place: 'Wednesday 18 November · 6:40 pm' },
+      'Flight (blue)': { src: '../../art/home-flight.jpg', paper: '#18264F', rgb: '24, 38, 84', h: 844, fillOnly: true, dark: true, place: 'Tuesday 17 November · SQ882 to Hong Kong' }
+    };
+    const accents = { 'Ink black': '#22211F', 'Harbour navy': '#1F2D63', 'Deep red': '#8E2B22', 'Forest green': '#2E4A36' };
+    const im = images[this.props.image] || images['Repulse Bay'];
+    const ink = im.dark ? '#F4ECDC' : '#22211F';
+    const ac = im.dark ? '#F4ECDC' : (accents[this.props.accent] || '#22211F');
+    const sub = im.dark ? '#C9CFE0' : '#5F5A4E';
+    const rule = im.dark ? 'rgba(244, 236, 220, 0.25)' : 'rgba(34, 33, 31, 0.15)';
+    const fill = im.fillOnly || this.props.layout === 'Art fills screen';
+    const po = (this.props.panel ?? 0) / 100;
+    const halo = (this.props.halo ?? 'On') === 'On';
+    const up = (im.up ?? 0) + (this.props.adjustArt ?? 0);
+    const size = (this.props.artSize ?? 100) / 100;
+    const crop = { Top: 'top', Middle: 'center', Bottom: 'bottom' }[this.props.cropAt] || 'center';
+    const s = (this.props.soften ?? 0) / 100;
+    const f = this.props.displayFont ?? 'Figtree';
+    const g = this.props.greeting ?? '早晨';
+    const panel = po > 0 ? 'background: rgba(' + im.rgb + ', ' + po + '); backdrop-filter: blur(' + Math.round(po * 4) + 'px); border-radius: 22px; ' : '';
+    const haloCss = halo ? 'text-shadow: 0 0 2px rgb(' + im.rgb + '), 0 0 6px rgb(' + im.rgb + '), 0 0 12px rgb(' + im.rgb + '); ' : '';
+
+    const imgStyle = fill
+      ? 'position: absolute; top: 0; left: 0; width: 390px; height: 844px; object-fit: cover; object-position: center ' + crop
+      : 'position: absolute; left: ' + Math.round((390 - 390 * size) / 2) + 'px; bottom: ' + up + 'px; width: ' + Math.round(390 * size) + 'px; height: ' + Math.round(im.h * size) + 'px; object-fit: cover' + (im.dark ? '; -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 110px); mask-image: linear-gradient(to bottom, transparent 0, #000 110px)' : '');
+
+    return {
+      img: im.src,
+      helpColour: im.dark ? '#F4A28C' : '#A8382C',
+      sub,
+      rule,
+      place: im.place || 'Thursday 19 November · Hong Kong',
+      greeting: g,
+      display: "'" + f + "', sans-serif",
+      frameStyle: 'position: relative; width: 390px; height: 844px; overflow: hidden; background: ' + im.paper + '; color: ' + ink + '; font-family: \'Figtree\', \'Noto Sans HK\', sans-serif',
+      imgStyle,
+      washStyle: 'position: absolute; top: 0; left: 0; width: 390px; height: 844px; background: rgba(' + im.rgb + ', ' + s + ')',
+      contentStyle: haloCss + 'position: relative; height: 844px; box-sizing: border-box; padding: 36px 24px 18px; display: flex; flex-direction: column',
+      greetStyle: "margin: 0; font-family: 'Noto Sans HK', sans-serif; font-weight: 700; line-height: 1.1; letter-spacing: 0.03em; color: " + ac + '; font-size: ' + (g.length > 3 ? 44 : 54) + 'px',
+      topStyle: panel ? panel + 'margin: -12px -8px 0; padding: 14px 16px' : '',
+      bottomStyle: (panel ? panel + 'margin-left: -8px; margin-right: -8px; padding: 14px 14px 4px; ' : '')
+        + 'margin-top: auto; display: flex; flex-direction: column; gap: 6px',
+      labelStyle: 'font-size: 17px; font-weight: 700; color: ' + ac,
+      buttonStyle: 'text-shadow: none; height: 60px; border-radius: 30px; background: ' + ac + '; color: ' + (im.dark ? im.paper : im.paper) + '; font-size: 19px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center',
+      chipStyle: 'min-height: 48px; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; color: ' + (im.dark ? '#E3E6EF' : '#4A4538') + '; text-decoration: none'
+    };
+  }
+}
+</script>
+</body>
+</html>

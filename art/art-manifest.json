@@ -1,0 +1,145 @@
+{
+  "version": "2026-10-23",
+  "screen_reference": "390x844 (wireframes)",
+  "fits": {
+    "bottom": "full screen width, height in proportion, pinned to the bottom, raised by raise_pct_of_screen_height; background colour fills the sky above",
+    "cover": "scaled to cover the whole screen without distortion; trim equally from both sides",
+    "map": "Place screen background behind the card; zoom ~160%, focus on the harbour (x 47%, y 60% of the image) under the pin"
+  },
+  "themes": {
+    "paper": {
+      "text": "#22211F",
+      "secondary": "#5F5A4E",
+      "button_bg": "#22211F",
+      "button_text": "background colour",
+      "help": "#A8382C",
+      "halo": "background colour"
+    },
+    "navy": {
+      "text": "#F4ECDC",
+      "secondary": "#C9CFE0",
+      "button_bg": "#F4ECDC",
+      "button_text": "background colour",
+      "help": "#F4A28C",
+      "halo": "background colour"
+    }
+  },
+  "images": [
+    {
+      "file": "art/home-morning-hk.jpg",
+      "use": "Home, morning (Hong Kong days)",
+      "width": 1024,
+      "height": 1535,
+      "fit": "bottom",
+      "background": "#F7EAD1",
+      "theme": "paper",
+      "soften_pct": 50,
+      "raise_pct_of_screen_height": 0.0,
+      "raise_px_at_390x844": 0,
+      "bytes": 536751
+    },
+    {
+      "file": "art/home-evening-moonlit-harbour.jpg",
+      "use": "Home, early evening",
+      "width": 1089,
+      "height": 2336,
+      "fit": "cover",
+      "background": "#022761",
+      "theme": "navy",
+      "soften_pct": 20,
+      "note": "Moon sits ~40% down, below the announcement",
+      "bytes": 673881
+    },
+    {
+      "file": "art/home-night-victoria-harbour.jpg",
+      "use": "Home, late night",
+      "width": 989,
+      "height": 1590,
+      "fit": "bottom",
+      "background": "#F1E6D0",
+      "theme": "paper",
+      "soften_pct": 50,
+      "raise_pct_of_screen_height": 14.2,
+      "raise_px_at_390x844": 120,
+      "bytes": 315934
+    },
+    {
+      "file": "art/home-flight.jpg",
+      "use": "Home, flight mornings",
+      "width": 1024,
+      "height": 1536,
+      "fit": "cover",
+      "background": "#18264F",
+      "theme": "navy",
+      "soften_pct": 20,
+      "note": "Keep the plane centred",
+      "bytes": 274403
+    },
+    {
+      "file": "art/day-repulse-bay.jpg",
+      "use": "Afternoon image for the Repulse Bay day (day TBD)",
+      "width": 1024,
+      "height": 1536,
+      "fit": "bottom",
+      "background": "#F3E9D3",
+      "theme": "paper",
+      "soften_pct": 50,
+      "raise_pct_of_screen_height": 16.6,
+      "raise_px_at_390x844": 140,
+      "note": "Day not yet assigned",
+      "bytes": 347455
+    },
+    {
+      "file": "art/day-victoria-peak.jpg",
+      "use": "Afternoon image for the Victoria Peak day (day TBD)",
+      "width": 916,
+      "height": 1717,
+      "fit": "bottom",
+      "background": "#F4E9D2",
+      "theme": "paper",
+      "soften_pct": 50,
+      "raise_pct_of_screen_height": -1.2,
+      "raise_px_at_390x844": -10,
+      "note": "Day not yet assigned",
+      "bytes": 436589
+    },
+    {
+      "file": "art/day-shenzhen-city.jpg",
+      "use": "Afternoon image for specific Shenzhen days (days TBD)",
+      "width": 1094,
+      "height": 1437,
+      "fit": "bottom",
+      "background": "#F4E8D0",
+      "theme": "paper",
+      "soften_pct": 50,
+      "raise_pct_of_screen_height": 13.0,
+      "raise_px_at_390x844": 110,
+      "note": "Days not yet assigned",
+      "bytes": 424013
+    },
+    {
+      "file": "art/map-hk-paper.jpg",
+      "use": "Place screen map, default (Hong Kong only)",
+      "width": 1159,
+      "height": 1357,
+      "fit": "map",
+      "background": "#F6EAD0",
+      "theme": "paper",
+      "soften_pct": 30,
+      "note": "Mood only; centred on the harbour; source/attribution TBD",
+      "bytes": 484039
+    },
+    {
+      "file": "art/map-hk-navy.jpg",
+      "use": "Place screen map, alternative",
+      "width": 1159,
+      "height": 1357,
+      "fit": "map",
+      "background": "#1E4880",
+      "theme": "navy",
+      "soften_pct": 30,
+      "note": "Mood only; source/attribution TBD",
+      "bytes": 523243
+    }
+  ]
+}

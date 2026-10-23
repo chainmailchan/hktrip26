@@ -1,0 +1,22 @@
+{
+  "HK": [
+    {
+      "label": "Police · Fire · Ambulance",
+      "number": "999"
+    }
+  ],
+  "SZ": [
+    {
+      "label": "Police",
+      "number": "110"
+    },
+    {
+      "label": "Ambulance",
+      "number": "120"
+    },
+    {
+      "label": "Fire",
+      "number": "119"
+    }
+  ]
+}

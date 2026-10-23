@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Place card over map</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&amp;family=EB+Garamond:wght@500;600&amp;family=Figtree:wght@400;600;700;800&amp;family=Noto+Sans+HK:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#22211F}a:hover{color:#000000}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes steam{0%{opacity:0;transform:translateY(4px)}50%{opacity:.8}100%{opacity:0;transform:translateY(-8px)}}
+.mapfade{animation:fadein 1s ease-out both}
+.rise{animation:rise .6s ease-out .5s both}
+.steam{animation:steam 2.8s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.mapfade,.rise,.steam{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; overflow: hidden; background: #F6EAD0; color: #22211F; font-family: 'Figtree', 'Noto Sans HK', sans-serif">
+
+  <div class="mapfade" style="position: absolute; top: 0; left: 0; width: 390px; height: 844px; overflow: hidden">
+    <img src="{{mapSrc}}" alt="" style="{{mapStyle}}">
+    <div style="position: absolute; top: 0; left: 0; width: 390px; height: 844px; background: {{wash}}"></div>
+  </div>
+  <svg class="mapfade" width="390" height="844" viewBox="0 0 390 844" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; top: 0; left: 0">
+    <path d="M262 392L195 262" stroke="{{lineColour}}" stroke-width="2" stroke-dasharray="2 9"></path>
+    <circle cx="262" cy="392" r="6" fill="{{dotFill}}" stroke="{{lineColour}}" stroke-width="1.8"></circle>
+    <path d="M195 258C195 258 180 241 180 230A15 15 0 0 1 210 230C210 241 195 258 195 258Z" fill="{{dotFill}}" stroke="{{pinColour}}" stroke-width="1.8"></path>
+    <circle cx="195" cy="230" r="4.5" stroke="{{pinColour}}" stroke-width="1.6"></circle>
+  </svg>
+
+  <div style="position: relative; padding: 20px 24px 0; display: flex; justify-content: space-between; align-items: center">
+    <a href="Schedule.dc.html" style="height: 52px; padding: 0 18px; border: 1.5px solid #22211F; border-radius: 26px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; text-decoration: none; background: rgba(243,240,234,0.85)"><span aria-hidden="true">←</span>Wednesday</a>
+    <button type="button" style="min-height: 56px; padding: 0 4px 0 16px; border: none; background: transparent; color: {{helpColour}}; font-family: inherit; font-size: 18px; font-weight: 700; cursor: pointer">Help</button>
+  </div>
+  <div style="{{captionStyle}}">Kowloon and the harbour (illustrative)</div>
+
+  <section class="rise" aria-label="Dim sum lunch" style="position: absolute; left: 16px; right: 16px; bottom: 20px; background: #FAF8F3; border: 1px solid #DAD5CB; border-radius: 22px; padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 10px 30px rgba(34,33,31,0.08)">
+    <div style="height: 130px; display: flex; align-items: center; justify-content: center">
+      <sc-if value="{{dimsum}}" hint-placeholder-val="{{ true }}">
+        <svg width="200" height="130" viewBox="0 0 200 130" fill="none" stroke="#2B2A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Line drawing of bamboo dim sum steamer baskets">
+          <ellipse cx="80" cy="96" rx="58" ry="14"></ellipse>
+          <path d="M22 96V112A58 14 0 0 0 138 112V96"></path>
+          <path d="M22 104A58 14 0 0 0 138 104" stroke="#A6A198"></path>
+          <ellipse cx="80" cy="62" rx="58" ry="14"></ellipse>
+          <path d="M22 62V82A58 14 0 0 0 138 82V62"></path>
+          <path d="M22 72A58 14 0 0 0 138 72" stroke="#A6A198"></path>
+          <path d="M50 60q8 -14 18 -2q6 -10 14 0M84 58q8 -14 18 -2q6 -10 14 0"></path>
+          <g class="steam" stroke="#A6A198"><path d="M62 38q-6 -8 0 -16q6 -8 0 -16M98 36q-6 -8 0 -16q6 -8 0 -16"></path></g>
+          <path d="M150 30L192 96M158 26L198 90"></path>
+        </svg>
+      </sc-if>
+      <sc-if value="{{noodles}}" hint-placeholder-val="{{ false }}">
+        <svg width="200" height="130" viewBox="0 0 200 130" fill="none" stroke="#2B2A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Line drawing of a bowl of noodles with chopsticks">
+          <path d="M30 70H170Q164 118 100 122Q36 118 30 70Z"></path>
+          <path d="M70 122V128H130V122"></path>
+          <path d="M44 70q10 -10 20 0q10 -10 20 0q10 -10 20 0q10 -10 20 0q10 -10 20 0" stroke="#A6A198"></path>
+          <path d="M108 70C112 50 118 40 124 30M116 70C122 52 128 44 132 34" stroke="#A6A198"></path>
+          <path d="M112 4L134 46M124 2L144 44"></path>
+          <g class="steam" stroke="#A6A198"><path d="M70 56q-6 -8 0 -16q6 -8 0 -16"></path></g>
+        </svg>
+      </sc-if>
+      <sc-if value="{{dessert}}" hint-placeholder-val="{{ false }}">
+        <svg width="200" height="130" viewBox="0 0 200 130" fill="none" stroke="#2B2A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Line drawing of two ice cream cones">
+          <path d="M62 62L80 124L98 62"></path>
+          <path d="M66 74L92 84M70 88L88 96M64 66L94 100M96 70L76 112" stroke="#A6A198"></path>
+          <path d="M58 62Q58 30 80 30Q102 30 102 62Q92 56 80 62Q68 56 58 62Z"></path>
+          <path d="M112 66L128 124L144 66"></path>
+          <path d="M116 78L140 88M118 92L136 100M114 70L142 104M142 74L124 114" stroke="#A6A198"></path>
+          <path d="M108 66Q108 38 128 38Q148 38 148 66Q138 60 128 66Q118 60 108 66Z"></path>
+          <path d="M128 38Q126 30 132 26"></path>
+        </svg>
+      </sc-if>
+      <sc-if value="{{charsiew}}" hint-placeholder-val="{{ false }}">
+        <svg width="200" height="130" viewBox="0 0 200 130" fill="none" stroke="#2B2A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Line drawing of a plate of char siu rice">
+          <ellipse cx="100" cy="98" rx="82" ry="22"></ellipse>
+          <ellipse cx="100" cy="96" rx="64" ry="15" stroke="#A6A198"></ellipse>
+          <path d="M48 92Q60 60 100 58Q140 60 152 92" stroke="#A6A198"></path>
+          <path d="M66 86l6 -6m10 4l5 -6m10 4l6 -6m12 4l5 -6m12 4l5 -6" stroke="#A6A198"></path>
+          <path d="M58 74L84 58L96 66L70 82Z M88 66L114 52L126 60L100 74Z M118 62L142 50L152 58L128 70Z"></path>
+          <path d="M66 74L84 64M96 66L114 56M126 62L142 54" stroke="#A6A198"></path>
+        </svg>
+      </sc-if>
+    </div>
+    <h2 style="margin: 0; font-family: {{display}}; font-size: 28px; font-weight: 700">Dim sum lunch</h2>
+    <div style="font-size: 17px; color: #5F5C56">12:45 · about 15 min away</div>
+    <p style="margin: 2px 0 6px; font-size: 18px; line-height: 1.4">[One line on why we're going]</p>
+    <a href="#" style="height: 58px; border-radius: 29px; background: #22211F; color: #FAF8F3; font-size: 18px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center">More about this place</a>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"dish":{"editor":"enum","options":["Dim sum","Noodles","Dessert","Char siu rice"],"default":"Dim sum","section":"Card art"},"mapStyle":{"editor":"enum","options":["Paper (blue lines)","Navy (cream lines)"],"default":"Paper (blue lines)","section":"Map"},"mapZoom":{"editor":"range","min":100,"max":250,"step":10,"unit":"%","default":160,"section":"Map"},"mapSoften":{"editor":"range","min":0,"max":70,"step":5,"unit":"%","default":30,"section":"Map"},"displayFont":{"editor":"enum","options":["Figtree","Barlow Condensed","EB Garamond"],"default":"Barlow Condensed","section":"Type"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const f = this.props.displayFont ?? 'Barlow Condensed';
+    const d = this.props.dish ?? 'Dim sum';
+    const navy = this.props.mapStyle === 'Navy (cream lines)';
+    const bgRgb = navy ? '30, 72, 128' : '246, 234, 208';
+    const z = (this.props.mapZoom ?? 160) / 100;
+    const w = 721 * z, h = 844 * z;
+    // focus on the harbour between the Kowloon tip and the island (image fractions), placed under the pin
+    const fx = 0.47, fy = 0.6;
+    const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+    const left = clamp(195 - fx * w, 390 - w, 0);
+    const top = clamp(250 - fy * h, 844 - h, 0);
+    const s = (this.props.mapSoften ?? 30) / 100;
+    return {
+      mapSrc: navy ? '../../art/map-hk-navy.jpg' : '../../art/map-hk-paper.jpg',
+      mapStyle: 'position: absolute; left: ' + Math.round(left) + 'px; top: ' + Math.round(top) + 'px; width: ' + Math.round(w) + 'px; height: ' + Math.round(h) + 'px',
+      wash: 'rgba(' + bgRgb + ', ' + s + ')',
+      helpColour: navy ? '#F4A28C' : '#A8382C',
+      lineColour: navy ? '#F4ECDC' : '#22211F',
+      pinColour: navy ? '#F4A28C' : '#9A4A12',
+      dotFill: navy ? '#1E4880' : '#F6EAD0',
+      captionStyle: 'position: absolute; left: 24px; top: 92px; font-size: 16px; font-weight: 600; color: ' + (navy ? '#F4ECDC' : '#22211F') + '; text-shadow: 0 0 2px rgb(' + bgRgb + '), 0 0 6px rgb(' + bgRgb + '), 0 0 12px rgb(' + bgRgb + ')',
+      display: "'" + f + "', sans-serif",
+      dimsum: d === 'Dim sum',
+      noodles: d === 'Noodles',
+      dessert: d === 'Dessert',
+      charsiew: d === 'Char siu rice'
+    };
+  }
+}
+</script>
+</body>
+</html>

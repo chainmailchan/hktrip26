@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Help</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&amp;family=EB+Garamond:wght@500;600&amp;family=Figtree:wght@400;600;700;800&amp;family=Noto+Sans+HK:wght@500;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#22211F}a:hover{color:#000000}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.fadein{animation:fadein .25s ease-out both}
+@media (prefers-reduced-motion: reduce){.fadein{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; box-sizing: border-box; overflow: hidden; background: #F3F0EA; color: #22211F; font-family: 'Figtree', 'Noto Sans HK', sans-serif; padding: 20px 24px 18px; display: flex; flex-direction: column">
+
+  <div style="display: flex; justify-content: space-between; align-items: center">
+    <a href="Main.dc.html" style="height: 52px; padding: 0 18px; border: 1.5px solid #22211F; border-radius: 26px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; text-decoration: none"><span aria-hidden="true">←</span>Home</a>
+  </div>
+
+  <h1 style="margin: 14px 0 10px; font-family: {{display}}; font-size: 30px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.01em">Help</h1>
+
+  <section aria-label="If you are lost" style="padding: 18px 18px 20px; border-radius: 22px; background: #EDE4D3; display: flex; flex-direction: column; gap: 6px">
+    <div style="font-size: 26px; font-weight: 800">Lost?</div>
+    <div style="font-size: 22px; font-weight: 700; line-height: 1.25">Stay where you are.</div>
+    <div style="font-size: 18px; line-height: 1.4; color: #3E3C38">Then message the family, or call {{firstCall}}. We will come to you.</div>
+  </section>
+
+  <a href="https://t.me/+TRIP_GROUP_INVITE_PLACEHOLDER" style="margin-top: 16px; min-height: 64px; padding: 8px 18px; border-radius: 32px; background: #22211F; color: #F3F0EA; font-size: 19px; font-weight: 800; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center">Message the family on Telegram</a>
+  <div style="margin-top: 6px; font-size: 17px; color: #5F5C56; text-align: center">Opens our trip group</div>
+
+  <div style="margin-top: 14px; font-size: 18px; line-height: 1.4">Need a toilet, a rest, or want us to wait? Just say so in the group.</div>
+
+  <div style="margin-top: 16px; display: grid; grid-template-columns: {{callCols}}; gap: 10px">
+    <sc-for list="{{calls}}" as="c" hint-placeholder-count="2">
+      <a href="#" style="height: 56px; border: 1.5px solid #22211F; border-radius: 28px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; text-decoration: none; white-space: nowrap">Call {{c}}</a>
+    </sc-for>
+  </div>
+
+  <button type="button" onClick="{{openEmg}}" style="margin-top: auto; min-height: 48px; border: none; background: transparent; color: #5F5C56; font-family: inherit; font-size: 17px; font-weight: 600; text-decoration: underline; cursor: pointer">Emergency numbers</button>
+
+  <sc-if value="{{dialogOpen}}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{close}}" style="position: absolute; inset: 0; background: rgba(34, 33, 31, 0.45)"></div>
+    <div class="fadein" role="dialog" aria-modal="true" style="position: absolute; left: 20px; right: 20px; top: 210px; background: #FAF8F3; border-radius: 24px; padding: 22px 20px 20px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 16px 40px rgba(34,33,31,0.18)">
+      <div style="font-size: 22px; font-weight: 800; line-height: 1.25">{{dTitle}}</div>
+      <sc-if value="{{showNumbers}}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <sc-for list="{{numbers}}" as="n" hint-placeholder-count="2">
+            <button type="button" onClick="{{n.pick}}" style="min-height: 56px; border: 1.5px solid #22211F; border-radius: 18px; background: transparent; font-family: inherit; font-size: 18px; font-weight: 700; color: #22211F; display: flex; justify-content: space-between; align-items: center; padding: 0 18px; cursor: pointer"><span>{{n.label}}</span><span>{{n.number}}</span></button>
+          </sc-for>
+        </div>
+      </sc-if>
+      <div style="{{btnWrap}}">
+        <button type="button" onClick="{{close}}" style="flex: 1; min-height: 64px; border: none; border-radius: 32px; background: #22211F; color: #FAF8F3; font-family: inherit; font-size: 19px; font-weight: 800; cursor: pointer">No, go back</button>
+        <sc-if value="{{hasConfirm}}" hint-placeholder-val="{{ true }}">
+          <button type="button" onClick="{{confirm}}" style="{{confirmStyle}}">{{confirmLabel}}</button>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"viewer":{"editor":"enum","options":["Mama (member)","Chan (admin)"],"default":"Mama (member)","section":"View"},"city":{"editor":"enum","options":["Hong Kong","Shenzhen"],"default":"Hong Kong","section":"View"},"displayFont":{"editor":"enum","options":["Figtree","Barlow Condensed","EB Garamond"],"default":"Barlow Condensed","section":"Type"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { dialog: null };
+  }
+  renderVals() {
+    const f = this.props.displayFont ?? 'Barlow Condensed';
+    const member = (this.props.viewer ?? 'Mama (member)') === 'Mama (member)';
+    const hk = (this.props.city ?? 'Hong Kong') === 'Hong Kong';
+    const d = this.state.dialog;
+    const list = hk
+      ? [{ label: 'Police · Fire · Ambulance', number: '999' }]
+      : [{ label: 'Police', number: '110' }, { label: 'Ambulance', number: '120' }, { label: 'Fire', number: '119' }];
+    const numbers = list.map((n) => ({ ...n, pick: () => this.setState({ dialog: { kind: 'emg', step: 1, number: n.number } }) }));
+
+    let dTitle = '', confirmLabel = '', hasConfirm = true, showNumbers = false, confirm = () => {}, pos = 'below';
+    if (d && d.kind === 'list') {
+      dTitle = 'Emergency numbers · ' + (hk ? 'Hong Kong' : 'Shenzhen');
+      showNumbers = true;
+      hasConfirm = false;
+    } else if (d && d.kind === 'emg') {
+      const steps = ['Call ' + d.number + '?', 'Is this an emergency?', 'Last step: tap the red button to call ' + d.number + '.'];
+      dTitle = steps[d.step - 1];
+      confirmLabel = d.step === 3 ? 'Call ' + d.number : 'Yes';
+      pos = ['below', 'above', 'beside'][d.step - 1];
+      confirm = () => (d.step < 3 ? this.setState({ dialog: { ...d, step: d.step + 1 } }) : this.setState({ dialog: null }));
+    }
+    const red = d && d.kind === 'emg' && d.step === 3;
+    const confirmStyle = 'min-height: 52px; padding: 0 20px; border-radius: 26px; font-family: inherit; font-size: 18px; font-weight: 700; cursor: pointer; '
+      + (red ? 'background: #A8382C; color: #FFF8F2; border: none' : 'background: transparent; color: #22211F; border: 1.5px solid #22211F')
+      + (pos === 'beside' ? '; flex: 0 0 auto' : '');
+    const btnWrap = 'display: flex; gap: 10px; ' + (pos === 'below' ? 'flex-direction: column' : pos === 'above' ? 'flex-direction: column-reverse' : 'flex-direction: row; align-items: stretch');
+    const calls = member ? ['Chan', 'Belle'] : ['Belle', 'Mama', 'Papa'];
+    return {
+      display: "'" + f + "', sans-serif",
+      firstCall: member ? 'Chan' : 'Belle',
+      calls,
+      callCols: 'repeat(' + calls.length + ', minmax(0, 1fr))',
+      openEmg: () => this.setState({ dialog: { kind: 'list' } }),
+      close: () => this.setState({ dialog: null }),
+      dialogOpen: !!d,
+      dTitle,
+      showNumbers,
+      numbers,
+      hasConfirm,
+      confirm,
+      confirmLabel,
+      confirmStyle,
+      btnWrap
+    };
+  }
+}
+</script>
+</body>
+</html>

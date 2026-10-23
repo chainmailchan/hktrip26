@@ -1,0 +1,84 @@
+{
+  "_note": "Phrases are Chan's own [stated 24 Oct]. One is picked at random within the window. Window times and the special-day rules are proposals. Long phrases may wrap after the full-width punctuation (，！？).",
+  "special_days": [
+    {
+      "from": "2026-10-31",
+      "to": "2026-11-16",
+      "id": "pretrip",
+      "phrases": [
+        "執咗行李未呀？",
+        "護照帶咗未呀？"
+      ],
+      "_note": "all day during the pre-trip phase"
+    },
+    {
+      "date": "2026-11-17",
+      "until": "14:00",
+      "id": "flight_out",
+      "phrases": [
+        "出發啦！"
+      ]
+    },
+    {
+      "date": "2026-11-24",
+      "from": "12:00",
+      "id": "flight_home",
+      "phrases": [
+        "返屋企啦"
+      ]
+    }
+  ],
+  "windows": [
+    {
+      "id": "morning",
+      "from": "05:00",
+      "to": "11:30",
+      "phrases": [
+        "早晨！瞓醒未呀？"
+      ]
+    },
+    {
+      "id": "lunch",
+      "from": "11:30",
+      "to": "13:30",
+      "phrases": [
+        "肚餓未呀？",
+        "減肥聽日先"
+      ]
+    },
+    {
+      "id": "afternoon",
+      "from": "13:30",
+      "to": "17:30",
+      "phrases": [
+        "三點三，飲下午茶！",
+        "行到腳軟",
+        "慢慢嚟，唔使急"
+      ]
+    },
+    {
+      "id": "evening",
+      "from": "17:30",
+      "to": "22:00",
+      "phrases": [
+        "今晚食乜餸？",
+        "收工！返酒店啦",
+        "好撚攰",
+        "好撚飽",
+        "肚餓未呀？",
+        "減肥聽日先"
+      ],
+      "_note": "evening + mealtime phrases (dinner falls in this window)"
+    },
+    {
+      "id": "late",
+      "from": "22:00",
+      "to": "05:00",
+      "phrases": [
+        "冲涼未呀？",
+        "做咩唔瞓覺？",
+        "瞓啦，聽日仲要行"
+      ]
+    }
+  ]
+}
