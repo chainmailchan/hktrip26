@@ -6,11 +6,13 @@
 | `spec/APP_SPEC.md` | The build spec, the source of truth (master copy) |
 | `spec/KICKOFF.md` | The first message for Claude Code (phase 1) |
 | `spec/PHONE.md` | How Chan sets up and then works from his phone |
+| `spec/SETUP.md` | The setup visit: tokens, installing, setup codes |
 | `spec/wireframes/` | Concept B screen sources (reference only) |
 | `art/` | All images + `art-manifest.json`; new uploads go in `art/incoming/` |
 | `data/` | Trip content: facts, itinerary, packing lists, greetings, art schedule, emergency numbers |
 | `index.html`, `app/`, `sw.js`, `manifest.webmanifest` | The app (plain static site, no build step) |
 | `fonts/`, `icons/` | Self-hosted fonts (OFL licences included) and app icons |
+| `app/vendor/` | QR reader (jsQR, Apache-2.0) and QR maker (qrcode-generator, MIT), licences included |
 | `tools/` | Layout check at the four phone sizes; Chinese font subsetting |
 
 The app itself sits at the root of `main` and is published by GitHub Pages.

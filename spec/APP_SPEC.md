@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.31, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.32, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -105,6 +105,7 @@ Wireframe file names are in brackets. All screens: 390 × 844 reference, no scro
 - Silent: no sound, vibration or notification [stated]. Refreshes every 30 s (§5.3).
 - Hidden when empty.
 - Public like everything else (§5.6): no private details.
+- Built in phase 2: read from `live/board.json`. Set-up phones see changes within 30 s; phones not yet set up within about 5 minutes (§5.3) [stated: OK, 24 Oct]. When live data can't be reached, a quiet line under it says "No connection · last updated 10:42" (§5.2) [proposal].
 
 ### F2. Home screen [stated] (`Main`, `Sunset`, `Night`, `Flight`)
 Top to bottom:
@@ -140,7 +141,7 @@ Top to bottom:
 1. **"Lost? Stay where you are."** Then: "message the family, or call Chan. We will come to you."
 2. **"Message the family on Telegram"** (the one filled button), opening the trip group's invite link from `data/trip.json` → `telegram_group_url` (placeholder for now) [assumption: an invite link opens the group in the Telegram app on iPhone and Android; test on the phones].
 3. One line: "Need a toilet, a rest, or want us to wait? Just say so in the group."
-4. **Call buttons**: Mama and Papa see Call Chan · Call Belle; admins see the other three. Numbers live on the phone only (§5.5).
+4. **Call buttons**: Mama and Papa see Call Chan · Call Belle; admins see the other three. Numbers live on the phone only (§5.5). They appear once the phone is set up; the numbers come from the setup code [built, phase 2].
 5. **Emergency numbers**: a quiet underlined link at the bottom → dialog listing the current city's numbers (HK **999** [source: Discover Hong Kong]; SZ **110** police, **120** ambulance, **119** fire [source: National Health Commission of the PRC]). Then **three confirmations** [stated]: "Call 999?" → "Is this an emergency?" → "Last step: tap the red button to call 999." The large easy target is always **"No, go back"**; the confirm button moves below → above → beside so repeated tapping can't get through. The last button is a real `tel:` link [assumption: iPhone and Android each add their own confirmation; verify].
   - "Yes" sits at the left and the red button at the right, so a quick second tap never lands on the next confirm (the wireframe's full-width "Yes" overlapped the red button) [proposal].
   - Outside the trip dates (e.g. pre-trip, in Singapore) the dialog lists both cities' numbers [proposal].
@@ -151,6 +152,11 @@ Top to bottom:
 - **Write the announcement**: text box (100 characters), "Show to everyone", "Clear", preview. After saving: "Done. Everyone sees this within 30 seconds."
 - **Packing items**: phase 1 edits `data/packing.json` in the repo (Chan or Claude Code) [proposal]; an in-app item editor only if Chan asks.
 - Not drawn in Concept B; build it in the same paper style as Packing.
+- Built in phase 2 [proposal on the details]:
+  - The "Admin" link sits **under** Help on the admin phones' home screen, not beside it, so the greeting keeps its width.
+  - The screen is titled "Announcement". Top to bottom: "Showing now" (as it looks on the home screen), the "New announcement" box with an "x of 100" counter, a preview, "Show to everyone" and "Clear the announcement".
+  - "Clear the announcement" takes it off every phone ("Done. It disappears from every phone within 30 seconds."). It is spelled out because a bare "Clear" could mean clearing the text box.
+  - If saving fails: "Not sent: no connection. Try again."
 
 ### F9. Pre-trip home [stated] (`PreTrip`)
 - From **Sat 31 Oct** until the morning of 17 Nov; switches to trip mode automatically [proposal].
@@ -164,7 +170,8 @@ Top to bottom:
 - Groups open one at a time; each item is a large checkbox row with an optional note.
 - **All four phones can tick** [stated, 23 Oct]; ticks sync through the live-data repo (§5.3). Only Chan and Belle change the items [stated].
 - **Pack by Sat 14 Nov** [stated].
-- Phase 1 is read-only: the boxes are drawn but can't be ticked, with the line "You can tick things off after Chan sets up your phone." [proposal]. On phones not yet set up the tabs read "Mama & Papa | Chan & Belle", Mama & Papa first [stated: kickoff].
+- Until a phone is set up, the boxes are drawn but can't be ticked, with the line "You can tick things off after Chan sets up your phone." [proposal] and a **"Set up this phone"** button under it [stated: OK, 24 Oct]. On phones not yet set up the tabs read "Mama & Papa | Chan & Belle", Mama & Papa first [stated: kickoff].
+- Ticking (phase 2): tap anywhere on an item's row to tick or untick it. The tick shows at once; quick taps go to GitHub together as one save, about 1.5 s after the last tap [proposal]. With no connection, ticks are kept on the phone with the line "No connection. Your ticks are saved on this phone and will be sent when you're back online.", and are sent when the connection returns [proposal].
 - Sourced notes inside the items: Singapore Airlines power banks from 15 Apr 2026: at most 2 per person, cabin bag only, ≤100 Wh without approval, no use or charging onboard [source: Singapore Airlines advisory]. Mainland China uses plug types A, C and I; Hong Kong uses Type G like Singapore [source: Trip.com China plug guide].
 
 ### F11. Greetings [stated]
@@ -223,7 +230,7 @@ Full table in `art/art-manifest.json`. Summary:
   - *navy*: cream text #F4ECDC, secondary #C9CFE0, cream button with navy text, Help #F4A28C.
 - Art format for new images: **9 : 19.5 portrait** [stated, 24 Oct], 1320 × 2868 px, JPEG ~80%, <700 KB; keep the top ~40% and bottom ~15% calm and the outer ~8% each side free of anything important. 1320 × 2868 is the 16 Pro Max screen in pixels; the other three phones are the same shape within 0.3%, so a full-height drawing fills each with about 1 px trimmed. The clock sits over the top ~7% (62 of 956 pt). Set the image's `background` to the colour along its top edge: Safari paints its status-bar band in that colour.
 - **Phones keep each image forever once downloaded, so a changed image needs a new file name** [proposal].
-- **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview". **In the installed app** (no address bar), five quick taps on the date line open the preview list [proposal].
+- **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview". **In the installed app** (no address bar), five quick taps on the date line open the preview list [proposal]. Since phase 2 that page is called "Hidden pages" and also links to "Set up this phone" and "Make setup codes" (§5.5).
 
 ### 4.3 Type [stated + proposal]
 - Body: **Figtree**. Chinese: **Noto Sans HK**. Date lines and screen titles: **Barlow Condensed** (current default from the test bench; final typeface is Chan's call, Q33). Self-host all fonts (§5.2).
@@ -275,6 +282,14 @@ Full table in `art/art-manifest.json`. Summary:
 - **Tokens:** each of the four phones holds a **fine-grained personal access token** limited to the live-data repo, Contents read/write only, expiring just after the trip [source: GitHub Docs, "Managing your personal access tokens"]. Loaded by QR (§5.5), stored only on that phone, revocable if a phone is lost.
 - **Rate limits:** 5,000 requests/hour per account for personal tokens [source: GitHub Docs, "Rate limits for the REST API"]; four phones polling every 30 s ≈ 480/hour. Content-creating requests: 80/minute and 500/hour [source: same]; ticks and announcements stay well under.
 - Nothing alerts a phone in a pocket; urgent things go through Telegram or a call [stated].
+- **As built (phase 2, `app/live.js`):**
+  - The repo name is in `data/trip.json` → `live.repo` (`chainmailchan/hktrip26scrt`); the check interval is `live.poll_seconds` (30).
+  - Set-up phones read through the GitHub API with their token and `If-None-Match`. An unchanged file returns 304, which doesn't count against the rate limit when the request carries a token [source: GitHub Docs, "Best practices for using the REST API"].
+  - Phones not yet set up have no token. They read the public copy on raw.githubusercontent.com, which GitHub caches for up to 5 minutes (`max-age=300`, measured 24 Oct), so announcements can reach them up to ~5 minutes late [stated: OK, 24 Oct].
+  - Only what the screen shows is checked: the announcement on the home and Admin screens; packing ticks on the home screen (which shows packing progress) and the Packing screen [proposal].
+  - Saves: read → change → save with the file's sha. If another phone saved in between, GitHub rejects the save; the app re-reads, merges and tries again (up to 4 times).
+  - The last copy of each file and any unsent ticks are kept on the phone (`localStorage`), so the screens work offline.
+  - `hktrip26scrt` had no files or branches on 24 Oct. The app creates `live/board.json` and `live/packing.json` on the first save [assumption: GitHub accepts the first file in an empty repo through the API; adding a README first (spec/SETUP.md) removes the doubt].
 
 ### 5.4 Map art
 - **Chan's two static Hong Kong street maps** (`art/map-hk-paper.jpg`, `art/map-hk-navy.jpg`), plus his Shenzhen map (`art/map-sz-paper.jpg`, 24 Oct), replace the per-stop rendered maps of v0.15 [stated]. They are mood images, not navigation [stated].
@@ -284,7 +299,19 @@ Full table in `art/art-manifest.json`. Summary:
 ### 5.5 Setup and access [stated: QR setup]
 - No accounts. **One QR code per person** (Chan, Belle, Mama, Papa) carrying their id, their token, admin yes/no, and the family phone numbers for the Call buttons. Scanning it sets the phone up in one step; all of it stays on the phone. **The code is scanned inside the app** (a "Set up this phone" button that opens the camera), so it sets up the installed app rather than Safari [stated, 24 Oct].
 - Before setup the site still works **view-only** (countdown, lists, guide), which is what Mama and Papa see from the link Chan sends around 31 Oct [stated].
-- Chan sets up Mama's and Papa's phones in person, week of 2 Nov [stated]. Include a one-page install guide.
+- Chan sets up Mama's and Papa's phones in person, week of 2 Nov [stated]. Include a one-page install guide: **`spec/SETUP.md`**.
+- **One token per phone**, expiring **30 Nov 2026** [stated, 24 Oct], so a lost phone's token can be revoked alone.
+- **As built (phase 2, `app/setup.js`):**
+  - **"Set up this phone"**: on the Packing screen until the phone is set up [stated: OK, 24 Oct], and on the Hidden pages (§4.2) for changing a phone later.
+  - "Open the camera" scans inside the app. Chrome on Android uses its built-in QR reader; iPhones use jsQR (self-hosted in `app/vendor/`, Apache-2.0).
+  - "Take a photo of the code instead" is a fallback if the live camera won't open [proposal].
+  - After a code is read: "This phone is set up for Mama.", then "Done" restarts the app.
+  - **"Make setup codes"** [stated: OK, 24 Oct]: a hidden page (Hidden pages → Make setup codes) where Chan pastes each person's token and types the four phone numbers. It draws each person's code, one at a time, using qrcode-generator (self-hosted, MIT).
+    - Nothing typed there is sent anywhere or saved; it is gone when he leaves the screen.
+    - "Use Chan's code on this phone" sets up the phone showing the codes, without scanning.
+    - Codes can't be made in a Claude session: tokens pasted there would stay in the transcript.
+  - The camera reader and the code maker download only when a setup screen opens; they are not part of the offline set.
+  - [assumption: the live camera works in the installed app on Mama's iPhone 14 Pro and Papa's S24+; test at the visit (Q43)]
 
 ### 5.6 Privacy (public site and repo)
 - Never commit phone numbers, booking references, passport details or payment details.
@@ -322,6 +349,9 @@ Seed files are in `data/`:
 // on-device only (localStorage, set by QR), never in the repo
 { "me": "m", "admin": false, "github_token": "<fine-grained, repo-scoped>",
   "contacts": [{ "name": "Chan", "phone": "+65…" }, { "name": "Belle", "phone": "+65…" }] }
+
+// setup code (QR, phase 2): the same, compact. "c" = the Call buttons, numbers without spaces
+{ "hktrip": 1, "me": "m", "admin": 0, "t": "github_pat_…", "c": [["Chan", "+65…"], ["Belle", "+65…"]] }
 ```
 
 ---
@@ -331,7 +361,7 @@ Seed files are in `data/`:
 |---|---|---|
 | **~30 Oct** | **1. Pre-trip, view-only** | Repo + Pages, PWA shell (manifest, service worker, icons), self-hosted fonts, home with art and halo (F2 rules), pre-trip home (F9), packing lists read-only (F10), greetings (F11), Help (F7) with placeholder link. Works in any browser without setup |
 | ~31 Oct | Chan sends the link | View-only for Mama and Papa [stated] |
-| **~1 Nov** | **2. Setup and sync** | QR setup (§5.5), tokens, ticking with sync via `live/packing.json`, announcement writing (F8) and display (F1) |
+| **~1 Nov** | **2. Setup and sync** | QR setup (§5.5), tokens, ticking with sync via `live/packing.json`, announcement writing (F8) and display (F1). **Built 24 Oct (v0.32)**; setup guide in `spec/SETUP.md` |
 | Week of 2 Nov | Chan's setup visit | Install on all four phones, scan QR codes [stated] |
 | **~10 Nov** | **3. Trip mode** | Schedule (F3), Place card + detail (F4), Weather (F5), Hotel (F6), trip-mode home with time-based art, offline test |
 | 10 Nov | Checks | SQ882/SQ883 times and the Shekou ferry (scheduled) |
@@ -361,6 +391,8 @@ Seed files are in `data/`:
 | Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | **Answered:** a "Set up this phone" button inside the app scans the code with the camera [stated, 24 Oct] |
 | Q41 | Phone tokens can write to the whole repo, including the app code on `main` | **Answered:** live data goes in a second, small repo; tokens limited to it [stated, 24 Oct]. Repo: `hktrip26scrt` [stated, 24 Oct] |
 | Q42 | *Bottom* drawings are about 2 : 3, so the background colour fills the top third or more of the screen; "longer is probably nicer" [stated, 24 Oct] | **Answered:** no cropping ("the cropped all look worse"); keep the drawings and let them run under Safari's address bar [stated, 24 Oct] |
+| Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | Open: test at the setup visit; "Take a photo of the code instead" is the fallback |
+| Q44 | `hktrip26scrt` is empty (no branches, 24 Oct); can the app create the first file there? [assumption: yes] | Open: add a README before the visit (spec/SETUP.md, step 1), which removes the doubt |
 
 ---
 
@@ -401,9 +433,11 @@ Seed files are in `data/`:
 | 24 Oct | Live-data repo is `hktrip26scrt`. QR codes are scanned inside the app (Q40) [stated] |
 | 24 Oct | No cropping of the art; it runs under Safari's address bar instead (Q42) [stated] |
 | 24 Oct | Live data in a second, small repo, with the phone tokens limited to it (Q41). Packing greetings from 24 Oct until the day before the trip. iPhone clock readable with the art behind it (Q39). Button gap at the bottom okay for now [stated] |
+| 24 Oct | **Phase 2 plan approved**: "Set up this phone" on Packing and the Hidden pages; a hidden "Make setup codes" page in the app; phones not yet set up may see announcements up to ~5 minutes late; one token per phone, expiring 30 Nov; built as one PR [stated] |
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.32 (24 Oct 2026):** Phase 2 built: phone setup by QR inside the app, with a photo fallback and a hidden code maker (§5.5); packing ticks sync through `hktrip26scrt`, batched and kept offline (F10, §5.3); the announcement is shown (F1) and written on the Admin screen (F8); "Hidden pages" (§4.2); setup code format (§6); setup guide `spec/SETUP.md`; Q43–Q44 added.
 - **v0.31 (24 Oct 2026):** Shenzhen map wording corrected: Place-screen background for the Shenzhen part of the trip, not per place (F4).
 - **v0.30 (24 Oct 2026):** Shenzhen map confirmed for the Place screen (F4); Kowloon days still open (Q34).
 - **v0.29 (24 Oct 2026):** Shenzhen evening and night drawings; art can vary by city (`by_city`), with after-midnight counted as the evening before (§4.2).

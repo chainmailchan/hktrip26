@@ -5,11 +5,11 @@ Family trip app (PWA) for Chan, Belle, Mama and Papa: Hong Kong and Shenzhen, 17
 ## Where things are
 - `spec/APP_SPEC.md`: **the source of truth**. Read the parts relevant to the task before changing anything.
 - `spec/wireframes/*.dc.html`: approved screens (Concept B). Design-tool files that won't run on their own; read them for layout, sizes, colours and copy.
-- `spec/KICKOFF.md`: the phase 1 brief. `spec/PHONE.md`: Chan's own guide for working from his phone.
+- `spec/KICKOFF.md`: the phase 1 brief. `spec/PHONE.md`: Chan's own guide for working from his phone. `spec/SETUP.md`: the setup-visit guide (tokens, install, setup codes).
 - `art/` + `art/art-manifest.json`: every image and how it is shown. `art/incoming/`: new images Chan uploads; optimise them into `art/` and update the manifest.
 - `data/`: all trip content (trip facts, itinerary, packing lists, greetings, art schedule, emergency numbers). **Trip content goes in data files, never in code.**
-- The app itself is served by GitHub Pages from the root of `main`: `index.html`, `app/` (code and styles), `sw.js` (offline cache, update on next open), `manifest.webmanifest`, `fonts/`, `icons/`.
-- `tools/check.mjs`: layout check at the four phone sizes (`NODE_PATH="$(npm root -g)" node tools/check.mjs`). `tools/subset-noto.py`: rebuild the Chinese font after greetings change.
+- The app itself is served by GitHub Pages from the root of `main`: `index.html`, `app/` (code and styles; `app/live.js` = announcement and ticks via the `hktrip26scrt` repo; `app/setup.js` + `app/vendor/` = QR setup), `sw.js` (offline cache, update on next open), `manifest.webmanifest`, `fonts/`, `icons/`.
+- `tools/check.mjs`: layout check at the four phone sizes, plus ticking, announcement and setup tests against a fake GitHub (`NODE_PATH="$(npm root -g)" node tools/check.mjs`). `tools/subset-noto.py`: rebuild the Chinese font after greetings change.
 
 ## How Chan works
 - Chan mostly works **from the Claude app on his iPhone** in cloud sessions. Each session starts fresh, from `main`, with no memory of earlier sessions. The spec and this file are the memory.
