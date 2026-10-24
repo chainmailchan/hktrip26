@@ -2,14 +2,14 @@
   "_note": "Phrases are Chan's own [stated 24 Oct]. One is picked at random within the window. Window times and the special-day rules are proposals. Long phrases may wrap after the full-width punctuation (，！？).",
   "special_days": [
     {
-      "from": "2026-10-31",
+      "from": "2026-10-24",
       "to": "2026-11-16",
       "id": "pretrip",
       "phrases": [
         "執咗行李未呀？",
         "護照帶咗未呀？"
       ],
-      "_note": "all day during the pre-trip phase"
+      "_note": "all day from 24 Oct until the day before the trip [stated 24 Oct]"
     },
     {
       "date": "2026-11-17",

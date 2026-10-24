@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.19, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.20, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -162,7 +162,7 @@ Top to bottom:
 - **Two lists**: Chan & Belle (full) and Mama & Papa (essentials only) [stated]. Seed items in `data/packing.json`.
 - Admin phones switch between both lists with two tabs; Mama's and Papa's phones show only theirs. Before a phone is set up (view-only link), show both tabs, since the app doesn't yet know who is looking [proposal].
 - Groups open one at a time; each item is a large checkbox row with an optional note.
-- **All four phones can tick** [stated, 23 Oct]; ticks sync through the `live` branch (§5.3). Only Chan and Belle change the items [stated].
+- **All four phones can tick** [stated, 23 Oct]; ticks sync through the live-data repo (§5.3). Only Chan and Belle change the items [stated].
 - **Pack by Sat 14 Nov** [stated].
 - Phase 1 is read-only: the boxes are drawn but can't be ticked, with the line "You can tick things off after Chan sets up your phone." [proposal]. On phones not yet set up the tabs read "Mama & Papa | Chan & Belle", Mama & Papa first [stated: kickoff].
 - Sourced notes inside the items: Singapore Airlines power banks from 15 Apr 2026: at most 2 per person, cabin bag only, ≤100 Wh without approval, no use or charging onboard [source: Singapore Airlines advisory]. Mainland China uses plug types A, C and I; Hong Kong uses Type G like Singapore [source: Trip.com China plug guide].
@@ -172,7 +172,7 @@ Top to bottom:
 
 | When | Phrases [stated] |
 |---|---|
-| Pre-trip (31 Oct – 16 Nov, all day) | 執咗行李未呀？ · 護照帶咗未呀？ |
+| Pre-trip (24 Oct – 16 Nov, all day) [stated, 24 Oct] | 執咗行李未呀？ · 護照帶咗未呀？ |
 | Flight out, 17 Nov (until 14:00) | 出發啦！ |
 | Flight home, 24 Nov (from 12:00) | 返屋企啦 |
 | Morning 05:00–11:30 | 早晨！瞓醒未呀？ |
@@ -215,7 +215,7 @@ Full table in `art/art-manifest.json`. Summary:
   - *navy*: cream text #F4ECDC, secondary #C9CFE0, cream button with navy text, Help #F4A28C.
 - Art format for new images [proposal]: 9 : 19.5 portrait, 1320 × 2868 px, JPEG ~80%, <700 KB; keep the top ~40% and bottom ~15% calm and the outer ~8% each side free of anything important.
 - **Phones keep each image forever once downloaded, so a changed image needs a new file name** [proposal].
-- **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview".
+- **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date; `&fit=cover` shows a *bottom* image cropped at the sides to fill the screen (to compare cropping with redrawing, Q42) [proposal]. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview".
 
 ### 4.3 Type [stated + proposal]
 - Body: **Figtree**. Chinese: **Noto Sans HK**. Date lines and screen titles: **Barlow Condensed** (current default from the test bench; final typeface is Chan's call, Q33). Self-host all fonts (§5.2).
@@ -233,7 +233,7 @@ Full table in `art/art-manifest.json`. Summary:
   - iPhone 14 Pro (Mama) 393 × 852 pt [source: same page]; safe areas likely 59 / 34 like other Dynamic Island phones of that size [assumption: read them from `env()` rather than hard-coding].
   - Galaxy S24+ (Papa) 384 × 832 CSS px, device pixel ratio 2.8125 [source: blisk.io device list]; same shape as the iPhones (≈0.46).
   - All four phones are almost the same shape, so art crops and layouts look alike on each.
-- Art runs edge to edge behind the status bar; text starts below `env(safe-area-inset-top)` and the button sits above `env(safe-area-inset-bottom)`.
+- Art runs edge to edge behind the status bar (and, in Safari, behind the toolbars [proposal]); text starts below `env(safe-area-inset-top)` and the button sits above `env(safe-area-inset-bottom)`. In Safari the button sits above the toolbar; in the installed app, above the home bar [proposal; Chan: "okay for now", 24 Oct].
 - Text sizes stay fixed; bigger phones get more space between announcement and button.
 - Test on Papa's S24+ in Chrome, both in the browser and installed.
 
@@ -258,13 +258,13 @@ Full table in `art/art-manifest.json`. Summary:
 - "Open in maps" in Shenzhen: Amap or Apple Maps. Mainland maps use GCJ-02 while GPS/OSM use WGS-84 (offsets of hundreds of metres); store the datum with coordinates and convert before building Amap links [assumption: verify Amap URI parameters].
 
 ### 5.3 Live data: GitHub only (no server, no bot [stated])
-- A separate `live` branch (not the published branch), read and written through the **GitHub REST API**, polled every 30 s while the app is open and immediately on reopen. Only the changed parts update; no reload, no scroll jump [stated].
+- **A second, small repo holds the live files** [stated, 24 Oct], so the phones' tokens can't touch the app. Read and written through the **GitHub REST API**, polled every 30 s while the app is open and immediately on reopen. Only the changed parts update; no reload, no scroll jump [stated].
 - Files:
   - `live/board.json`: the announcement (admins write).
   - `live/packing.json`: ticks for both lists (all four phones write) [stated: all can tick].
   - Removed on 23 Oct: `live/c|b|m|p.json` (statuses) and `live/plan.json` (Now/Next) [stated / proposal, Q31].
 - Concurrent writes: GitHub's SHA check rejects a stale update; re-read, merge the tick, retry.
-- **Tokens:** each of the four phones holds a **fine-grained personal access token** limited to this repo, Contents read/write only, expiring just after the trip [source: GitHub Docs, "Managing your personal access tokens"]. Loaded by QR (§5.5), stored only on that phone, revocable if a phone is lost.
+- **Tokens:** each of the four phones holds a **fine-grained personal access token** limited to the live-data repo, Contents read/write only, expiring just after the trip [source: GitHub Docs, "Managing your personal access tokens"]. Loaded by QR (§5.5), stored only on that phone, revocable if a phone is lost.
 - **Rate limits:** 5,000 requests/hour per account for personal tokens [source: GitHub Docs, "Rate limits for the REST API"]; four phones polling every 30 s ≈ 480/hour. Content-creating requests: 80/minute and 500/hour [source: same]; ticks and announcements stay well under.
 - Nothing alerts a phone in a pocket; urgent things go through Telegram or a call [stated].
 
@@ -305,10 +305,10 @@ Seed files are in `data/`:
   "coords": { "lat": 0, "lng": 0, "datum": "WGS84|GCJ02" },
   "travel": { "mode": "walk|mtr|taxi|train|ferry|bus", "duration_min": 0, "steps": [""] } }
 
-// live branch: live/board.json (admins); "text": "" hides it
+// live-data repo: live/board.json (admins); "text": "" hides it
 { "text": "Meet in the lobby at 9:30.", "by": "c", "set_at": "" }
 
-// live branch: live/packing.json (all four phones)
+// live-data repo: live/packing.json (all four phones)
 { "cb": { "passports": { "done": true, "by": "b", "at": "" } }, "mp": { "meds": { "done": true, "by": "m", "at": "" } } }
 
 // on-device only (localStorage, set by QR), never in the repo
@@ -349,9 +349,10 @@ Seed files are in `data/`:
 | Q36 | Telegram group invite link | Chan to create; **OK in the public repo** [stated]; removal reminder set for 28 Nov |
 | Q37 | Pre-trip art (suitcase placeholder) | Chan may supply a drawing |
 | Q38 | App name and icon | Open [proposal]: "HK trip" under the icon, "HK & Shenzhen trip" in full; icon cropped from the moonlit-harbour drawing |
-| Q39 | iPhone status bar: art runs behind it (§4.5), so iOS draws the clock in white, which may be faint on the cream screens | Open [assumption: check on Mama's phone once installed]; fallback is a solid cream status bar |
+| Q39 | iPhone status bar: art runs behind it (§4.5), so iOS draws the clock in white, which may be faint on the cream screens | **Answered:** readable on Chan's phone; keep [stated, 24 Oct] |
 | Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | Open, before phase 2 [proposal: a "Set up this phone" button inside the app that scans the code with the camera] |
-| Q41 | Phone tokens can write to the whole repo, including the app code on `main` | Open, before phase 2 [proposal: keep live data in a second, tiny repo so the four tokens can only touch that] |
+| Q41 | Phone tokens can write to the whole repo, including the app code on `main` | **Answered:** live data goes in a second, small repo; tokens limited to it [stated, 24 Oct]. Repo name and creation: before phase 2 |
+| Q42 | *Bottom* drawings are about 2 : 3, so the background colour fills the top third or more of the screen; "longer is probably nicer" [stated, 24 Oct] | Open: Chan to choose per image between redrawing at 1320 × 2868 (§4.2) and cropping (preview `&fit=cover`: fine for Victoria Peak and Shenzhen city, cuts the junk boat on Victoria Harbour and Repulse Bay). Redrawn images need new file names |
 
 ---
 
@@ -382,9 +383,11 @@ Seed files are in `data/`:
 | 23 Oct | **No in-app statuses** (removed status buttons, status line, Family screen, lost alert). Help = Telegram group button (placeholder link), calls, emergency numbers. The 20 Oct "no Telegram links" rule is lifted for this one button [stated] |
 | 23 Oct | **All four phones can tick packing items**, so all four get QR setup and a token [stated] |
 | 24 Oct | Development continues from Chan's phone: Claude Code cloud sessions on the GitHub repo; repo copy of this spec is the master [stated: "continue development from my phone"] |
+| 24 Oct | Live data in a second, small repo, with the phone tokens limited to it (Q41). Packing greetings from 24 Oct until the day before the trip. iPhone clock readable with the art behind it (Q39). Button gap at the bottom okay for now [stated] |
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.20 (24 Oct 2026):** Phase 1 feedback: art runs behind Safari's toolbars; crop preview (`&fit=cover`); packing greetings from 24 Oct; live data moves to a second repo (§5.3, Q41); Q39 answered; Q42 (art height) added.
 - **v0.19 (24 Oct 2026):** Phase 1 built: PWA shell (manifest, icons, service worker with update on next open), self-hosted fonts, pre-trip home (F9), read-only packing lists (F10), greetings (F11), Help with the emergency flow (F7), art engine with a hidden preview (§4.2), and `tools/check.mjs` (layout check at the four phone sizes). `home_city` and `cities` added to `data/trip.json`. Build proposals noted in F7, F9, F10, §4.2, §4.3, §5.1. New open items Q38–Q41.
 - **v0.18 (24 Oct 2026):** Phone workflow: repo layout (`CLAUDE.md`, `spec/`, `art/`, `data/`, app at the root of `main`), cloud-session and PR flow, repo copy of the spec is the master, data-only changes from 15 Nov.
 - **v0.17 (24 Oct 2026):** Phones and SIMs answered (Q1, Q3); greeting phrases added (F11) with pre-trip and flight-day pools; afternoon art slot with one image per day; screen sizes for all four phones; data-saving note; Telegram link allowed in public repo with a 28 Nov removal reminder.
