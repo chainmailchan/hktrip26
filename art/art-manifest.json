@@ -33,7 +33,7 @@
       "fit": "bottom",
       "background": "#F7EAD1",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 0.0,
       "raise_px_at_390x844": 0,
       "bytes": 536751
@@ -46,7 +46,7 @@
       "fit": "cover",
       "background": "#022761",
       "theme": "navy",
-      "soften_pct": 20,
+      "soften_pct": 15,
       "note": "Moon sits ~40% down, below the announcement",
       "bytes": 673881
     },
@@ -58,7 +58,7 @@
       "fit": "cover",
       "background": "#F0DBB9",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
       "bytes": 567247
     },
@@ -70,9 +70,33 @@
       "fit": "cover",
       "background": "#F3E1C3",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
       "bytes": 584250
+    },
+    {
+      "file": "art/home-evening-shenzhen.jpg",
+      "use": "Home, evening in Shenzhen",
+      "width": 853,
+      "height": 1844,
+      "fit": "cover",
+      "background": "#F9EACE",
+      "theme": "paper",
+      "soften_pct": 30,
+      "note": "Full-height 9:19.5 drawing sent 24 Oct; background = colour along its top edge",
+      "bytes": 317746
+    },
+    {
+      "file": "art/home-night-shenzhen.jpg",
+      "use": "Home, late night in Shenzhen",
+      "width": 933,
+      "height": 1686,
+      "fit": "cover",
+      "background": "#011F4C",
+      "theme": "navy",
+      "soften_pct": 15,
+      "note": "Sent 24 Oct at 933 × 1686, wider than 9:19.5, so ~8% trimmed each side (dark edges); background = colour along its top edge",
+      "bytes": 377405
     },
     {
       "file": "art/home-night-victoria-harbour.jpg",
@@ -82,7 +106,7 @@
       "fit": "bottom",
       "background": "#F1E6D0",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 14.2,
       "raise_px_at_390x844": 120,
       "bytes": 315934
@@ -95,7 +119,7 @@
       "fit": "cover",
       "background": "#18264F",
       "theme": "navy",
-      "soften_pct": 20,
+      "soften_pct": 15,
       "note": "Keep the plane centred",
       "bytes": 274403
     },
@@ -107,7 +131,7 @@
       "fit": "bottom",
       "background": "#F4E9D2",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": -1.2,
       "raise_px_at_390x844": -10,
       "note": "Day not yet assigned",
@@ -121,35 +145,35 @@
       "fit": "bottom",
       "background": "#F4E8D0",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 13.0,
       "raise_px_at_390x844": 110,
       "note": "Days not yet assigned",
       "bytes": 424013
     },
     {
-      "file": "art/day-kowloon-courtyard.jpg",
+      "file": "art/day-kowloon-courtyard-2.jpg",
       "use": "Afternoon candidate: Kowloon, looking up a housing-block courtyard (mostly-Kowloon days)",
-      "width": 899,
-      "height": 1750,
+      "width": 852,
+      "height": 1846,
       "fit": "cover",
-      "background": "#E1D8CA",
+      "background": "#FDF0D7",
       "theme": "paper",
-      "soften_pct": 50,
-      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
-      "bytes": 649475
+      "soften_pct": 30,
+      "note": "Full-height 9:19.5 drawing with a calm top for the text (replaces the first version, 24 Oct). Background = colour along its top edge. Day(s) not yet assigned",
+      "bytes": 330981
     },
     {
-      "file": "art/day-kowloon-towers.jpg",
+      "file": "art/day-kowloon-towers-2.jpg",
       "use": "Afternoon candidate: Kowloon, tower blocks (mostly-Kowloon days)",
-      "width": 899,
-      "height": 1750,
+      "width": 852,
+      "height": 1846,
       "fit": "cover",
-      "background": "#EAE0CA",
+      "background": "#F8EACF",
       "theme": "paper",
-      "soften_pct": 50,
-      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
-      "bytes": 604415
+      "soften_pct": 30,
+      "note": "Full-height 9:19.5 drawing with a calm top for the text (replaces the first version, 24 Oct). Background = colour along its top edge. Day(s) not yet assigned",
+      "bytes": 337475
     },
     {
       "file": "art/map-hk-paper.jpg",
@@ -174,6 +198,18 @@
       "soften_pct": 30,
       "note": "Mood only; source/attribution TBD",
       "bytes": 523243
+    },
+    {
+      "file": "art/map-sz-paper.jpg",
+      "use": "Place screen map for Shenzhen places (phase 3)",
+      "width": 852,
+      "height": 1846,
+      "fit": "map",
+      "background": "#F7ECD5",
+      "theme": "paper",
+      "soften_pct": 30,
+      "note": "Sent by Chan 24 Oct for the Shenzhen part of the trip (answers the Shenzhen map in Q34). Mood only; source/attribution TBD (Q35)",
+      "bytes": 450662
     }
   ],
   "archived": [
@@ -185,7 +221,7 @@
       "fit": "bottom",
       "background": "#F3E9D3",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 16.6,
       "raise_px_at_390x844": 140,
       "note": "Archived 24 Oct: not going to Repulse Bay [stated]. Not downloaded by phones while archived.",

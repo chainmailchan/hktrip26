@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.26, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.29, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -127,7 +127,7 @@ Top to bottom:
 - Background: **Chan's Hong Kong street map** (paper style by default; navy available), zoomed ~160% and softened 30%, framed on the area of the place [proposal: per-place focus point in data]. A dotted line and a pin are drawn over it, **for mood only** [stated].
 - Card at the bottom: small line-art drawing of the food or activity, name, time and distance, one line on why we're going, and **"More about this place"**.
 - "More about this place" opens the detail view [carried over from v0.15 F4]: About | Getting there switch, 2–4 short lines, numbered plain-language steps, and one **"Open in maps"** button (Google Maps in HK; Amap or Apple Maps in Shenzhen, §5.2). No prices.
-- Shenzhen places need their own map image (Q34); until then use the paper colour with the pin only [proposal].
+- Shenzhen places use Chan's Shenzhen map, `art/map-sz-paper.jpg` [stated, 24 Oct: "the shenzhen map is for the shenzhen portion of the trip"; read as the Place-screen map, to confirm].
 
 ### F5. Weather and what to wear [stated: keep] [carried over]
 - Today's forecast for the city we're in (tomorrow's after 22:00); one plain line of advice from simple rules ("Light layers. Bring the umbrella.").
@@ -199,20 +199,24 @@ Full table in `art/art-manifest.json`. Summary:
 
 | Image | When | Fit | Background | Raise | Soften |
 |---|---|---|---|---|---|
-| Hong Kong morning | 05:00–12:00 | bottom | #F7EAD1 | 0 | 50% |
-| **Afternoon: one image per day** [stated, 24 Oct] | 12:00–17:30 | per image | per image | per image | 50% (paper) |
-| **Two sunset drawings** (`home-sunset-skyline`, `home-sunset-waterfront`; moodier versions) [stated, 24 Oct], taking turns day by day [stated: "taking turns is ok"] | 17:30–22:00 | cover | #F0DBB9 / #F3E1C3 | — | 50% |
-| Moonlit harbour | **22:00–05:00** [stated, 24 Oct] | cover | #022761 | — | 20% |
-| Victoria Harbour | afternoon candidate [stated, 24 Oct] (late night until 24 Oct) | bottom | #F1E6D0 | 14.2% of screen height | 50% |
-| Flight (plane over clouds) | flight mornings | cover | #18264F | — | 20% [stated] |
-| Victoria Peak / Shenzhen city | likely afternoon images for their days [assumption]; days TBD | bottom | see manifest | −1.2% / 13.0% | 50% |
-| Two Kowloon drawings (`day-kowloon-courtyard`, `day-kowloon-towers`) | afternoons of the days spent mostly in Kowloon [stated, 24 Oct]; days TBD; a day can list both to take turns | cover (~5% trimmed each side) | #E1D8CA / #EAE0CA (paper tone) | — | 50% |
-| Repulse Bay | **archived** in `art/archive/`, not downloaded by phones; "we are not going there" [stated, 24 Oct] | bottom | #F3E9D3 | 16.6% | 50% |
+| Hong Kong morning | 05:00–12:00 | bottom | #F7EAD1 | 0 | 30% [stated, 24 Oct] |
+| **Afternoon: one image per day** [stated, 24 Oct] | 12:00–17:30 | per image | per image | per image | 30% (paper) [stated, 24 Oct] |
+| **Two sunset drawings** (`home-sunset-skyline`, `home-sunset-waterfront`; moodier versions) [stated, 24 Oct], taking turns day by day [stated: "taking turns is ok"] | 17:30–22:00, Hong Kong days | cover | #F0DBB9 / #F3E1C3 | — | 30% [stated, 24 Oct] |
+| Moonlit harbour | **22:00–05:00** [stated, 24 Oct], Hong Kong days | cover | #022761 | — | 15% [stated, 24 Oct] |
+| **Shenzhen evening skyline** (`home-evening-shenzhen`) [stated, 24 Oct] | 17:30–22:00, Shenzhen days | cover | #F9EACE | — | 30% |
+| **Shenzhen night** (`home-night-shenzhen`) [stated, 24 Oct] | 22:00–05:00, Shenzhen days | cover (~8% trimmed each side) | #011F4C | — | 15% |
+| Victoria Harbour | afternoon candidate [stated, 24 Oct] (late night until 24 Oct) | bottom | #F1E6D0 | 14.2% of screen height | 30% [stated, 24 Oct] |
+| Flight (plane over clouds) | flight mornings | cover | #18264F | — | 15% [stated, 24 Oct] |
+| Victoria Peak / Shenzhen city | likely afternoon images for their days [assumption]; days TBD | bottom | see manifest | −1.2% / 13.0% | 30% [stated, 24 Oct] |
+| Two Kowloon drawings (`day-kowloon-courtyard-2`, `day-kowloon-towers-2`; calm-top versions, 24 Oct) [stated] | afternoons of the days spent mostly in Kowloon [stated, 24 Oct]; days TBD; a day can list both to take turns | cover (~5% trimmed each side) | #FDF0D7 / #F8EACF | — | 30% [stated, 24 Oct] |
+| Repulse Bay | **archived** in `art/archive/`, not downloaded by phones; "we are not going there" [stated, 24 Oct] | bottom | #F3E9D3 | 16.6% | 30% [stated, 24 Oct] |
 | HK street map (paper / navy) | Place screen | map | #F6EAD0 / #1E4880 | — | 30% |
+| Shenzhen map (`map-sz-paper`) [stated, 24 Oct] | Place screen, Shenzhen places | map | #F7ECD5 | — | 30% |
 
 - Time windows and the flight-day overrides are proposals in `data/art-schedule.json`; the image–context pairings are [stated].
 - **Afternoon art changes with each day's itinerary** [stated]: Chan will supply one image per day (`afternoon_by_day`). Until a day has one, the morning image stays up.
 - A time slot can list several images; they take turns, one per day [proposal] (used for the two sunsets).
+- A time slot can name a picture per city (`by_city` in `data/art-schedule.json`); the city comes from `data/itinerary.json`, so Shenzhen days (20–23 Nov) get the Shenzhen pictures without listing dates. After midnight counts as the evening before (00:00–05:00 on 24 Nov is still a Shenzhen night) [proposal].
 - **Fits:** *bottom* = full width, height in proportion, pinned to the bottom and raised by the stored share of screen height; the background colour fills the sky above. *cover* = scaled to cover without distortion, trimmed equally from both sides. **Never stretch.**
 - **Two themes:**
   - *paper*: ink text #22211F, secondary #5F5A4E, ink button with paper-coloured text, Help #A8382C.
@@ -273,7 +277,7 @@ Full table in `art/art-manifest.json`. Summary:
 - Nothing alerts a phone in a pocket; urgent things go through Telegram or a call [stated].
 
 ### 5.4 Map art
-- **Chan's two static Hong Kong street maps** (`art/map-hk-paper.jpg`, `art/map-hk-navy.jpg`) replace the per-stop rendered maps of v0.15 [stated]. They are mood images, not navigation [stated].
+- **Chan's two static Hong Kong street maps** (`art/map-hk-paper.jpg`, `art/map-hk-navy.jpg`), plus his Shenzhen map (`art/map-sz-paper.jpg`, 24 Oct), replace the per-stop rendered maps of v0.15 [stated]. They are mood images, not navigation [stated].
 - Source of the maps is unknown; **if they derive from OpenStreetMap data, show "© OpenStreetMap contributors"** on the Place screen (Q35) [assumption].
 - No live tiles; nothing to fetch at runtime.
 
@@ -348,8 +352,8 @@ Seed files are in `data/`:
 | Q31 | Without Now/Next, is a clock-time highlight on the Schedule enough, or does Chan want an admin "we've moved on" control? | Open [proposal: clock time] |
 | Q32 | Greeting phrases | **Answered:** Chan's full list (F11) [stated]; window times are proposals |
 | Q33 | Final typeface | Chan will decide later [stated] |
-| Q34 | Shenzhen map image; **one afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon drawings received, for the mostly-Kowloon days [stated, 24 Oct]: which days? Shenzhen evening drawings: Chan looking [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
-| Q35 | Source of the street maps (attribution) | Open |
+| Q34 | **One afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon drawings received, for the mostly-Kowloon days [stated, 24 Oct]: which days? Shenzhen evening drawings: Chan looking [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
+| Q35 | Source of the street maps, including the Shenzhen map (attribution) | Open |
 | Q36 | Telegram group invite link | Chan to create; **OK in the public repo** [stated]; removal reminder set for 28 Nov |
 | Q37 | Pre-trip art (suitcase placeholder) | Chan may supply a drawing |
 | Q38 | App name and icon | Open [proposal]: "HK trip" under the icon, "HK & Shenzhen trip" in full; icon cropped from the moonlit-harbour drawing |
@@ -387,6 +391,9 @@ Seed files are in `data/`:
 | 23 Oct | **No in-app statuses** (removed status buttons, status line, Family screen, lost alert). Help = Telegram group button (placeholder link), calls, emergency numbers. The 20 Oct "no Telegram links" rule is lifted for this one button [stated] |
 | 23 Oct | **All four phones can tick packing items**, so all four get QR setup and a token [stated] |
 | 24 Oct | Development continues from Chan's phone: Claude Code cloud sessions on the GitHub repo; repo copy of this spec is the master [stated: "continue development from my phone"] |
+| 24 Oct | Shenzhen evening skyline and Shenzhen night drawings for the Shenzhen days [stated] |
+| 24 Oct | Calmer-topped Kowloon drawings replace the first two. Shenzhen map received for the Shenzhen part of the trip [stated] |
+| 24 Oct | Soften layer lowered: cream (paper) images 30%, navy images 15% (was 50% / 20%); street maps unchanged at 30% [stated] |
 | 24 Oct | Two Kowloon drawings added for the mostly-Kowloon afternoons [stated] |
 | 24 Oct | Evening: Chan's two sunset drawings. Kowloon photo for the mostly-Kowloon days. Victoria Harbour is an afternoon candidate. Repulse Bay archived (not going) [stated] |
 | 24 Oct | Late night uses the moonlit harbour; evening will use a sunset photo (to upload). All future art at 9 : 19.5. Current art works well full screen in the installed app. `hktrip26scrt` is public [stated] |
@@ -396,6 +403,9 @@ Seed files are in `data/`:
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.29 (24 Oct 2026):** Shenzhen evening and night drawings; art can vary by city (`by_city`), with after-midnight counted as the evening before (§4.2).
+- **v0.28 (24 Oct 2026):** Kowloon drawings replaced with calm-top versions (`-2`); Shenzhen map added for the Place screen (F4, §5.4).
+- **v0.27 (24 Oct 2026):** Soften layer lowered to 30% on cream images and 15% on navy (§4.2).
 - **v0.26 (24 Oct 2026):** Two Kowloon drawings added as afternoon candidates for the mostly-Kowloon days (Q34).
 - **v0.25 (24 Oct 2026):** Two sunset drawings (moodier versions) for the evening, taking turns by day; Repulse Bay archived; Victoria Harbour an afternoon candidate; Kowloon photo slot noted (Q34).
 - **v0.24 (24 Oct 2026):** Late night → moonlit harbour; evening slot reserved for the sunset photo (moonlit harbour meanwhile); Victoria Harbour unscheduled; 9 : 19.5 art format stated; `hktrip26scrt` public.

@@ -22,14 +22,20 @@
         "home-sunset-skyline.jpg",
         "home-sunset-waterfront.jpg"
       ],
-      "_note": "Chan's two sunset drawings [stated 24 Oct], taking turns day by day [stated 24 Oct]"
+      "by_city": {
+        "SZ": "home-evening-shenzhen.jpg"
+      },
+      "_note": "Hong Kong: Chan's two sunset drawings, taking turns day by day [stated 24 Oct]. Shenzhen days (city from itinerary.json): the Shenzhen evening skyline [stated 24 Oct]"
     },
     {
       "id": "late",
       "from": "22:00",
       "to": "05:00",
       "image": "home-evening-moonlit-harbour.jpg",
-      "_note": "moonlit harbour [stated 24 Oct]"
+      "by_city": {
+        "SZ": "home-night-shenzhen.jpg"
+      },
+      "_note": "moonlit harbour; Shenzhen night on Shenzhen days [stated 24 Oct]. After midnight counts as the evening before"
     }
   ],
   "afternoon_by_day": {
@@ -45,8 +51,8 @@
       "day-victoria-peak.jpg",
       "day-shenzhen-city.jpg",
       "home-night-victoria-harbour.jpg",
-      "day-kowloon-courtyard.jpg",
-      "day-kowloon-towers.jpg"
+      "day-kowloon-courtyard-2.jpg",
+      "day-kowloon-towers-2.jpg"
     ],
     "_note": "Chan to assign once the itinerary is set; existing day drawings are likely afternoon images [assumption]. Victoria Harbour is a candidate [stated 24 Oct]. The two Kowloon drawings are for the days that are mostly in Kowloon [stated 24 Oct]; a day can list both to take turns."
   },
