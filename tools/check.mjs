@@ -46,11 +46,9 @@ const pages = [
   ['home', '?preview=pretrip&date=2026-10-31', { noScroll: true }],
   ...schedule.default.map((s) => [`home-${s.id}`, `?preview=${s.id}&date=2026-11-18`, { noScroll: true }]),
   ['home-flight', '?preview=morning&date=2026-11-17', { noScroll: true }],
-  ...manifest.images.filter((i) => i.fit !== 'map').flatMap((i) => {
+  ...manifest.images.filter((i) => i.fit !== 'map').map((i) => {
     const stem = i.file.split('/').pop().replace(/\.jpg$/, '');
-    const out = [[`art-${stem}`, `?preview=${stem}`, { noScroll: true }]];
-    if (i.fit === 'bottom') out.push([`crop-${stem}`, `?preview=${stem}&fit=cover`, { noScroll: true }]);
-    return out;
+    return [`art-${stem}`, `?preview=${stem}`, { noScroll: true }];
   }),
   ['packing-mp', '#packing/mp'],
   ['packing-cb', '#packing/cb'],
