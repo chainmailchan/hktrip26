@@ -201,7 +201,7 @@
     },
     {
       "file": "art/map-sz-paper.jpg",
-      "use": "Place screen map for Shenzhen places (phase 3)",
+      "use": "Place screen map (opened from a Schedule item) during the Shenzhen part of the trip (phase 3)",
       "width": 852,
       "height": 1846,
       "fit": "map",
