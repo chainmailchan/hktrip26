@@ -114,9 +114,6 @@ function renderHome() {
   const pretrip = !slotPreview && date < trip.start;
   const file = slotPreview && !schedule.default.some((s) => s.id === preview) ? preview : undefined;
   const art = pickArt({ schedule, manifest, date, time, pretrip, file });
-  // Preview only: &fit=cover shows a bottom-fit image cropped at the sides to fill the screen.
-  const cropped = slotPreview && params.get('fit') === 'cover' && art.fit === 'bottom';
-  if (cropped) art.fit = 'cover';
   setVars(themeVars(manifest, art));
   paintArt(artEl, art, { animate: firstHome });
   artEl.hidden = false;
@@ -130,7 +127,7 @@ function renderHome() {
   let bottom = '';
   if (slotPreview) {
     lines = `<div class="line">Preview · ${esc(date)} ${esc(time)}</div>
-      <div class="line-bold">${esc(art.file || 'placeholder art')}${cropped ? ', cropped' : ''}</div>`;
+      <div class="line-bold">${esc(art.file || 'placeholder art')}</div>`;
     announcement = announcementHtml({ by: 'c', text: 'Example: meet in the lobby at 9:30.' });
     bottom = '<a class="btn-primary" href="./">Close preview</a>';
   } else {
@@ -259,11 +256,9 @@ function renderPreviewList() {
     ['Pre-trip home, today', '?preview=pretrip'],
     ...schedule.default.map((s) => [`${label(s.id)}, ${longDate(day2)}`, `?preview=${s.id}&date=${day2}`]),
     ...schedule.overrides.map((o) => [`${longDate(o.date)} from ${o.from}`, `?preview=${slotAt(o.from)}&date=${o.date}&time=${o.from}`]),
-    ...manifest.images.filter((i) => i.fit !== 'map').flatMap((i) => {
+    ...manifest.images.filter((i) => i.fit !== 'map').map((i) => {
       const stem = i.file.split('/').pop().replace(/\.[a-z]+$/, '');
-      const links = [[i.use, `?preview=${stem}`]];
-      if (i.fit === 'bottom') links.push([i.use + ', cropped to fill the screen', `?preview=${stem}&fit=cover`]);
-      return links;
+      return [i.use, `?preview=${stem}`];
     })
   ];
   screen.innerHTML = `
