@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.21, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.22, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -233,7 +233,7 @@ Full table in `art/art-manifest.json`. Summary:
   - iPhone 14 Pro (Mama) 393 × 852 pt [source: same page]; safe areas likely 59 / 34 like other Dynamic Island phones of that size [assumption: read them from `env()` rather than hard-coding].
   - Galaxy S24+ (Papa) 384 × 832 CSS px, device pixel ratio 2.8125 [source: blisk.io device list]; same shape as the iPhones (≈0.46).
   - All four phones are almost the same shape, so art crops and layouts look alike on each.
-- Art runs edge to edge behind the status bar and, in Safari, down behind the address bar [stated, 24 Oct]. It scrolls with the page rather than being fixed, because iOS Safari doesn't draw fixed content under its bottom bar [source: Apple Developer Forums, thread 800798], so in Safari the home screen can move by the height of that bar [proposal]; text starts below `env(safe-area-inset-top)` and the button sits above `env(safe-area-inset-bottom)`. In Safari the button sits above the toolbar; in the installed app, above the home bar [proposal; Chan: "okay for now", 24 Oct].
+- Art runs edge to edge behind the status bar and, in Safari, down behind the address bar [stated, 24 Oct]. It scrolls with the page rather than being fixed, because iOS Safari doesn't draw fixed content under its bottom bar [source: Apple Developer Forums, thread 800798], so in Safari the home screen can move by the height of that bar [proposal]. Measured in Safari on Chan's 16 Pro Max: the page starts 62 pt down (the status bar band is Safari's, tinted with the page colour, and can't be drawn into) and ended 58 pt above the bottom edge; in an iPhone Safari tab the page is made 58 px taller so the art runs into that strip [proposal]. The installed app fills the whole screen; text starts below `env(safe-area-inset-top)` and the button sits above `env(safe-area-inset-bottom)`. In Safari the button sits above the toolbar; in the installed app, above the home bar [proposal; Chan: "okay for now", 24 Oct].
 - Text sizes stay fixed; bigger phones get more space between announcement and button.
 - Test on Papa's S24+ in Chrome, both in the browser and installed.
 
@@ -258,7 +258,7 @@ Full table in `art/art-manifest.json`. Summary:
 - "Open in maps" in Shenzhen: Amap or Apple Maps. Mainland maps use GCJ-02 while GPS/OSM use WGS-84 (offsets of hundreds of metres); store the datum with coordinates and convert before building Amap links [assumption: verify Amap URI parameters].
 
 ### 5.3 Live data: GitHub only (no server, no bot [stated])
-- **A second, small repo holds the live files** [stated, 24 Oct], so the phones' tokens can't touch the app. Read and written through the **GitHub REST API**, polled every 30 s while the app is open and immediately on reopen. Only the changed parts update; no reload, no scroll jump [stated].
+- **A second, small repo holds the live files: `hktrip26scrt`** [stated, 24 Oct], so the phones' tokens can't touch the app. Read and written through the **GitHub REST API**, polled every 30 s while the app is open and immediately on reopen. Only the changed parts update; no reload, no scroll jump [stated].
 - Files:
   - `live/board.json`: the announcement (admins write).
   - `live/packing.json`: ticks for both lists (all four phones write) [stated: all can tick].
@@ -274,7 +274,7 @@ Full table in `art/art-manifest.json`. Summary:
 - No live tiles; nothing to fetch at runtime.
 
 ### 5.5 Setup and access [stated: QR setup]
-- No accounts. **One QR code per person** (Chan, Belle, Mama, Papa) carrying their id, their token, admin yes/no, and the family phone numbers for the Call buttons. Scanning it sets the phone up in one step; all of it stays on the phone.
+- No accounts. **One QR code per person** (Chan, Belle, Mama, Papa) carrying their id, their token, admin yes/no, and the family phone numbers for the Call buttons. Scanning it sets the phone up in one step; all of it stays on the phone. **The code is scanned inside the app** (a "Set up this phone" button that opens the camera), so it sets up the installed app rather than Safari [stated, 24 Oct].
 - Before setup the site still works **view-only** (countdown, lists, guide), which is what Mama and Papa see from the link Chan sends around 31 Oct [stated].
 - Chan sets up Mama's and Papa's phones in person, week of 2 Nov [stated]. Include a one-page install guide.
 
@@ -350,8 +350,8 @@ Seed files are in `data/`:
 | Q37 | Pre-trip art (suitcase placeholder) | Chan may supply a drawing |
 | Q38 | App name and icon | Open [proposal]: "HK trip" under the icon, "HK & Shenzhen trip" in full; icon cropped from the moonlit-harbour drawing |
 | Q39 | iPhone status bar: art runs behind it (§4.5), so iOS draws the clock in white, which may be faint on the cream screens | **Answered:** readable on Chan's phone; keep [stated, 24 Oct] |
-| Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | Open, before phase 2 [proposal: a "Set up this phone" button inside the app that scans the code with the camera] |
-| Q41 | Phone tokens can write to the whole repo, including the app code on `main` | **Answered:** live data goes in a second, small repo; tokens limited to it [stated, 24 Oct]. Repo name and creation: before phase 2 |
+| Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | **Answered:** a "Set up this phone" button inside the app scans the code with the camera [stated, 24 Oct] |
+| Q41 | Phone tokens can write to the whole repo, including the app code on `main` | **Answered:** live data goes in a second, small repo; tokens limited to it [stated, 24 Oct]. Repo: `hktrip26scrt` [stated, 24 Oct] |
 | Q42 | *Bottom* drawings are about 2 : 3, so the background colour fills the top third or more of the screen; "longer is probably nicer" [stated, 24 Oct] | **Answered:** no cropping ("the cropped all look worse"); keep the drawings and let them run under Safari's address bar [stated, 24 Oct] |
 
 ---
@@ -383,11 +383,13 @@ Seed files are in `data/`:
 | 23 Oct | **No in-app statuses** (removed status buttons, status line, Family screen, lost alert). Help = Telegram group button (placeholder link), calls, emergency numbers. The 20 Oct "no Telegram links" rule is lifted for this one button [stated] |
 | 23 Oct | **All four phones can tick packing items**, so all four get QR setup and a token [stated] |
 | 24 Oct | Development continues from Chan's phone: Claude Code cloud sessions on the GitHub repo; repo copy of this spec is the master [stated: "continue development from my phone"] |
+| 24 Oct | Live-data repo is `hktrip26scrt`. QR codes are scanned inside the app (Q40) [stated] |
 | 24 Oct | No cropping of the art; it runs under Safari's address bar instead (Q42) [stated] |
 | 24 Oct | Live data in a second, small repo, with the phone tokens limited to it (Q41). Packing greetings from 24 Oct until the day before the trip. iPhone clock readable with the art behind it (Q39). Button gap at the bottom okay for now [stated] |
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.22 (24 Oct 2026):** In an iPhone Safari tab the art runs into the 58 pt strip below the page (§4.5); live-data repo named (Q41); in-app QR scanning (§5.5, Q40).
 - **v0.21 (24 Oct 2026):** Art scrolls with the page so it runs under Safari's address bar; crop preview removed; Q42 answered.
 - **v0.20 (24 Oct 2026):** Phase 1 feedback: art runs behind Safari's toolbars; crop preview (`&fit=cover`); packing greetings from 24 Oct; live data moves to a second repo (§5.3, Q41); Q39 answered; Q42 (art height) added.
 - **v0.19 (24 Oct 2026):** Phase 1 built: PWA shell (manifest, icons, service worker with update on next open), self-hosted fonts, pre-trip home (F9), read-only packing lists (F10), greetings (F11), Help with the emergency flow (F7), art engine with a hidden preview (§4.2), and `tools/check.mjs` (layout check at the four phone sizes). `home_city` and `cities` added to `data/trip.json`. Build proposals noted in F7, F9, F10, §4.2, §4.3, §5.1. New open items Q38–Q41.
