@@ -33,7 +33,7 @@
       "fit": "bottom",
       "background": "#F7EAD1",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 0.0,
       "raise_px_at_390x844": 0,
       "bytes": 536751
@@ -46,7 +46,7 @@
       "fit": "cover",
       "background": "#022761",
       "theme": "navy",
-      "soften_pct": 20,
+      "soften_pct": 15,
       "note": "Moon sits ~40% down, below the announcement",
       "bytes": 673881
     },
@@ -58,7 +58,7 @@
       "fit": "cover",
       "background": "#F0DBB9",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
       "bytes": 567247
     },
@@ -70,7 +70,7 @@
       "fit": "cover",
       "background": "#F3E1C3",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
       "bytes": 584250
     },
@@ -82,7 +82,7 @@
       "fit": "bottom",
       "background": "#F1E6D0",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 14.2,
       "raise_px_at_390x844": 120,
       "bytes": 315934
@@ -95,7 +95,7 @@
       "fit": "cover",
       "background": "#18264F",
       "theme": "navy",
-      "soften_pct": 20,
+      "soften_pct": 15,
       "note": "Keep the plane centred",
       "bytes": 274403
     },
@@ -107,7 +107,7 @@
       "fit": "bottom",
       "background": "#F4E9D2",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": -1.2,
       "raise_px_at_390x844": -10,
       "note": "Day not yet assigned",
@@ -121,7 +121,7 @@
       "fit": "bottom",
       "background": "#F4E8D0",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 13.0,
       "raise_px_at_390x844": 110,
       "note": "Days not yet assigned",
@@ -135,7 +135,7 @@
       "fit": "cover",
       "background": "#E1D8CA",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
       "bytes": 649475
     },
@@ -147,7 +147,7 @@
       "fit": "cover",
       "background": "#EAE0CA",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
       "bytes": 604415
     },
@@ -185,7 +185,7 @@
       "fit": "bottom",
       "background": "#F3E9D3",
       "theme": "paper",
-      "soften_pct": 50,
+      "soften_pct": 30,
       "raise_pct_of_screen_height": 16.6,
       "raise_px_at_390x844": 140,
       "note": "Archived 24 Oct: not going to Repulse Bay [stated]. Not downloaded by phones while archived.",
