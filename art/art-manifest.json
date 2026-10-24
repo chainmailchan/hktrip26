@@ -128,28 +128,28 @@
       "bytes": 424013
     },
     {
-      "file": "art/day-kowloon-courtyard.jpg",
+      "file": "art/day-kowloon-courtyard-2.jpg",
       "use": "Afternoon candidate: Kowloon, looking up a housing-block courtyard (mostly-Kowloon days)",
-      "width": 899,
-      "height": 1750,
+      "width": 852,
+      "height": 1846,
       "fit": "cover",
-      "background": "#E1D8CA",
+      "background": "#FDF0D7",
       "theme": "paper",
       "soften_pct": 30,
-      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
-      "bytes": 649475
+      "note": "Full-height 9:19.5 drawing with a calm top for the text (replaces the first version, 24 Oct). Background = colour along its top edge. Day(s) not yet assigned",
+      "bytes": 330981
     },
     {
-      "file": "art/day-kowloon-towers.jpg",
+      "file": "art/day-kowloon-towers-2.jpg",
       "use": "Afternoon candidate: Kowloon, tower blocks (mostly-Kowloon days)",
-      "width": 899,
-      "height": 1750,
+      "width": 852,
+      "height": 1846,
       "fit": "cover",
-      "background": "#EAE0CA",
+      "background": "#F8EACF",
       "theme": "paper",
       "soften_pct": 30,
-      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
-      "bytes": 604415
+      "note": "Full-height 9:19.5 drawing with a calm top for the text (replaces the first version, 24 Oct). Background = colour along its top edge. Day(s) not yet assigned",
+      "bytes": 337475
     },
     {
       "file": "art/map-hk-paper.jpg",
@@ -174,6 +174,18 @@
       "soften_pct": 30,
       "note": "Mood only; source/attribution TBD",
       "bytes": 523243
+    },
+    {
+      "file": "art/map-sz-paper.jpg",
+      "use": "Place screen map for Shenzhen places (phase 3)",
+      "width": 852,
+      "height": 1846,
+      "fit": "map",
+      "background": "#F7ECD5",
+      "theme": "paper",
+      "soften_pct": 30,
+      "note": "Sent by Chan 24 Oct for the Shenzhen part of the trip (answers the Shenzhen map in Q34). Mood only; source/attribution TBD (Q35)",
+      "bytes": 450662
     }
   ],
   "archived": [
