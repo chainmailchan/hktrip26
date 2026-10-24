@@ -51,28 +51,28 @@
       "bytes": 673881
     },
     {
-      "file": "art/home-sunset-a.jpg",
-      "use": "Home, evening: sunset over the skyline (takes turns with b)",
-      "width": 851,
-      "height": 1848,
+      "file": "art/home-sunset-skyline.jpg",
+      "use": "Home, evening: sunset over the skyline (takes turns with the waterfront)",
+      "width": 853,
+      "height": 1844,
       "fit": "cover",
-      "background": "#F7E8CC",
+      "background": "#F0DBB9",
       "theme": "paper",
       "soften_pct": 50,
-      "note": "Full-height 9:19.5 drawing; background = colour along its top edge. Sent in chat at ~851 px wide; full-size original would be sharper",
-      "bytes": 611503
+      "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
+      "bytes": 567247
     },
     {
-      "file": "art/home-sunset-b.jpg",
-      "use": "Home, evening: sunset from the waterfront (takes turns with a)",
+      "file": "art/home-sunset-waterfront.jpg",
+      "use": "Home, evening: sunset from the waterfront (takes turns with the skyline)",
       "width": 852,
       "height": 1846,
       "fit": "cover",
-      "background": "#F6E8CE",
+      "background": "#F3E1C3",
       "theme": "paper",
       "soften_pct": 50,
-      "note": "Full-height 9:19.5 drawing; background = colour along its top edge. Sent in chat at ~851 px wide; full-size original would be sharper",
-      "bytes": 623752
+      "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
+      "bytes": 584250
     },
     {
       "file": "art/home-night-victoria-harbour.jpg",
