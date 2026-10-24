@@ -42,6 +42,13 @@ a:active, button:active { opacity: 0.7; }
 /* Absolute, not fixed: iOS Safari won't draw fixed content under its bottom bar. The body is at least
    100lvh tall, so in Safari the art runs down behind the bar; in the installed app it is the full screen. */
 .art { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+/* iPhone Safari tab only (not the installed app): the page ends 58 px above the bottom edge and Safari
+   fills that strip with flat colour (measured on Chan's 16 Pro Max, 24 Oct). A taller page lets the art run into it. */
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: browser) {
+    body { min-height: calc(100lvh + 58px); }
+  }
+}
 .art-img { position: absolute; left: 0; width: 100%; display: block; max-width: none; }
 .fit-bottom { height: auto; }
 .fit-cover { top: 0; height: 100%; object-fit: cover; object-position: center; }
