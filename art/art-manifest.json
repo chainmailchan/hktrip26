@@ -75,6 +75,30 @@
       "bytes": 584250
     },
     {
+      "file": "art/home-evening-shenzhen.jpg",
+      "use": "Home, evening in Shenzhen",
+      "width": 853,
+      "height": 1844,
+      "fit": "cover",
+      "background": "#F9EACE",
+      "theme": "paper",
+      "soften_pct": 30,
+      "note": "Full-height 9:19.5 drawing sent 24 Oct; background = colour along its top edge",
+      "bytes": 317746
+    },
+    {
+      "file": "art/home-night-shenzhen.jpg",
+      "use": "Home, late night in Shenzhen",
+      "width": 933,
+      "height": 1686,
+      "fit": "cover",
+      "background": "#011F4C",
+      "theme": "navy",
+      "soften_pct": 15,
+      "note": "Sent 24 Oct at 933 × 1686, wider than 9:19.5, so ~8% trimmed each side (dark edges); background = colour along its top edge",
+      "bytes": 377405
+    },
+    {
       "file": "art/home-night-victoria-harbour.jpg",
       "use": "Afternoon candidate: Victoria Harbour (late night until 24 Oct)",
       "width": 989,

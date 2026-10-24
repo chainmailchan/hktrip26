@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.28, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.29, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -201,8 +201,10 @@ Full table in `art/art-manifest.json`. Summary:
 |---|---|---|---|---|---|
 | Hong Kong morning | 05:00–12:00 | bottom | #F7EAD1 | 0 | 30% [stated, 24 Oct] |
 | **Afternoon: one image per day** [stated, 24 Oct] | 12:00–17:30 | per image | per image | per image | 30% (paper) [stated, 24 Oct] |
-| **Two sunset drawings** (`home-sunset-skyline`, `home-sunset-waterfront`; moodier versions) [stated, 24 Oct], taking turns day by day [stated: "taking turns is ok"] | 17:30–22:00 | cover | #F0DBB9 / #F3E1C3 | — | 30% [stated, 24 Oct] |
-| Moonlit harbour | **22:00–05:00** [stated, 24 Oct] | cover | #022761 | — | 15% [stated, 24 Oct] |
+| **Two sunset drawings** (`home-sunset-skyline`, `home-sunset-waterfront`; moodier versions) [stated, 24 Oct], taking turns day by day [stated: "taking turns is ok"] | 17:30–22:00, Hong Kong days | cover | #F0DBB9 / #F3E1C3 | — | 30% [stated, 24 Oct] |
+| Moonlit harbour | **22:00–05:00** [stated, 24 Oct], Hong Kong days | cover | #022761 | — | 15% [stated, 24 Oct] |
+| **Shenzhen evening skyline** (`home-evening-shenzhen`) [stated, 24 Oct] | 17:30–22:00, Shenzhen days | cover | #F9EACE | — | 30% |
+| **Shenzhen night** (`home-night-shenzhen`) [stated, 24 Oct] | 22:00–05:00, Shenzhen days | cover (~8% trimmed each side) | #011F4C | — | 15% |
 | Victoria Harbour | afternoon candidate [stated, 24 Oct] (late night until 24 Oct) | bottom | #F1E6D0 | 14.2% of screen height | 30% [stated, 24 Oct] |
 | Flight (plane over clouds) | flight mornings | cover | #18264F | — | 15% [stated, 24 Oct] |
 | Victoria Peak / Shenzhen city | likely afternoon images for their days [assumption]; days TBD | bottom | see manifest | −1.2% / 13.0% | 30% [stated, 24 Oct] |
@@ -214,6 +216,7 @@ Full table in `art/art-manifest.json`. Summary:
 - Time windows and the flight-day overrides are proposals in `data/art-schedule.json`; the image–context pairings are [stated].
 - **Afternoon art changes with each day's itinerary** [stated]: Chan will supply one image per day (`afternoon_by_day`). Until a day has one, the morning image stays up.
 - A time slot can list several images; they take turns, one per day [proposal] (used for the two sunsets).
+- A time slot can name a picture per city (`by_city` in `data/art-schedule.json`); the city comes from `data/itinerary.json`, so Shenzhen days (20–23 Nov) get the Shenzhen pictures without listing dates. After midnight counts as the evening before (00:00–05:00 on 24 Nov is still a Shenzhen night) [proposal].
 - **Fits:** *bottom* = full width, height in proportion, pinned to the bottom and raised by the stored share of screen height; the background colour fills the sky above. *cover* = scaled to cover without distortion, trimmed equally from both sides. **Never stretch.**
 - **Two themes:**
   - *paper*: ink text #22211F, secondary #5F5A4E, ink button with paper-coloured text, Help #A8382C.
@@ -388,6 +391,7 @@ Seed files are in `data/`:
 | 23 Oct | **No in-app statuses** (removed status buttons, status line, Family screen, lost alert). Help = Telegram group button (placeholder link), calls, emergency numbers. The 20 Oct "no Telegram links" rule is lifted for this one button [stated] |
 | 23 Oct | **All four phones can tick packing items**, so all four get QR setup and a token [stated] |
 | 24 Oct | Development continues from Chan's phone: Claude Code cloud sessions on the GitHub repo; repo copy of this spec is the master [stated: "continue development from my phone"] |
+| 24 Oct | Shenzhen evening skyline and Shenzhen night drawings for the Shenzhen days [stated] |
 | 24 Oct | Calmer-topped Kowloon drawings replace the first two. Shenzhen map received for the Shenzhen part of the trip [stated] |
 | 24 Oct | Soften layer lowered: cream (paper) images 30%, navy images 15% (was 50% / 20%); street maps unchanged at 30% [stated] |
 | 24 Oct | Two Kowloon drawings added for the mostly-Kowloon afternoons [stated] |
@@ -399,6 +403,7 @@ Seed files are in `data/`:
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.29 (24 Oct 2026):** Shenzhen evening and night drawings; art can vary by city (`by_city`), with after-midnight counted as the evening before (§4.2).
 - **v0.28 (24 Oct 2026):** Kowloon drawings replaced with calm-top versions (`-2`); Shenzhen map added for the Place screen (F4, §5.4).
 - **v0.27 (24 Oct 2026):** Soften layer lowered to 30% on cream images and 15% on navy (§4.2).
 - **v0.26 (24 Oct 2026):** Two Kowloon drawings added as afternoon candidates for the mostly-Kowloon days (Q34).

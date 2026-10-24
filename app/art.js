@@ -13,18 +13,22 @@ export function inWindow(time, from, to) {
   return from <= end ? time >= from && time < end : time >= from || time < end;
 }
 
-export function pickArt({ schedule, manifest, date, time, pretrip, file }) {
+export function pickArt({ schedule, manifest, date, time, pretrip, file, cityOn = () => null }) {
   if (!file) {
     if (pretrip) {
       file = schedule.pretrip.image;
     } else {
       const override = schedule.overrides.find((o) => o.date === date && inWindow(time, o.from, o.to));
       const slot = schedule.default.find((s) => inWindow(time, s.from, s.to));
+      // After midnight, a slot that began the evening before still belongs to that day (and its city).
+      const slotDate = slot.from > slot.to && time < slot.to
+        ? new Date(Date.parse(date) - 86400000).toISOString().slice(0, 10) : date;
       file = override ? override.image
+        : slot.by_city?.[cityOn(slotDate)] ? slot.by_city[cityOn(slotDate)]
         : slot.image === 'per_day' ? schedule.afternoon_by_day[date] || slot.fallback
         : slot.image;
       // A list of images takes turns, one per day (the two sunset drawings).
-      if (Array.isArray(file)) file = file[Math.round(Date.parse(date) / 86400000) % file.length];
+      if (Array.isArray(file)) file = file[Math.round(Date.parse(slotDate) / 86400000) % file.length];
     }
   }
   const img = file && findImage(manifest, file);

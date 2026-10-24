@@ -113,7 +113,7 @@ function renderHome() {
   const slotPreview = preview !== null && preview !== 'pretrip';
   const pretrip = !slotPreview && date < trip.start;
   const file = slotPreview && !schedule.default.some((s) => s.id === preview) ? preview : undefined;
-  const art = pickArt({ schedule, manifest, date, time, pretrip, file });
+  const art = pickArt({ schedule, manifest, date, time, pretrip, file, cityOn });
   setVars(themeVars(manifest, art));
   paintArt(artEl, art, { animate: firstHome });
   artEl.hidden = false;

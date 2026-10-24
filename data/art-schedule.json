@@ -22,14 +22,20 @@
         "home-sunset-skyline.jpg",
         "home-sunset-waterfront.jpg"
       ],
-      "_note": "Chan's two sunset drawings [stated 24 Oct], taking turns day by day [stated 24 Oct]"
+      "by_city": {
+        "SZ": "home-evening-shenzhen.jpg"
+      },
+      "_note": "Hong Kong: Chan's two sunset drawings, taking turns day by day [stated 24 Oct]. Shenzhen days (city from itinerary.json): the Shenzhen evening skyline [stated 24 Oct]"
     },
     {
       "id": "late",
       "from": "22:00",
       "to": "05:00",
       "image": "home-evening-moonlit-harbour.jpg",
-      "_note": "moonlit harbour [stated 24 Oct]"
+      "by_city": {
+        "SZ": "home-night-shenzhen.jpg"
+      },
+      "_note": "moonlit harbour; Shenzhen night on Shenzhen days [stated 24 Oct]. After midnight counts as the evening before"
     }
   ],
   "afternoon_by_day": {
