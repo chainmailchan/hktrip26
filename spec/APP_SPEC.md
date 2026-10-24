@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.29, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.30, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -127,7 +127,7 @@ Top to bottom:
 - Background: **Chan's Hong Kong street map** (paper style by default; navy available), zoomed ~160% and softened 30%, framed on the area of the place [proposal: per-place focus point in data]. A dotted line and a pin are drawn over it, **for mood only** [stated].
 - Card at the bottom: small line-art drawing of the food or activity, name, time and distance, one line on why we're going, and **"More about this place"**.
 - "More about this place" opens the detail view [carried over from v0.15 F4]: About | Getting there switch, 2–4 short lines, numbered plain-language steps, and one **"Open in maps"** button (Google Maps in HK; Amap or Apple Maps in Shenzhen, §5.2). No prices.
-- Shenzhen places use Chan's Shenzhen map, `art/map-sz-paper.jpg` [stated, 24 Oct: "the shenzhen map is for the shenzhen portion of the trip"; read as the Place-screen map, to confirm].
+- Shenzhen places use Chan's Shenzhen map, `art/map-sz-paper.jpg` [stated, 24 Oct: "the shenzhen map is for the shenzhen portion of the trip"; confirmed as the Place-screen map].
 
 ### F5. Weather and what to wear [stated: keep] [carried over]
 - Today's forecast for the city we're in (tomorrow's after 22:00); one plain line of advice from simple rules ("Light layers. Bring the umbrella.").
@@ -352,7 +352,7 @@ Seed files are in `data/`:
 | Q31 | Without Now/Next, is a clock-time highlight on the Schedule enough, or does Chan want an admin "we've moved on" control? | Open [proposal: clock time] |
 | Q32 | Greeting phrases | **Answered:** Chan's full list (F11) [stated]; window times are proposals |
 | Q33 | Final typeface | Chan will decide later [stated] |
-| Q34 | **One afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon drawings received, for the mostly-Kowloon days [stated, 24 Oct]: which days? Shenzhen evening drawings: Chan looking [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
+| Q34 | **One afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon drawings received, for the mostly-Kowloon days [stated, 24 Oct]: which days? Chan not sure yet (24 Oct). Shenzhen evening drawings: Chan looking [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
 | Q35 | Source of the street maps, including the Shenzhen map (attribution) | Open |
 | Q36 | Telegram group invite link | Chan to create; **OK in the public repo** [stated]; removal reminder set for 28 Nov |
 | Q37 | Pre-trip art (suitcase placeholder) | Chan may supply a drawing |
@@ -391,6 +391,7 @@ Seed files are in `data/`:
 | 23 Oct | **No in-app statuses** (removed status buttons, status line, Family screen, lost alert). Help = Telegram group button (placeholder link), calls, emergency numbers. The 20 Oct "no Telegram links" rule is lifted for this one button [stated] |
 | 23 Oct | **All four phones can tick packing items**, so all four get QR setup and a token [stated] |
 | 24 Oct | Development continues from Chan's phone: Claude Code cloud sessions on the GitHub repo; repo copy of this spec is the master [stated: "continue development from my phone"] |
+| 24 Oct | Shenzhen map confirmed as the Place-screen map for Shenzhen places [stated] |
 | 24 Oct | Shenzhen evening skyline and Shenzhen night drawings for the Shenzhen days [stated] |
 | 24 Oct | Calmer-topped Kowloon drawings replace the first two. Shenzhen map received for the Shenzhen part of the trip [stated] |
 | 24 Oct | Soften layer lowered: cream (paper) images 30%, navy images 15% (was 50% / 20%); street maps unchanged at 30% [stated] |
@@ -403,6 +404,7 @@ Seed files are in `data/`:
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.30 (24 Oct 2026):** Shenzhen map confirmed for the Place screen (F4); Kowloon days still open (Q34).
 - **v0.29 (24 Oct 2026):** Shenzhen evening and night drawings; art can vary by city (`by_city`), with after-midnight counted as the evening before (§4.2).
 - **v0.28 (24 Oct 2026):** Kowloon drawings replaced with calm-top versions (`-2`); Shenzhen map added for the Place screen (F4, §5.4).
 - **v0.27 (24 Oct 2026):** Soften layer lowered to 30% on cream images and 15% on navy (§4.2).
