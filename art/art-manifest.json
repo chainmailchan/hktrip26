@@ -128,6 +128,30 @@
       "bytes": 424013
     },
     {
+      "file": "art/day-kowloon-courtyard.jpg",
+      "use": "Afternoon candidate: Kowloon, looking up a housing-block courtyard (mostly-Kowloon days)",
+      "width": 899,
+      "height": 1750,
+      "fit": "cover",
+      "background": "#E1D8CA",
+      "theme": "paper",
+      "soften_pct": 50,
+      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
+      "bytes": 649475
+    },
+    {
+      "file": "art/day-kowloon-towers.jpg",
+      "use": "Afternoon candidate: Kowloon, tower blocks (mostly-Kowloon days)",
+      "width": 899,
+      "height": 1750,
+      "fit": "cover",
+      "background": "#EAE0CA",
+      "theme": "paper",
+      "soften_pct": 50,
+      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
+      "bytes": 604415
+    },
+    {
       "file": "art/map-hk-paper.jpg",
       "use": "Place screen map, default (Hong Kong only)",
       "width": 1159,

@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.25, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.26, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -206,7 +206,7 @@ Full table in `art/art-manifest.json`. Summary:
 | Victoria Harbour | afternoon candidate [stated, 24 Oct] (late night until 24 Oct) | bottom | #F1E6D0 | 14.2% of screen height | 50% |
 | Flight (plane over clouds) | flight mornings | cover | #18264F | — | 20% [stated] |
 | Victoria Peak / Shenzhen city | likely afternoon images for their days [assumption]; days TBD | bottom | see manifest | −1.2% / 13.0% | 50% |
-| Kowloon photo (Chan to upload) | afternoons of the days spent mostly in Kowloon [stated, 24 Oct] | — | — | — | — |
+| Two Kowloon drawings (`day-kowloon-courtyard`, `day-kowloon-towers`) | afternoons of the days spent mostly in Kowloon [stated, 24 Oct]; days TBD; a day can list both to take turns | cover (~5% trimmed each side) | #E1D8CA / #EAE0CA (paper tone) | — | 50% |
 | Repulse Bay | **archived** in `art/archive/`, not downloaded by phones; "we are not going there" [stated, 24 Oct] | bottom | #F3E9D3 | 16.6% | 50% |
 | HK street map (paper / navy) | Place screen | map | #F6EAD0 / #1E4880 | — | 30% |
 
@@ -348,7 +348,7 @@ Seed files are in `data/`:
 | Q31 | Without Now/Next, is a clock-time highlight on the Schedule enough, or does Chan want an admin "we've moved on" control? | Open [proposal: clock time] |
 | Q32 | Greeting phrases | **Answered:** Chan's full list (F11) [stated]; window times are proposals |
 | Q33 | Final typeface | Chan will decide later [stated] |
-| Q34 | Shenzhen map image; **one afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon photo to upload, for the mostly-Kowloon days [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
+| Q34 | Shenzhen map image; **one afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon drawings received, for the mostly-Kowloon days [stated, 24 Oct]: which days? Shenzhen evening drawings: Chan looking [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
 | Q35 | Source of the street maps (attribution) | Open |
 | Q36 | Telegram group invite link | Chan to create; **OK in the public repo** [stated]; removal reminder set for 28 Nov |
 | Q37 | Pre-trip art (suitcase placeholder) | Chan may supply a drawing |
@@ -387,6 +387,7 @@ Seed files are in `data/`:
 | 23 Oct | **No in-app statuses** (removed status buttons, status line, Family screen, lost alert). Help = Telegram group button (placeholder link), calls, emergency numbers. The 20 Oct "no Telegram links" rule is lifted for this one button [stated] |
 | 23 Oct | **All four phones can tick packing items**, so all four get QR setup and a token [stated] |
 | 24 Oct | Development continues from Chan's phone: Claude Code cloud sessions on the GitHub repo; repo copy of this spec is the master [stated: "continue development from my phone"] |
+| 24 Oct | Two Kowloon drawings added for the mostly-Kowloon afternoons [stated] |
 | 24 Oct | Evening: Chan's two sunset drawings. Kowloon photo for the mostly-Kowloon days. Victoria Harbour is an afternoon candidate. Repulse Bay archived (not going) [stated] |
 | 24 Oct | Late night uses the moonlit harbour; evening will use a sunset photo (to upload). All future art at 9 : 19.5. Current art works well full screen in the installed app. `hktrip26scrt` is public [stated] |
 | 24 Oct | Live-data repo is `hktrip26scrt`. QR codes are scanned inside the app (Q40) [stated] |
@@ -395,6 +396,7 @@ Seed files are in `data/`:
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.26 (24 Oct 2026):** Two Kowloon drawings added as afternoon candidates for the mostly-Kowloon days (Q34).
 - **v0.25 (24 Oct 2026):** Two sunset drawings (moodier versions) for the evening, taking turns by day; Repulse Bay archived; Victoria Harbour an afternoon candidate; Kowloon photo slot noted (Q34).
 - **v0.24 (24 Oct 2026):** Late night → moonlit harbour; evening slot reserved for the sunset photo (moonlit harbour meanwhile); Victoria Harbour unscheduled; 9 : 19.5 art format stated; `hktrip26scrt` public.
 - **v0.23 (24 Oct 2026):** Five taps on the date line open the art preview inside the installed app; art format notes (§4.2); Safari's top band explained (§4.5).
