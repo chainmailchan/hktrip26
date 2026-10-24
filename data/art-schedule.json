@@ -18,8 +18,11 @@
       "id": "evening",
       "from": "17:30",
       "to": "22:00",
-      "image": "home-evening-moonlit-harbour.jpg",
-      "_note": "Chan's sunset photo goes here once uploaded [stated 24 Oct]; moonlit harbour until then [proposal]"
+      "image": [
+        "home-sunset-a.jpg",
+        "home-sunset-b.jpg"
+      ],
+      "_note": "Chan's two sunset drawings [stated 24 Oct], taking turns day by day [proposal]"
     },
     {
       "id": "late",
@@ -39,11 +42,11 @@
     "2026-11-23": null,
     "2026-11-24": null,
     "_candidates": [
-      "day-repulse-bay.jpg",
       "day-victoria-peak.jpg",
-      "day-shenzhen-city.jpg"
+      "day-shenzhen-city.jpg",
+      "home-night-victoria-harbour.jpg"
     ],
-    "_note": "Chan to assign once the itinerary is set; existing day drawings are likely afternoon images [assumption]"
+    "_note": "Chan to assign once the itinerary is set; existing day drawings are likely afternoon images [assumption]. Victoria Harbour is a candidate [stated 24 Oct]. A Kowloon photo (to upload) is for the days that are mostly in Kowloon [stated 24 Oct]."
   },
   "pretrip": {
     "image": null,
