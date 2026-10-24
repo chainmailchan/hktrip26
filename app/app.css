@@ -36,6 +36,8 @@ body {
 }
 a, button { color: inherit; font-family: inherit; cursor: pointer; }
 a:active, button:active { opacity: 0.7; }
+button:disabled { opacity: 0.4; cursor: default; }
+[hidden] { display: none !important; }
 #screen { position: relative; z-index: 1; }
 
 /* ---------- art (§4.2) ---------- */
@@ -81,6 +83,7 @@ a:active, button:active { opacity: 0.7; }
 .g-small { font-size: 44px; line-height: 1.1; letter-spacing: 0.03em; }
 .greeting.keep { word-break: keep-all; overflow-wrap: anywhere; }
 .dateline { font-family: 'Barlow Condensed', sans-serif; font-weight: 500; font-size: 18px; color: var(--ink-2); }
+.top-links { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; }
 .help-link {
   flex-shrink: 0;
   min-height: 56px;
@@ -92,6 +95,17 @@ a:active, button:active { opacity: 0.7; }
   font-weight: 700;
   text-decoration: none;
 }
+/* F8: admin phones only, under Help so the greeting keeps its width */
+.admin-link {
+  min-height: 48px;
+  padding: 0 2px 0 10px;
+  display: flex;
+  align-items: center;
+  color: var(--ink-2);
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+}
 .lines { margin-top: 16px; display: flex; flex-direction: column; gap: 2px; }
 .line-big { font-size: 26px; font-weight: 700; }
 .line { font-size: 20px; }
@@ -99,6 +113,7 @@ a:active, button:active { opacity: 0.7; }
 .announcement { margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; }
 .announcement-label { font-size: 17px; font-weight: 700; }
 .announcement-text { font-size: 19px; font-weight: 600; line-height: 1.35; }
+.live-note { margin-top: 12px; font-size: 17px; color: var(--ink-2); }
 .bottom { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 6px; }
 
 .btn-primary {
@@ -189,7 +204,20 @@ a:active, button:active { opacity: 0.7; }
 .items { padding: 0 0 8px; animation: open 0.35s ease-out both; }
 @keyframes open { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
 .item { min-height: 56px; display: flex; gap: 14px; align-items: center; border-top: 1px dashed var(--line); }
+/* F10: on set-up phones the whole row is the tick button */
+button.item { width: 100%; padding: 0; border: none; border-top: 1px dashed var(--line); background: transparent; color: var(--ink); font-size: inherit; text-align: left; }
 .box { width: 26px; height: 26px; flex-shrink: 0; border: 2px solid var(--ink); border-radius: 6px; }
+.item.done .box { background: var(--ink); }
+.item.done .box::after {
+  content: '';
+  display: block;
+  width: 7px;
+  height: 13px;
+  margin: 2px 0 0 7px;
+  border: solid var(--bg);
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
 .item-text { display: flex; flex-direction: column; padding: 6px 0; }
 .item-name { font-size: 19px; font-weight: 600; }
 .item-note { font-size: 17px; line-height: 1.3; color: var(--ink-2); }
@@ -208,6 +236,8 @@ a:active, button:active { opacity: 0.7; }
   padding: 0 12px;
   border: 1.5px solid var(--ink);
   border-radius: 28px;
+  background: transparent;
+  color: var(--ink);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,6 +248,44 @@ a:active, button:active { opacity: 0.7; }
 }
 .btn-outline.left { justify-content: flex-start; padding: 8px 20px; white-space: normal; }
 .preview-list { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+.list-head { margin: 18px 0 0; font-size: 19px; font-weight: 700; }
+.setup-btn { margin: 0 0 12px; }
+
+/* ---------- F8 Admin, §5.5 setup and setup codes (paper pages) ---------- */
+.field-label { display: block; margin-top: 16px; font-size: 17px; font-weight: 700; color: var(--ink-2); }
+.field {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 14px;
+  background: #FAF8F3;
+  color: var(--ink);
+  font: 600 19px/1.35 'Figtree', sans-serif;
+  resize: none;
+}
+input.field { min-height: 56px; font-weight: 500; }
+.field::placeholder { color: #8A867E; font-weight: 400; }
+.counter { margin-top: 4px; font-size: 17px; color: var(--ink-2); text-align: right; }
+.admin-now .announcement, [data-draft] .announcement { margin-top: 8px; }
+.admin-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+.msg { margin: 12px 0 0; font-size: 18px; font-weight: 600; line-height: 1.35; }
+.msg:empty { display: none; }
+.lead { margin: 4px 0 0; font-size: 18px; line-height: 1.4; }
+.viewfinder {
+  width: 100%;
+  margin-top: 16px;
+  aspect-ratio: 1;
+  border-radius: 22px;
+  background: #22211F;
+  object-fit: cover;
+  display: block;
+}
+.setup-done { margin-top: 18px; font-size: 26px; font-weight: 800; line-height: 1.25; }
+.person { margin-top: 14px; padding-top: 4px; border-top: 1px solid var(--line); }
+.person-name { margin: 10px 0 0; font-size: 21px; font-weight: 700; }
+.tabs.four { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 10px; }
+.qr { display: block; width: min(100%, 340px); margin: 18px auto 0; border-radius: 12px; }
 .emg-link {
   margin-top: auto;
   min-height: 48px;

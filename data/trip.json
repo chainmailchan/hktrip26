@@ -10,6 +10,11 @@
     "SZ": "Shenzhen"
   },
   "telegram_group_url": "https://t.me/+TRIP_GROUP_INVITE_PLACEHOLDER",
+  "live": {
+    "_note": "Live-data repo (APP_SPEC §5.3): the announcement and packing ticks. Phones check every poll_seconds while the app is open.",
+    "repo": "chainmailchan/hktrip26scrt",
+    "poll_seconds": 30
+  },
   "hotels": [
     {
       "id": "hk",
