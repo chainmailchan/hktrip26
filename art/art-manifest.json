@@ -40,7 +40,7 @@
     },
     {
       "file": "art/home-evening-moonlit-harbour.jpg",
-      "use": "Home, early evening",
+      "use": "Home, late night (and evening until the sunset photo arrives)",
       "width": 1089,
       "height": 2336,
       "fit": "cover",
@@ -52,7 +52,7 @@
     },
     {
       "file": "art/home-night-victoria-harbour.jpg",
-      "use": "Home, late night",
+      "use": "Victoria Harbour (not scheduled since 24 Oct)",
       "width": 989,
       "height": 1590,
       "fit": "bottom",

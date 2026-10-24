@@ -18,13 +18,15 @@
       "id": "evening",
       "from": "17:30",
       "to": "22:00",
-      "image": "home-evening-moonlit-harbour.jpg"
+      "image": "home-evening-moonlit-harbour.jpg",
+      "_note": "Chan's sunset photo goes here once uploaded [stated 24 Oct]; moonlit harbour until then [proposal]"
     },
     {
       "id": "late",
       "from": "22:00",
       "to": "05:00",
-      "image": "home-night-victoria-harbour.jpg"
+      "image": "home-evening-moonlit-harbour.jpg",
+      "_note": "moonlit harbour [stated 24 Oct]"
     }
   ],
   "afternoon_by_day": {
