@@ -344,7 +344,16 @@ function render() {
   window.scrollTo(0, 0);
 }
 
+// The installed app has no address bar: five quick taps on the date line open the art preview list.
+let dateTaps = [];
+
 screen.addEventListener('click', (e) => {
+  if (e.target.closest('.dateline')) {
+    const t = Date.now();
+    dateTaps = dateTaps.filter((x) => t - x < 2000).concat(t);
+    if (dateTaps.length >= 5) location.href = './?preview';
+    return;
+  }
   const tab = e.target.closest('[data-list]');
   if (tab) {
     history.replaceState(history.state, '', '#packing/' + tab.dataset.list);

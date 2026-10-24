@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.22, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.23, 24 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -213,9 +213,9 @@ Full table in `art/art-manifest.json`. Summary:
 - **Two themes:**
   - *paper*: ink text #22211F, secondary #5F5A4E, ink button with paper-coloured text, Help #A8382C.
   - *navy*: cream text #F4ECDC, secondary #C9CFE0, cream button with navy text, Help #F4A28C.
-- Art format for new images [proposal]: 9 : 19.5 portrait, 1320 × 2868 px, JPEG ~80%, <700 KB; keep the top ~40% and bottom ~15% calm and the outer ~8% each side free of anything important.
+- Art format for new images [proposal]: 9 : 19.5 portrait, 1320 × 2868 px, JPEG ~80%, <700 KB; keep the top ~40% and bottom ~15% calm and the outer ~8% each side free of anything important. 1320 × 2868 is the 16 Pro Max screen in pixels; the other three phones are the same shape within 0.3%, so a full-height drawing fills each with about 1 px trimmed. The clock sits over the top ~7% (62 of 956 pt). Set the image's `background` to the colour along its top edge: Safari paints its status-bar band in that colour.
 - **Phones keep each image forever once downloaded, so a changed image needs a new file name** [proposal].
-- **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview".
+- **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview". **In the installed app** (no address bar), five quick taps on the date line open the preview list [proposal].
 
 ### 4.3 Type [stated + proposal]
 - Body: **Figtree**. Chinese: **Noto Sans HK**. Date lines and screen titles: **Barlow Condensed** (current default from the test bench; final typeface is Chan's call, Q33). Self-host all fonts (§5.2).
@@ -233,7 +233,7 @@ Full table in `art/art-manifest.json`. Summary:
   - iPhone 14 Pro (Mama) 393 × 852 pt [source: same page]; safe areas likely 59 / 34 like other Dynamic Island phones of that size [assumption: read them from `env()` rather than hard-coding].
   - Galaxy S24+ (Papa) 384 × 832 CSS px, device pixel ratio 2.8125 [source: blisk.io device list]; same shape as the iPhones (≈0.46).
   - All four phones are almost the same shape, so art crops and layouts look alike on each.
-- Art runs edge to edge behind the status bar and, in Safari, down behind the address bar [stated, 24 Oct]. It scrolls with the page rather than being fixed, because iOS Safari doesn't draw fixed content under its bottom bar [source: Apple Developer Forums, thread 800798], so in Safari the home screen can move by the height of that bar [proposal]. Measured in Safari on Chan's 16 Pro Max: the page starts 62 pt down (the status bar band is Safari's, tinted with the page colour, and can't be drawn into) and ended 58 pt above the bottom edge; in an iPhone Safari tab the page is made 58 px taller so the art runs into that strip [proposal]. The installed app fills the whole screen; text starts below `env(safe-area-inset-top)` and the button sits above `env(safe-area-inset-bottom)`. In Safari the button sits above the toolbar; in the installed app, above the home bar [proposal; Chan: "okay for now", 24 Oct].
+- Art runs edge to edge behind the status bar and, in Safari, down behind the address bar [stated, 24 Oct]. It scrolls with the page rather than being fixed, because iOS Safari doesn't draw fixed content under its bottom bar [source: Apple Developer Forums, thread 800798], so in Safari the home screen can move by the height of that bar [proposal]. Measured in Safari on Chan's 16 Pro Max: the page starts 62 pt down (the status bar band is Safari's, tinted with the page colour; Safari doesn't draw page content there at rest, so full-screen art can't touch the top in a Safari tab [assumption from Chan's screenshots]; the installed app draws it behind the clock, and iOS 26.1+ adds a dark gradient there [source: autobrr/qui issue 2520]) and ended 58 pt above the bottom edge; in an iPhone Safari tab the page is made 58 px taller so the art runs into that strip [proposal]. The installed app fills the whole screen; text starts below `env(safe-area-inset-top)` and the button sits above `env(safe-area-inset-bottom)`. In Safari the button sits above the toolbar; in the installed app, above the home bar [proposal; Chan: "okay for now", 24 Oct].
 - Text sizes stay fixed; bigger phones get more space between announcement and button.
 - Test on Papa's S24+ in Chrome, both in the browser and installed.
 
@@ -389,6 +389,7 @@ Seed files are in `data/`:
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 
 ## 11. Changelog
+- **v0.23 (24 Oct 2026):** Five taps on the date line open the art preview inside the installed app; art format notes (§4.2); Safari's top band explained (§4.5).
 - **v0.22 (24 Oct 2026):** In an iPhone Safari tab the art runs into the 58 pt strip below the page (§4.5); live-data repo named (Q41); in-app QR scanning (§5.5, Q40).
 - **v0.21 (24 Oct 2026):** Art scrolls with the page so it runs under Safari's address bar; crop preview removed; Q42 answered.
 - **v0.20 (24 Oct 2026):** Phase 1 feedback: art runs behind Safari's toolbars; crop preview (`&fit=cover`); packing greetings from 24 Oct; live data moves to a second repo (§5.3, Q41); Q39 answered; Q42 (art height) added.
