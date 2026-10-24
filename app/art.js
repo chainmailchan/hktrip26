@@ -23,6 +23,8 @@ export function pickArt({ schedule, manifest, date, time, pretrip, file }) {
       file = override ? override.image
         : slot.image === 'per_day' ? schedule.afternoon_by_day[date] || slot.fallback
         : slot.image;
+      // A list of images takes turns, one per day (the two sunset drawings).
+      if (Array.isArray(file)) file = file[Math.round(Date.parse(date) / 86400000) % file.length];
     }
   }
   const img = file && findImage(manifest, file);

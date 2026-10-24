@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-23",
+  "version": "2026-10-24",
   "screen_reference": "390x844 (wireframes)",
   "fits": {
     "bottom": "full screen width, height in proportion, pinned to the bottom, raised by raise_pct_of_screen_height; background colour fills the sky above",
@@ -40,7 +40,7 @@
     },
     {
       "file": "art/home-evening-moonlit-harbour.jpg",
-      "use": "Home, early evening",
+      "use": "Home, late night",
       "width": 1089,
       "height": 2336,
       "fit": "cover",
@@ -51,8 +51,32 @@
       "bytes": 673881
     },
     {
+      "file": "art/home-sunset-skyline.jpg",
+      "use": "Home, evening: sunset over the skyline (takes turns with the waterfront)",
+      "width": 853,
+      "height": 1844,
+      "fit": "cover",
+      "background": "#F0DBB9",
+      "theme": "paper",
+      "soften_pct": 50,
+      "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
+      "bytes": 567247
+    },
+    {
+      "file": "art/home-sunset-waterfront.jpg",
+      "use": "Home, evening: sunset from the waterfront (takes turns with the skyline)",
+      "width": 852,
+      "height": 1846,
+      "fit": "cover",
+      "background": "#F3E1C3",
+      "theme": "paper",
+      "soften_pct": 50,
+      "note": "Full-height 9:19.5 drawing (moodier version, 24 Oct); background = colour along its top edge. Sent in chat at ~852 px wide; soft is OK [stated]",
+      "bytes": 584250
+    },
+    {
       "file": "art/home-night-victoria-harbour.jpg",
-      "use": "Home, late night",
+      "use": "Afternoon candidate: Victoria Harbour (late night until 24 Oct)",
       "width": 989,
       "height": 1590,
       "fit": "bottom",
@@ -74,20 +98,6 @@
       "soften_pct": 20,
       "note": "Keep the plane centred",
       "bytes": 274403
-    },
-    {
-      "file": "art/day-repulse-bay.jpg",
-      "use": "Afternoon image for the Repulse Bay day (day TBD)",
-      "width": 1024,
-      "height": 1536,
-      "fit": "bottom",
-      "background": "#F3E9D3",
-      "theme": "paper",
-      "soften_pct": 50,
-      "raise_pct_of_screen_height": 16.6,
-      "raise_px_at_390x844": 140,
-      "note": "Day not yet assigned",
-      "bytes": 347455
     },
     {
       "file": "art/day-victoria-peak.jpg",
@@ -118,6 +128,30 @@
       "bytes": 424013
     },
     {
+      "file": "art/day-kowloon-courtyard.jpg",
+      "use": "Afternoon candidate: Kowloon, looking up a housing-block courtyard (mostly-Kowloon days)",
+      "width": 899,
+      "height": 1750,
+      "fit": "cover",
+      "background": "#E1D8CA",
+      "theme": "paper",
+      "soften_pct": 50,
+      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
+      "bytes": 649475
+    },
+    {
+      "file": "art/day-kowloon-towers.jpg",
+      "use": "Afternoon candidate: Kowloon, tower blocks (mostly-Kowloon days)",
+      "width": 899,
+      "height": 1750,
+      "fit": "cover",
+      "background": "#EAE0CA",
+      "theme": "paper",
+      "soften_pct": 50,
+      "note": "Full-height drawing sent in chat 24 Oct (899 × 1750, a little wider than 9:19.5, so ~5% trimmed each side). Background = the drawing's paper tone, since the top edge is busy. Day(s) not yet assigned",
+      "bytes": 604415
+    },
+    {
       "file": "art/map-hk-paper.jpg",
       "use": "Place screen map, default (Hong Kong only)",
       "width": 1159,
@@ -140,6 +174,22 @@
       "soften_pct": 30,
       "note": "Mood only; source/attribution TBD",
       "bytes": 523243
+    }
+  ],
+  "archived": [
+    {
+      "file": "art/archive/day-repulse-bay.jpg",
+      "use": "Afternoon image for the Repulse Bay day (day TBD)",
+      "width": 1024,
+      "height": 1536,
+      "fit": "bottom",
+      "background": "#F3E9D3",
+      "theme": "paper",
+      "soften_pct": 50,
+      "raise_pct_of_screen_height": 16.6,
+      "raise_px_at_390x844": 140,
+      "note": "Archived 24 Oct: not going to Repulse Bay [stated]. Not downloaded by phones while archived.",
+      "bytes": 347455
     }
   ]
 }
