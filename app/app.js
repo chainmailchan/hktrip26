@@ -1,11 +1,13 @@
-// Phase 1 (APP_SPEC §7): pre-trip home (F9), packing lists read-only (F10),
-// greetings (F11), Help (F7), the art engine (§4.2) and a hidden art preview.
-// All trip content comes from data/; nothing about the trip is written here.
+// Phases 1–2 (APP_SPEC §7): pre-trip home (F9), packing lists with ticks (F10), greetings (F11),
+// Help (F7), the announcement (F1) and Admin (F8), phone setup (§5.5), the art engine (§4.2)
+// and a hidden art preview. All trip content comes from data/; nothing about the trip is written here.
 
 import { pickArt, paintArt, themeVars, inWindow, findImage } from './art.js';
+import { createLive } from './live.js';
 
-// Set by QR setup in phase 2 (§5.5). Stays on the phone; never in the repo.
+// Set by phone setup (§5.5, app/setup.js). Stays on the phone; never in the repo.
 const PROFILE_KEY = 'hktrip.profile';
+const BOARD_MAX = 100; // F8: announcement length
 
 // Packing and Help screens (spec/wireframes/Packing.dc.html, Help.dc.html).
 const PAPER = {
@@ -18,14 +20,23 @@ const json = (path) => fetch(path).then((r) => {
   return r.json();
 });
 
-const [trip, greetings, schedule, manifest, packing, itinerary, emergency] = await Promise.all([
+const [trip, greetings, schedule, manifest, packing, itinerary, emergency, people] = await Promise.all([
   'data/trip.json', 'data/greetings.json', 'data/art-schedule.json', 'art/art-manifest.json',
-  'data/packing.json', 'data/itinerary.json', 'data/emergency.json'
+  'data/packing.json', 'data/itinerary.json', 'data/emergency.json', 'data/people.json'
 ].map(json));
 
 const profile = readProfile();
-const ticks = {};     // phase 2: live/packing.json
-const board = null;   // phase 2: live/board.json (F1); hidden while empty
+const canTick = !!profile?.github_token;
+const nameOf = (id) => people.find((p) => p.id === id)?.name || '';
+// live.board: the announcement (F1), hidden while empty. live.ticks: packing ticks (F10).
+const live = createLive({
+  repo: trip.live.repo,
+  token: profile?.github_token,
+  me: profile?.me,
+  name: nameOf(profile?.me),
+  pollSeconds: trip.live.poll_seconds,
+  onChange: onLive
+});
 
 const params = new URLSearchParams(location.search);
 const preview = params.has('preview') ? params.get('preview') : null;
@@ -35,12 +46,27 @@ const artEl = document.getElementById('art');
 const dialogEl = document.getElementById('dialog');
 let firstHome = true;
 let lastGreeting = null;
+let route = 'home';
+let home = null;          // what the home screen showing now was drawn from, so live changes redraw only its live parts
+let leave = null;         // stops the setup camera when the screen changes
+let profileChanged = false;
 const openGroup = {};
 
 // ---------- helpers ----------
 
 function readProfile() {
   try { return JSON.parse(localStorage.getItem(PROFILE_KEY)); } catch { return null; }
+}
+
+// Called by app/setup.js. The app starts again with the new profile when you leave setup.
+function saveProfile(p) {
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
+  profileChanged = true;
+}
+
+function restart() {
+  history.replaceState(null, '', location.pathname);
+  location.reload();
 }
 
 function esc(s) {
@@ -55,6 +81,8 @@ const addDays = (date, n) => new Date(Date.parse(date) + n * dayMs).toISOString(
 const daysBetween = (from, to) => Math.round((Date.parse(to) - Date.parse(from)) / dayMs);
 const longDate = (date) => new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })
   .format(new Date(date + 'T00:00:00Z')).replace(',', '');
+const shortDate = (d) => new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' }).format(d);
+const when = (ms) => { const d = new Date(ms); return (ymd(d) === ymd(new Date()) ? '' : shortDate(d) + ', ') + hm(d); };
 
 function setVars(vars) {
   for (const [k, v] of Object.entries(vars)) document.documentElement.style.setProperty(k, v);
@@ -101,9 +129,39 @@ function lists() {
   return profile.admin ? ['cb', 'mp'] : ['mp'];
 }
 
-function count(listId, items = packing.lists[listId].groups.flatMap((g) => g.items)) {
+function count(listId, items = packing.lists[listId].groups.flatMap((g) => g.items), ticks = live.ticks) {
   const done = items.filter((i) => ticks[listId]?.[i.id]?.done).length;
   return { done, total: items.length };
+}
+
+const pct = (k) => (k.total ? Math.round(k.done / k.total * 100) : 0);
+
+// §5.2: when live data can't be reached, say so and when it last came through.
+function liveNote() {
+  if (live.status === 'denied') return 'Not updating. Ask Chan to set up this phone again.';
+  if (live.status === 'offline') return 'No connection' + (live.lastOk ? ' · last updated ' + when(live.lastOk) : '');
+  return '';
+}
+
+function packingNote() {
+  if (live.unsent && live.status === 'denied') return 'Your ticks can’t be sent. Ask Chan to set up this phone again.';
+  if (live.unsent && live.status === 'offline') return 'No connection. Your ticks are saved on this phone and will be sent when you’re back online.';
+  return liveNote();
+}
+
+// Live changes redraw only what shows live data (§5.3: no reload, no scroll jump).
+function onLive() {
+  if (route === 'home') updateHome();
+  else if (route === 'packing') updatePacking();
+  else if (route === 'admin') updateAdmin();
+}
+
+// Which live files the screen showing now needs; the others aren't checked (saves data).
+function liveNeeds() {
+  if (route === 'home') return home?.slotPreview ? [] : ['board', 'packing'];
+  if (route === 'packing') return ['packing'];
+  if (route === 'admin') return ['board'];
+  return [];
 }
 
 // ---------- screens ----------
@@ -121,28 +179,8 @@ function renderHome() {
 
   const place = pretrip ? trip.home_city : trip.cities[cityOn(date)] || '';
   const dateLine = longDate(date) + (place ? ' · ' + place : '');
-
-  let lines = '';
-  let announcement = board?.text ? announcementHtml(board) : '';
-  let bottom = '';
-  if (slotPreview) {
-    lines = `<div class="line">Preview · ${esc(date)} ${esc(time)}</div>
-      <div class="line-bold">${esc(art.file || 'placeholder art')}</div>`;
-    announcement = announcementHtml({ by: 'c', text: 'Example: meet in the lobby at 9:30.' });
-    bottom = '<a class="btn-primary" href="./">Close preview</a>';
-  } else {
-    const days = daysBetween(date, trip.start);
-    const dest = trip.cities[itinerary.days[0].city];
-    const [mine, other] = lists();
-    const a = count(mine);
-    if (days > 0) lines += `<div class="line-big">${days} ${days === 1 ? 'day' : 'days'} to ${esc(dest)}</div>`;
-    lines += `<div class="line">${esc(packing.lists[mine].title)} have packed ${a.done} of ${a.total} things.</div>`;
-    bottom = `<a class="btn-primary" href="#packing/${mine}">Packing list</a>`;
-    if (other) {
-      const b = count(other);
-      bottom += `<a class="quiet-link" href="#packing/${other}">${esc(packing.lists[other].title)} have packed ${b.done} of ${b.total} things</a>`;
-    }
-  }
+  home = { date, time, art, slotPreview };
+  home.parts = homeParts(home);
 
   screen.innerHTML = `
     <div class="home halo">
@@ -151,16 +189,57 @@ function renderHome() {
           ${greetingHtml(pickGreeting(date, time))}
           <div class="dateline">${esc(dateLine)}</div>
         </div>
-        <a class="help-link" href="#help">Help</a>
+        <div class="top-links">
+          <a class="help-link" href="#help">Help</a>
+          ${profile?.admin ? '<a class="admin-link" href="#admin">Admin</a>' : ''}
+        </div>
       </header>
-      <div class="lines">${lines}</div>
-      ${announcement}
-      <div class="bottom">${bottom}</div>
+      <div class="lines" data-part="lines">${home.parts.lines}</div>
+      <div data-part="news">${home.parts.news}</div>
+      <div class="bottom" data-part="bottom">${home.parts.bottom}</div>
     </div>`;
 }
 
+// The parts of the home screen that show live data: packing progress and the announcement.
+function homeParts({ date, time, art, slotPreview }) {
+  if (slotPreview) {
+    return {
+      lines: `<div class="line">Preview · ${esc(date)} ${esc(time)}</div>
+        <div class="line-bold">${esc(art.file || 'placeholder art')}</div>`,
+      news: announcementHtml({ by: 'c', text: 'Example: meet in the lobby at 9:30.' }),
+      bottom: '<a class="btn-primary" href="./">Close preview</a>'
+    };
+  }
+  let lines = '';
+  const days = daysBetween(date, trip.start);
+  const dest = trip.cities[itinerary.days[0].city];
+  const [mine, other] = lists();
+  const a = count(mine);
+  if (days > 0) lines += `<div class="line-big">${days} ${days === 1 ? 'day' : 'days'} to ${esc(dest)}</div>`;
+  lines += `<div class="line">${esc(packing.lists[mine].title)} have packed ${a.done} of ${a.total} things.</div>`;
+  let bottom = `<a class="btn-primary" href="#packing/${mine}">Packing list</a>`;
+  if (other) {
+    const b = count(other);
+    bottom += `<a class="quiet-link" href="#packing/${other}">${esc(packing.lists[other].title)} have packed ${b.done} of ${b.total} things</a>`;
+  }
+  const note = liveNote();
+  const news = (live.board?.text ? announcementHtml(live.board) : '') + (note ? `<div class="live-note">${esc(note)}</div>` : '');
+  return { lines, news, bottom };
+}
+
+function updateHome() {
+  if (!home) return;
+  const parts = homeParts(home);
+  for (const [key, html] of Object.entries(parts)) {
+    if (html === home.parts[key]) continue;
+    const el = screen.querySelector(`[data-part="${key}"]`);
+    if (el) el.innerHTML = html;
+  }
+  home.parts = parts;
+}
+
 function announcementHtml(b) {
-  const by = b.by === 'b' ? 'Belle' : 'Chan';
+  const by = people.find((p) => p.id === b.by && p.role === 'admin')?.name || 'Chan';
   return `<section class="announcement" aria-label="Announcement from ${by}">
     <div class="announcement-label">Announcement · from ${by}</div>
     <div class="announcement-text">${esc(b.text)}</div>
@@ -172,50 +251,149 @@ function renderPacking(listId) {
   const lid = order.includes(listId) ? listId : order[0];
   const list = packing.lists[lid];
   if (!(lid in openGroup)) openGroup[lid] = list.groups[0].id;
-  const total = count(lid);
+  const ticks = live.ticks;
+  const total = count(lid, undefined, ticks);
   setVars(PAPER);
   artEl.hidden = true;
 
   const tabs = order.length < 2 ? '' : `
     <div class="tabs" role="tablist" aria-label="Which list">
       ${order.map((id) => {
-        const k = count(id);
+        const k = count(id, undefined, ticks);
         return `<button type="button" class="tab" role="tab" aria-selected="${id === lid}" data-list="${id}">
-          <span>${esc(packing.lists[id].title)}</span><span class="count">${k.done} of ${k.total}</span></button>`;
+          <span>${esc(packing.lists[id].title)}</span><span class="count" data-count="tab:${id}">${k.done} of ${k.total}</span></button>`;
       }).join('')}
     </div>`;
 
   const groups = list.groups.map((g) => {
     const open = openGroup[lid] === g.id;
-    const k = count(lid, g.items);
+    const k = count(lid, g.items, ticks);
     const items = !open ? '' : `<div class="items">${g.items.map((it) => {
-      const done = ticks[lid]?.[it.id]?.done;
-      return `<div class="item${done ? ' done' : ''}">
-        <span class="box" aria-hidden="true"></span>
+      const done = !!ticks[lid]?.[it.id]?.done;
+      const inner = `<span class="box" aria-hidden="true"></span>
         <span class="item-text">
           <span class="item-name">${esc(it.name)}</span>
           ${it.note ? `<span class="item-note">${esc(it.note)}</span>` : ''}
-        </span>
-      </div>`;
+        </span>`;
+      // Set-up phones tick by tapping anywhere on the row (F10).
+      return canTick
+        ? `<button type="button" class="item${done ? ' done' : ''}" role="checkbox" aria-checked="${done}" data-item="${esc(it.id)}">${inner}</button>`
+        : `<div class="item${done ? ' done' : ''}" data-item="${esc(it.id)}">${inner}</div>`;
     }).join('')}</div>`;
     return `<section class="group">
       <button type="button" class="group-head" aria-expanded="${open}" data-group="${g.id}">
-        <span class="group-name">${esc(g.name)}</span><span class="group-count">${k.done} of ${k.total}</span>
+        <span class="group-name">${esc(g.name)}</span><span class="group-count" data-count="group:${g.id}">${k.done} of ${k.total}</span>
       </button>${items}</section>`;
   }).join('');
 
+  const note = packingNote();
   screen.innerHTML = `
-    <div class="page">
+    <div class="page" data-packing="${lid}">
       <div class="bar"><a class="pill" href="#" data-home><span aria-hidden="true">←</span>Home</a><a class="help-link" href="#help">Help</a></div>
       <h1 class="title">Packing</h1>
       ${tabs}
       <div class="progress">
-        <div><strong>${esc(list.title)}</strong> · ${total.done} of ${total.total} packed</div>
-        <div class="track"><div class="fill" style="width: ${total.total ? Math.round(total.done / total.total * 100) : 0}%"></div></div>
+        <div data-progress>${progressHtml(list, total)}</div>
+        <div class="track"><div class="fill" style="width: ${pct(total)}%"></div></div>
       </div>
-      ${profile?.github_token ? '' : '<p class="note">You can tick things off after Chan sets up your phone.</p>'}
+      <p class="note" data-live-note${note ? '' : ' hidden'}>${esc(note)}</p>
+      ${canTick ? '' : `<p class="note">You can tick things off after Chan sets up your phone.</p>
+        <a class="btn-outline setup-btn" href="#setup">Set up this phone</a>`}
       ${groups}
     </div>`;
+}
+
+const progressHtml = (list, k) => `<strong>${esc(list.title)}</strong> · ${k.done} of ${k.total} packed`;
+
+function updatePacking() {
+  const page = screen.querySelector('[data-packing]');
+  if (!page) return;
+  const lid = page.dataset.packing;
+  const list = packing.lists[lid];
+  const ticks = live.ticks;
+  for (const row of page.querySelectorAll('[data-item]')) {
+    const done = !!ticks[lid]?.[row.dataset.item]?.done;
+    row.classList.toggle('done', done);
+    if (row.hasAttribute('aria-checked')) row.setAttribute('aria-checked', String(done));
+  }
+  for (const el of page.querySelectorAll('[data-count]')) {
+    const [kind, id] = el.dataset.count.split(':');
+    const k = kind === 'tab' ? count(id, undefined, ticks) : count(lid, list.groups.find((g) => g.id === id).items, ticks);
+    el.textContent = `${k.done} of ${k.total}`;
+  }
+  const total = count(lid, undefined, ticks);
+  page.querySelector('[data-progress]').innerHTML = progressHtml(list, total);
+  page.querySelector('.fill').style.width = pct(total) + '%';
+  const note = page.querySelector('[data-live-note]');
+  note.textContent = packingNote();
+  note.hidden = !note.textContent;
+}
+
+// ---------- F8 Admin: write the announcement (Chan and Belle) ----------
+
+function renderAdmin() {
+  setVars(PAPER);
+  artEl.hidden = true;
+  screen.innerHTML = `
+    <div class="page admin">
+      <div class="bar"><a class="pill" href="#" data-home><span aria-hidden="true">←</span>Home</a><a class="help-link" href="#help">Help</a></div>
+      <h1 class="title">Announcement</h1>
+      <section class="admin-now" aria-label="Showing now" data-now>${adminNowHtml()}</section>
+      <label class="field-label" for="board-text">New announcement</label>
+      <textarea id="board-text" class="field" maxlength="${BOARD_MAX}" rows="3" placeholder="For example: meet in the lobby at 9:30."></textarea>
+      <div class="counter" data-counter>0 of ${BOARD_MAX}</div>
+      <div data-draft></div>
+      <div class="admin-actions">
+        <button type="button" class="btn-primary" data-show disabled>Show to everyone</button>
+        <button type="button" class="btn-outline" data-clear${live.board?.text ? '' : ' hidden'}>Clear the announcement</button>
+      </div>
+      <p class="msg" data-msg role="status"></p>
+    </div>`;
+}
+
+function adminNowHtml() {
+  const note = liveNote();
+  return `<div class="field-label">Showing now</div>
+    ${live.board?.text ? announcementHtml(live.board) : '<div class="say">Nothing at the moment.</div>'}
+    ${note ? `<p class="note">${esc(note)}</p>` : ''}`;
+}
+
+function updateAdmin() {
+  const now = screen.querySelector('[data-now]');
+  if (!now) return;
+  now.innerHTML = adminNowHtml();
+  const clear = screen.querySelector('[data-clear]');
+  if (!clear.disabled) clear.hidden = !live.board?.text;
+}
+
+const draftText = () => (screen.querySelector('#board-text')?.value || '').replace(/\s+/g, ' ').trim();
+
+function updateDraft() {
+  const text = draftText();
+  screen.querySelector('[data-counter]').textContent = `${screen.querySelector('#board-text').value.length} of ${BOARD_MAX}`;
+  screen.querySelector('[data-draft]').innerHTML = text
+    ? `<div class="field-label">Preview</div>${announcementHtml({ by: profile.me, text })}` : '';
+  screen.querySelector('[data-show]').disabled = !text;
+}
+
+async function postBoard(text) {
+  const buttons = screen.querySelectorAll('[data-show], [data-clear]');
+  const msg = screen.querySelector('[data-msg]');
+  buttons.forEach((b) => { b.disabled = true; });
+  msg.textContent = 'Sending…';
+  let reply;
+  try {
+    await live.setBoard(text);
+    reply = text ? 'Done. Everyone sees this within 30 seconds.' : 'Done. It disappears from every phone within 30 seconds.';
+    if (route === 'admin' && text) screen.querySelector('#board-text').value = '';
+  } catch (e) {
+    reply = e.denied ? 'Not sent: this phone can’t send. Set it up again.' : 'Not sent: no connection. Try again.';
+  }
+  if (route !== 'admin') return;
+  msg.textContent = reply;
+  buttons.forEach((b) => { b.disabled = false; });
+  updateDraft();
+  updateAdmin();
 }
 
 function renderHelp() {
@@ -225,7 +403,7 @@ function renderHelp() {
   const firstCall = contacts[0]?.name || 'Chan';
   const calls = !contacts.length ? '' : `
     <div class="calls" style="grid-template-columns: repeat(${contacts.length}, minmax(0, 1fr))">
-      ${contacts.map((c) => `<a class="btn-outline" href="tel:${esc(c.phone)}">Call ${esc(c.name)}</a>`).join('')}
+      ${contacts.map((c) => `<a class="btn-outline" href="tel:${esc(c.phone.replace(/[^\d+]/g, ''))}">Call ${esc(c.name)}</a>`).join('')}
     </div>`;
 
   screen.innerHTML = `
@@ -245,7 +423,7 @@ function renderHelp() {
     </div>`;
 }
 
-// Hidden page listing every preview link (?preview).
+// Hidden page (?preview, or five taps on the date line): phone setup and every art preview link.
 function renderPreviewList() {
   setVars(PAPER);
   artEl.hidden = true;
@@ -261,14 +439,38 @@ function renderPreviewList() {
       return [i.use, `?preview=${stem}`];
     })
   ];
+  const buttons = (list) => list.map(([text, href]) => `<a class="btn-outline left" href="${esc(href)}">${esc(text)}</a>`).join('');
   screen.innerHTML = `
     <div class="page">
       <div class="bar"><a class="pill" href="./"><span aria-hidden="true">←</span>Home</a></div>
-      <h1 class="title">Art preview</h1>
-      <div class="preview-list">
-        ${links.map(([text, href]) => `<a class="btn-outline left" href="${esc(href)}">${esc(text)}</a>`).join('')}
-      </div>
+      <h1 class="title">Hidden pages</h1>
+      <h2 class="list-head">Phone setup</h2>
+      <div class="preview-list">${buttons([['Set up this phone', './#setup'], ['Make setup codes', './#codes']])}</div>
+      <h2 class="list-head">Art preview</h2>
+      <div class="preview-list">${buttons(links)}</div>
     </div>`;
+}
+
+// ---------- §5.5 phone setup (app/setup.js, loaded only when needed) ----------
+
+function renderSetupScreen(name) {
+  setVars(PAPER);
+  artEl.hidden = true;
+  screen.innerHTML = '<div class="page"></div>';
+  const visit = { gone: false };
+  leave = () => { visit.gone = true; };
+  import('./setup.js').then((m) => {
+    if (visit.gone) return;
+    const show = name === 'codes' ? m.renderCodes : m.renderSetup;
+    leave = show({ screen, people, profile, saveProfile, restart, esc });
+  }).catch(() => {
+    if (visit.gone) return;
+    screen.innerHTML = `<div class="page">
+      <div class="bar"><a class="pill" href="#" data-home><span aria-hidden="true">←</span>Home</a></div>
+      <h1 class="title">Set up this phone</h1>
+      <p class="say">This needs a connection. Try again when you’re online.</p>
+    </div>`;
+  });
 }
 
 // ---------- F7 emergency numbers: list, then three confirmations ----------
@@ -336,11 +538,22 @@ function knownPreview() {
 function render() {
   emg = null;
   renderEmergency();
+  leave?.();
+  leave = null;
   const [name, arg] = location.hash.slice(1).split('/');
-  if (name === 'packing') renderPacking(arg);
-  else if (name === 'help') renderHelp();
-  else if (preview !== null && !knownPreview()) renderPreviewList();
+  const setup = name === 'setup' || name === 'codes';
+  if (profileChanged && !setup) return restart();
+  home = null;
+  route = name === 'packing' || name === 'help' || setup ? name
+    : name === 'admin' && profile?.admin ? 'admin'
+    : preview !== null && !knownPreview() ? 'hidden' : 'home';
+  if (route === 'packing') renderPacking(arg);
+  else if (route === 'help') renderHelp();
+  else if (route === 'admin') renderAdmin();
+  else if (setup) renderSetupScreen(name);
+  else if (route === 'hidden') renderPreviewList();
   else renderHome();
+  live.refresh();
   window.scrollTo(0, 0);
 }
 
@@ -354,6 +567,13 @@ screen.addEventListener('click', (e) => {
     if (dateTaps.length >= 5) location.href = './?preview';
     return;
   }
+  const row = e.target.closest('button[data-item]');
+  if (row) {
+    live.tick(screen.querySelector('[data-packing]').dataset.packing, row.dataset.item, row.getAttribute('aria-checked') !== 'true');
+    return;
+  }
+  if (e.target.closest('[data-show]')) return postBoard(draftText());
+  if (e.target.closest('[data-clear]')) return postBoard('');
   const tab = e.target.closest('[data-list]');
   if (tab) {
     history.replaceState(history.state, '', '#packing/' + tab.dataset.list);
@@ -388,8 +608,13 @@ screen.addEventListener('click', (e) => {
   }
 });
 
+screen.addEventListener('input', (e) => {
+  if (e.target.id === 'board-text') updateDraft();
+});
+
 window.addEventListener('popstate', render);
 render();
+live.start(liveNeeds);
 
 // Date, countdown and greeting move on when the app comes back to the front.
 document.addEventListener('visibilitychange', () => {

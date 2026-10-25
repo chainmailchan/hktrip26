@@ -4,6 +4,8 @@
 //   stored together and the page reloads on its next open ("update on next open").
 // - KEEP: fonts, icons and every image in art/art-manifest.json. Downloaded once,
 //   never again. A changed image needs a new file name.
+// - Not stored: phone setup (app/setup.js, app/vendor/), fetched only when a setup screen
+//   opens, and the live data on GitHub (other origins are left to the browser).
 
 const SHELL = 'shell';
 const KEEP = 'keep';
@@ -14,6 +16,7 @@ const SHELL_FILES = [
   'app/app.css',
   'app/app.js',
   'app/art.js',
+  'app/live.js',
   'art/art-manifest.json',
   'data/art-schedule.json',
   'data/emergency.json',
