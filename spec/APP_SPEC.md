@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.32, 24 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.33, 27 Oct 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -106,6 +106,7 @@ Wireframe file names are in brackets. All screens: 390 × 844 reference, no scro
 - Hidden when empty.
 - Public like everything else (§5.6): no private details.
 - Built in phase 2: read from `live/board.json`. Set-up phones see changes within 30 s; phones not yet set up within about 5 minutes (§5.3) [stated: OK, 24 Oct]. When live data can't be reached, a quiet line under it says "No connection · last updated 10:42" (§5.2) [proposal].
+- A long announcement (near 100 characters) runs over the pre-trip suitcase drawing; the halo keeps it readable, which is fine [stated, 27 Oct].
 
 ### F2. Home screen [stated] (`Main`, `Sunset`, `Night`, `Flight`)
 Top to bottom:
@@ -289,7 +290,7 @@ Full table in `art/art-manifest.json`. Summary:
   - Only what the screen shows is checked: the announcement on the home and Admin screens; packing ticks on the home screen (which shows packing progress) and the Packing screen [proposal].
   - Saves: read → change → save with the file's sha. If another phone saved in between, GitHub rejects the save; the app re-reads, merges and tries again (up to 4 times).
   - The last copy of each file and any unsent ticks are kept on the phone (`localStorage`), so the screens work offline.
-  - `hktrip26scrt` had no files or branches on 24 Oct. The app creates `live/board.json` and `live/packing.json` on the first save [assumption: GitHub accepts the first file in an empty repo through the API; adding a README first (spec/SETUP.md) removes the doubt].
+  - `hktrip26scrt` had no files or branches on 24 Oct; Chan added a README, and the app has since saved the announcement and ticks there [stated, 27 Oct] (Q44).
 
 ### 5.4 Map art
 - **Chan's two static Hong Kong street maps** (`art/map-hk-paper.jpg`, `art/map-hk-navy.jpg`), plus his Shenzhen map (`art/map-sz-paper.jpg`, 24 Oct), replace the per-stop rendered maps of v0.15 [stated]. They are mood images, not navigation [stated].
@@ -361,7 +362,7 @@ Seed files are in `data/`:
 |---|---|---|
 | **~30 Oct** | **1. Pre-trip, view-only** | Repo + Pages, PWA shell (manifest, service worker, icons), self-hosted fonts, home with art and halo (F2 rules), pre-trip home (F9), packing lists read-only (F10), greetings (F11), Help (F7) with placeholder link. Works in any browser without setup |
 | ~31 Oct | Chan sends the link | View-only for Mama and Papa [stated] |
-| **~1 Nov** | **2. Setup and sync** | QR setup (§5.5), tokens, ticking with sync via `live/packing.json`, announcement writing (F8) and display (F1). **Built 24 Oct (v0.32)**; setup guide in `spec/SETUP.md` |
+| **~1 Nov** | **2. Setup and sync** | QR setup (§5.5), tokens, ticking with sync via `live/packing.json`, announcement writing (F8) and display (F1). **Built 24 Oct (v0.32)**; setup guide in `spec/SETUP.md`. **Works on Chan's and Belle's phones** (27 Oct) [stated] |
 | Week of 2 Nov | Chan's setup visit | Install on all four phones, scan QR codes [stated] |
 | **~10 Nov** | **3. Trip mode** | Schedule (F3), Place card + detail (F4), Weather (F5), Hotel (F6), trip-mode home with time-based art, offline test |
 | 10 Nov | Checks | SQ882/SQ883 times and the Shekou ferry (scheduled) |
@@ -391,8 +392,8 @@ Seed files are in `data/`:
 | Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | **Answered:** a "Set up this phone" button inside the app scans the code with the camera [stated, 24 Oct] |
 | Q41 | Phone tokens can write to the whole repo, including the app code on `main` | **Answered:** live data goes in a second, small repo; tokens limited to it [stated, 24 Oct]. Repo: `hktrip26scrt` [stated, 24 Oct] |
 | Q42 | *Bottom* drawings are about 2 : 3, so the background colour fills the top third or more of the screen; "longer is probably nicer" [stated, 24 Oct] | **Answered:** no cropping ("the cropped all look worse"); keep the drawings and let them run under Safari's address bar [stated, 24 Oct] |
-| Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | Open: test at the setup visit; "Take a photo of the code instead" is the fallback |
-| Q44 | `hktrip26scrt` is empty (no branches, 24 Oct); can the app create the first file there? [assumption: yes] | Open: add a README before the visit (spec/SETUP.md, step 1), which removes the doubt |
+| Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | **Partly answered:** Belle scanned Chan's code with the camera on her iPhone 16 Pro [stated, 27 Oct]. Mama's and Papa's phones still to test at the visit; "Take a photo of the code instead" is the fallback |
+| Q44 | `hktrip26scrt` is empty (no branches, 24 Oct); can the app create the first file there? | **Answered:** Chan added a README; announcements and ticks save [stated, 27 Oct] |
 
 ---
 
@@ -423,6 +424,7 @@ Seed files are in `data/`:
 | 23 Oct | **No in-app statuses** (removed status buttons, status line, Family screen, lost alert). Help = Telegram group button (placeholder link), calls, emergency numbers. The 20 Oct "no Telegram links" rule is lifted for this one button [stated] |
 | 23 Oct | **All four phones can tick packing items**, so all four get QR setup and a token [stated] |
 | 24 Oct | Development continues from Chan's phone: Claude Code cloud sessions on the GitHub repo; repo copy of this spec is the master [stated: "continue development from my phone"] |
+| 24 Oct | **Phase 2 plan approved**: "Set up this phone" on Packing and the Hidden pages; a hidden "Make setup codes" page in the app; phones not yet set up may see announcements up to ~5 minutes late; one token per phone, expiring 30 Nov; built as one PR [stated] |
 | 24 Oct | Shenzhen map = background of the Place screen (opened from a Schedule item) during the Shenzhen part of the trip, not tied to each place's location [stated] |
 | 24 Oct | Shenzhen evening skyline and Shenzhen night drawings for the Shenzhen days [stated] |
 | 24 Oct | Calmer-topped Kowloon drawings replace the first two. Shenzhen map received for the Shenzhen part of the trip [stated] |
@@ -433,10 +435,11 @@ Seed files are in `data/`:
 | 24 Oct | Live-data repo is `hktrip26scrt`. QR codes are scanned inside the app (Q40) [stated] |
 | 24 Oct | No cropping of the art; it runs under Safari's address bar instead (Q42) [stated] |
 | 24 Oct | Live data in a second, small repo, with the phone tokens limited to it (Q41). Packing greetings from 24 Oct until the day before the trip. iPhone clock readable with the art behind it (Q39). Button gap at the bottom okay for now [stated] |
-| 24 Oct | **Phase 2 plan approved**: "Set up this phone" on Packing and the Hidden pages; a hidden "Make setup codes" page in the app; phones not yet set up may see announcements up to ~5 minutes late; one token per phone, expiring 30 Nov; built as one PR [stated] |
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
+| 27 Oct | **Phase 2 works** on Chan's and Belle's phones: setup codes, Belle's camera scan, announcements from both, ticks. README added to `hktrip26scrt`; all four tokens made. A long announcement over the suitcase drawing is fine with the halo [stated] |
 
 ## 11. Changelog
+- **v0.33 (27 Oct 2026):** Phase 2 tested on Chan's and Belle's phones (§7); Q44 answered, Q43 partly answered (camera works on Belle's iPhone); long announcements over the art are fine (F1).
 - **v0.32 (24 Oct 2026):** Phase 2 built: phone setup by QR inside the app, with a photo fallback and a hidden code maker (§5.5); packing ticks sync through `hktrip26scrt`, batched and kept offline (F10, §5.3); the announcement is shown (F1) and written on the Admin screen (F8); "Hidden pages" (§4.2); setup code format (§6); setup guide `spec/SETUP.md`; Q43–Q44 added.
 - **v0.31 (24 Oct 2026):** Shenzhen map wording corrected: Place-screen background for the Shenzhen part of the trip, not per place (F4).
 - **v0.30 (24 Oct 2026):** Shenzhen map confirmed for the Place screen (F4); Kowloon days still open (Q34).
