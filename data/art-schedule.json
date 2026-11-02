@@ -57,8 +57,8 @@
     "_note": "Chan to assign once the itinerary is set; existing day drawings are likely afternoon images [assumption]. Victoria Harbour is a candidate [stated 24 Oct]. The two Kowloon drawings are for the days that are mostly in Kowloon [stated 24 Oct]; a day can list both to take turns."
   },
   "pretrip": {
-    "image": null,
-    "_note": "placeholder suitcase line art until Chan supplies a drawing"
+    "image": "home-pretrip-suitcase.jpg",
+    "_note": "Chan's drawing [stated 2 Nov]; from 31 Oct until the trip starts"
   },
   "overrides": [
     {

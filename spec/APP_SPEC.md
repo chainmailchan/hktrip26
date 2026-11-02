@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.33, 27 Oct 2026. Owner: Chan.
+**Living build spec.** Version 0.34, 2 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -162,7 +162,7 @@ Top to bottom:
 ### F9. Pre-trip home [stated] (`PreTrip`)
 - From **Sat 31 Oct** until the morning of 17 Nov; switches to trip mode automatically [proposal].
 - Greeting, "Saturday 31 October · Singapore", **"17 days to Hong Kong"**, the viewer's packing progress, announcement, **"Packing list"** button at the bottom, and a second line with the other list's progress (admins) [wireframe].
-- Art: placeholder suitcase line art until Chan supplies a drawing.
+- Art: **Chan's drawing of a suitcase on a terrace above Victoria Harbour** (`home-pretrip-suitcase`) [stated, 2 Nov]. The placeholder suitcase line art stays in the code and shows only if `pretrip.image` in `data/art-schedule.json` is emptied.
 - Before a phone is set up, the first progress line is Mama & Papa's list and the second Chan & Belle's [proposal]. "Singapore" and the city names come from `data/trip.json` (`home_city`, `cities`).
 
 ### F10. Packing lists [stated] (`Packing`)
@@ -215,6 +215,7 @@ Full table in `art/art-manifest.json`. Summary:
 | **Shenzhen night** (`home-night-shenzhen`) [stated, 24 Oct] | 22:00–05:00, Shenzhen days | cover (~8% trimmed each side) | #011F4C | — | 15% |
 | Victoria Harbour | afternoon candidate [stated, 24 Oct] (late night until 24 Oct) | bottom | #F1E6D0 | 14.2% of screen height | 30% [stated, 24 Oct] |
 | Flight (plane over clouds) | flight mornings | cover | #18264F | — | 15% [stated, 24 Oct] |
+| **Pre-trip: suitcase above Victoria Harbour** (`home-pretrip-suitcase`) [stated, 2 Nov] | pre-trip home (F9), all day | cover | #FBEDD2 | — | 30% |
 | Victoria Peak / Shenzhen city | likely afternoon images for their days [assumption]; days TBD | bottom | see manifest | −1.2% / 13.0% | 30% [stated, 24 Oct] |
 | Two Kowloon drawings (`day-kowloon-courtyard-2`, `day-kowloon-towers-2`; calm-top versions, 24 Oct) [stated] | afternoons of the days spent mostly in Kowloon [stated, 24 Oct]; days TBD; a day can list both to take turns | cover (~5% trimmed each side) | #FDF0D7 / #F8EACF | — | 30% [stated, 24 Oct] |
 | Repulse Bay | **archived** in `art/archive/`, not downloaded by phones; "we are not going there" [stated, 24 Oct] | bottom | #F3E9D3 | 16.6% | 30% [stated, 24 Oct] |
@@ -262,7 +263,7 @@ Full table in `art/art-manifest.json`. Summary:
 - **iPhone:** Safari → Share → Add to Home Screen.
 - **GitHub Pages:** on GitHub Free the repo must be public, and the Pages site is **always public** [source: GitHub Docs]. Treat everything as public (§5.6).
 - **Updates:** the installed app picks up new versions the next time it is opened online, so trip features can ship after the setup visit [assumption: implement "update on next open" in the service worker and verify on both platforms].
-  - Built in phase 1 (`sw.js`): everything is served from the phone. Each time the app opens, the app and data files are re-checked with conditional requests (unchanged files return 304, no download); if anything changed, the new set is stored and shows on the next open. Art, fonts and icons download once at install (≈4.4 MB in all) and never again [proposal].
+  - Built in phase 1 (`sw.js`): everything is served from the phone. Each time the app opens, the app and data files are re-checked with conditional requests (unchanged files return 304, no download); if anything changed, the new set is stored and shows on the next open. Art, fonts and icons download once at install (≈7.3 MB in all as of 2 Nov; each new image adds its own size once) and never again [proposal].
 
 ### 5.2 Mainland China network
 - Google services and Telegram are blocked on mainland local networks (hotel Wi-Fi, Chinese SIMs) but generally work over **international roaming** [source: intotravelchina.com, 2026].
@@ -386,7 +387,7 @@ Seed files are in `data/`:
 | Q34 | **One afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon drawings received, for the mostly-Kowloon days [stated, 24 Oct]: which days? Chan not sure yet (24 Oct). Shenzhen evening drawings: Chan looking [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
 | Q35 | Source of the street maps, including the Shenzhen map (attribution) | Open |
 | Q36 | Telegram group invite link | Chan to create; **OK in the public repo** [stated]; removal reminder set for 28 Nov |
-| Q37 | Pre-trip art (suitcase placeholder) | Chan may supply a drawing |
+| Q37 | Pre-trip art (suitcase placeholder) | **Answered:** Chan's suitcase-above-the-harbour drawing [stated, 2 Nov] |
 | Q38 | App name and icon | Open [proposal]: "HK trip" under the icon, "HK & Shenzhen trip" in full; icon cropped from the moonlit-harbour drawing |
 | Q39 | iPhone status bar: art runs behind it (§4.5), so iOS draws the clock in white, which may be faint on the cream screens | **Answered:** readable on Chan's phone; keep [stated, 24 Oct] |
 | Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | **Answered:** a "Set up this phone" button inside the app scans the code with the camera [stated, 24 Oct] |
@@ -437,8 +438,10 @@ Seed files are in `data/`:
 | 24 Oct | Live data in a second, small repo, with the phone tokens limited to it (Q41). Packing greetings from 24 Oct until the day before the trip. iPhone clock readable with the art behind it (Q39). Button gap at the bottom okay for now [stated] |
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 | 27 Oct | **Phase 2 works** on Chan's and Belle's phones: setup codes, Belle's camera scan, announcements from both, ticks. README added to `hktrip26scrt`; all four tokens made. A long announcement over the suitcase drawing is fine with the halo [stated] |
+| 2 Nov | Chan's drawing of a suitcase above Victoria Harbour is the pre-trip home art (Q37). It goes on the pre-trip home, not behind the packing list [stated] |
 
 ## 11. Changelog
+- **v0.34 (2 Nov 2026):** Pre-trip home art: Chan's suitcase drawing replaces the placeholder (F9, §4.2, Q37); offline download size updated (§5.1).
 - **v0.33 (27 Oct 2026):** Phase 2 tested on Chan's and Belle's phones (§7); Q44 answered, Q43 partly answered (camera works on Belle's iPhone); long announcements over the art are fine (F1).
 - **v0.32 (24 Oct 2026):** Phase 2 built: phone setup by QR inside the app, with a photo fallback and a hidden code maker (§5.5); packing ticks sync through `hktrip26scrt`, batched and kept offline (F10, §5.3); the announcement is shown (F1) and written on the Admin screen (F8); "Hidden pages" (§4.2); setup code format (§6); setup guide `spec/SETUP.md`; Q43–Q44 added.
 - **v0.31 (24 Oct 2026):** Shenzhen map wording corrected: Place-screen background for the Shenzhen part of the trip, not per place (F4).
