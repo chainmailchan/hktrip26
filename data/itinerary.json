@@ -1,5 +1,5 @@
 {
-  "_note": "Chan’s itinerary (screenshots, 2 Nov) [stated], shortened for the app. Times are 24-hour; 'until' ends a time range; 'by' = done by that time; 'approx' = about. 'search' is the line to paste into Google Maps or Uber (Hong Kong) or Amap or DiDi (Shenzhen). 'options' are backups or choices, headed by 'options_title'. Keys starting with _ are notes for Chan, not shown. The Schedule and Place screens that show this come in phase 3. 'extras' are optional places the itinerary mentions without a time.",
+  "_note": "Chan’s itinerary (screenshots, 2 Nov) [stated], shortened for the app. Times are 24-hour; 'until' ends a time range; 'by' = done by that time; 'approx' = about. 'search' is the line to paste into Google Maps or Uber (Hong Kong) or Amap or DiDi (Shenzhen). 'options' are backups or choices, headed by 'options_title'. Keys starting with _ are notes for Chan, not shown. Shown by the Schedule and Place screens (phase 3). 'map_area' frames the Place map on that area (areas are listed per map in art/art-manifest.json) [assumption: read off Chan's maps]; 'card_art' is the line drawing on the place card (dimsum, noodles, dessert or charsiu) [proposal]; a stop's 'city' says where it really is when that differs from the day's city, for Open in maps and Uber or DiDi. 'extras' are optional places the itinerary mentions without a time.",
   "days": [
     {
       "date": "2026-11-17",
@@ -27,6 +27,7 @@
           "try": "French toast, corned-beef and egg sandwich, pineapple bun, milk tea",
           "note": "Order lightly: dinner is two hours later.",
           "search": "半島冰室 北角炮台山宏安道14-28號威德閣地下2號舖",
+          "map_area": "north-point",
           "options_title": "Backup",
           "options": [
             {
@@ -44,7 +45,9 @@
           "name_zh": "華姐清湯腩",
           "why": "A short taxi ride from Peninsula Ice Room",
           "try": "Clear-soup beef brisket noodles, beef tendon and tripe",
-          "search": "華姐清湯腩 香港天后電氣道13A號"
+          "search": "華姐清湯腩 香港天后電氣道13A號",
+          "map_area": "north-point",
+          "card_art": "noodles"
         },
         {
           "id": "fook-yuen",
@@ -53,7 +56,9 @@
           "name_zh": "福元湯圓",
           "optional": true,
           "try": "Peanut or black-sesame rice balls in ginger syrup",
-          "search": "福元湯圓 北角炮台山福元街7號利都樓地下I-1號舖"
+          "search": "福元湯圓 北角炮台山福元街7號利都樓地下I-1號舖",
+          "map_area": "north-point",
+          "card_art": "dessert"
         }
       ]
     },
@@ -70,7 +75,8 @@
           "name": "Chun Yeung Street market",
           "name_zh": "春秧街街市",
           "why": "Right by the hotel: trams, market stalls and old streets",
-          "search": "春秧街街市 北角春秧街"
+          "search": "春秧街街市 北角春秧街",
+          "map_area": "north-point"
         },
         {
           "id": "lee-keung-kee",
@@ -78,7 +84,8 @@
           "name": "Egg waffles at Lee Keung Kee",
           "name_zh": "利強記北角雞蛋仔",
           "try": "Original egg waffle (原味雞蛋仔), freshly made",
-          "search": "利強記北角雞蛋仔 北角英皇道492號"
+          "search": "利強記北角雞蛋仔 北角英皇道492號",
+          "map_area": "north-point"
         },
         {
           "id": "to-central",
@@ -92,13 +99,16 @@
           "name_zh": "大會堂美心皇宮",
           "why": "Classic banquet-hall dim sum with comfortable seats. Pushcarts are not guaranteed.",
           "try": "Har gow, siu mai, char siu bao, spare ribs, turnip cake, egg tarts",
-          "search": "大會堂美心皇宮 香港中環愛丁堡廣場5-7號香港大會堂低座2樓"
+          "search": "大會堂美心皇宮 香港中環愛丁堡廣場5-7號香港大會堂低座2樓",
+          "map_area": "central",
+          "card_art": "dimsum"
         },
         {
           "id": "apple-ifc",
           "time": "12:45",
           "name": "Apple Store, IFC mall",
-          "search": "Apple ifc mall 8 Finance Street Central Hong Kong"
+          "search": "Apple ifc mall 8 Finance Street Central Hong Kong",
+          "map_area": "central"
         },
         {
           "id": "waterfront-break",
@@ -114,6 +124,7 @@
           "name_zh": "山頂凌霄閣",
           "why": "Harbour views from the Peak Tower, no long walks. Take a taxi up if the Peak Tram queue is long.",
           "search": "山頂凌霄閣 香港山頂山頂道128號",
+          "map_area": "peak",
           "options_title": "Peak Tram",
           "options": [
             {
@@ -130,7 +141,9 @@
           "name": "Dinner at Mak’s Noodle",
           "name_zh": "麥奀雲吞麵世家",
           "try": "Wonton noodle soup; a small bowl is enough after a big lunch",
-          "search": "麥奀雲吞麵世家 中環威靈頓街77號"
+          "search": "麥奀雲吞麵世家 中環威靈頓街77號",
+          "map_area": "central",
+          "card_art": "noodles"
         },
         {
           "id": "back-18",
@@ -156,7 +169,8 @@
           "time": "09:30",
           "name": "Bakehouse, Wan Chai",
           "try": "Sourdough egg tart. Buy pastries for later rather than filling up before lunch.",
-          "search": "Bakehouse 灣仔大王東街14號"
+          "search": "Bakehouse 灣仔大王東街14號",
+          "map_area": "wan-chai"
         },
         {
           "id": "blue-house",
@@ -165,7 +179,8 @@
           "name_zh": "藍屋",
           "optional": true,
           "why": "Colourful heritage building; a short look outside is enough",
-          "search": "藍屋 香港灣仔石水渠街72號"
+          "search": "藍屋 香港灣仔石水渠街72號",
+          "map_area": "wan-chai"
         },
         {
           "id": "chukfo-taipan",
@@ -173,7 +188,9 @@
           "name": "Roast-meat lunch at Chukfo Taipan",
           "name_zh": "竺扶大班燒味",
           "try": "Roast goose, char siu, crispy pork belly or the mixed roast rice",
-          "search": "竺扶大班燒味 灣仔三角街2-3號華欣閣地下3號舖"
+          "search": "竺扶大班燒味 灣仔三角街2-3號華欣閣地下3號舖",
+          "map_area": "wan-chai",
+          "card_art": "charsiu"
         },
         {
           "id": "to-causeway-bay",
@@ -188,6 +205,8 @@
           "try": "Fishball noodles, fish-skin dumplings, chilli oil",
           "note": "Search by the restaurant name: nearby street numbers get mixed up.",
           "search": "江仔記粉麵專家 銅鑼灣堅拿道東2號",
+          "map_area": "causeway-bay",
+          "card_art": "noodles",
           "options_title": "Instead",
           "options": [
             {
@@ -204,7 +223,9 @@
           "name": "Yee Shun Milk Company",
           "name_zh": "港澳義順牛奶公司",
           "try": "Steamed milk pudding: try it hot and chilled",
-          "search": "港澳義順牛奶公司 銅鑼灣駱克道506號"
+          "search": "港澳義順牛奶公司 銅鑼灣駱克道506號",
+          "map_area": "causeway-bay",
+          "card_art": "dessert"
         },
         {
           "id": "victoria-park",
@@ -243,7 +264,9 @@
           "name": "Arrive at West Kowloon station",
           "name_zh": "香港西九龍站",
           "note": "Hong Kong exit and Mainland entry checks are both done here, before boarding.",
-          "search": "香港西九龍站 香港九龍柯士甸道西3號"
+          "search": "香港西九龍站 香港九龍柯士甸道西3號",
+          "city": "HK",
+          "map_area": "west-kowloon"
         },
         {
           "id": "train-futian",
@@ -257,6 +280,7 @@
           "name": "Arrive at Futian station",
           "name_zh": "福田站",
           "search": "福田站 深圳市福田区福田高铁站",
+          "map_area": "futian",
           "_note": "The itinerary says 'clear arrival formalities' here; per APP_SPEC §1a both checks are at West Kowloon"
         },
         {
@@ -271,7 +295,8 @@
           "name": "Breakfast at Hongli Village Rice Rolls",
           "name_zh": "红荔村肠粉",
           "try": "Freshly steamed rice rolls, congee and tea",
-          "search": "红荔村肠粉 科技园文化广场 深南大道一层1-02E商铺"
+          "search": "红荔村肠粉 科技园文化广场 深南大道一层1-02E商铺",
+          "map_area": "nanshan"
         },
         {
           "id": "mixc-world",
@@ -281,6 +306,7 @@
           "name_zh": "万象天地",
           "why": "Open-air and indoor shopping streets, plenty of seats, close to the hotel",
           "search": "深圳万象天地 深圳市南山区深南大道9668号",
+          "map_area": "nanshan",
           "options_title": "Lunch: choose one",
           "options": [
             {
@@ -315,7 +341,8 @@
           "name_zh": "海上潮",
           "try": "Chaoshan braised dishes, fresh fish, vegetables",
           "note": "If everyone is tired, eat at the hotel or nearby instead.",
-          "search": "海上潮 万象天地L2层NL218号铺"
+          "search": "海上潮 万象天地L2层NL218号铺",
+          "map_area": "nanshan"
         }
       ]
     },
@@ -332,7 +359,9 @@
           "name_zh": "蘩楼",
           "try": "Red-rice prawn rolls, har gow, chicken feet, spare ribs",
           "note": "Breakfast from 8:30.",
-          "search": "蘩楼 信和购物广场 南海大道2088号L3层"
+          "search": "蘩楼 信和购物广场 南海大道2088号L3层",
+          "map_area": "nanshan",
+          "card_art": "dimsum"
         },
         {
           "id": "shenzhen-bay-park",
@@ -341,7 +370,8 @@
           "name_zh": "深圳湾公园北湾鹭港",
           "why": "Flat seaside path with birds and greenery; 40 to 50 minutes is plenty",
           "note": "Search this exact section: the park is 13 km long.",
-          "search": "深圳湾公园北湾鹭港 深圳市南山区滨海大道"
+          "search": "深圳湾公园北湾鹭港 深圳市南山区滨海大道",
+          "map_area": "shenzhen-bay"
         },
         {
           "id": "shenzhen-bay-mixc",
@@ -349,7 +379,8 @@
           "name": "Shenzhen Bay MixC: lunch and coffee",
           "name_zh": "深圳湾万象城",
           "why": "A comfortable mall for lunch and a long sit-down",
-          "search": "深圳湾万象城 深圳市南山区科苑南路2888号"
+          "search": "深圳湾万象城 深圳市南山区科苑南路2888号",
+          "map_area": "shenzhen-bay"
         },
         {
           "id": "culture-plaza",
@@ -359,7 +390,8 @@
           "optional": true,
           "why": "Nine stone-shaped buildings, worth seeing from outside",
           "note": "Open Tuesday to Sunday, 10:00 to 18:00.",
-          "search": "深圳湾文化广场 深圳市南山区科苑南路与创业路交汇处"
+          "search": "深圳湾文化广场 深圳市南山区科苑南路与创业路交汇处",
+          "map_area": "shenzhen-bay"
         },
         {
           "id": "rest-21",
@@ -386,7 +418,8 @@
               "why": "Freshly sliced beef, meatballs and clear broth",
               "search": "八合里潮汕鲜牛肉火锅 海德三道19号海岸大厦西座301A-302A"
             }
-          ]
+          ],
+          "map_area": "shenzhen-bay"
         },
         {
           "id": "to-talent-park",
@@ -401,7 +434,8 @@
           "optional": true,
           "why": "Shenzhen’s skyline lit up",
           "note": "Shows are usually at 19:00, 20:00 and 21:00 on show nights; check the Saturday schedule nearer the time.",
-          "search": "深圳人才公园 深圳市南山区科苑南路3329号"
+          "search": "深圳人才公园 深圳市南山区科苑南路3329号",
+          "map_area": "shenzhen-bay"
         },
         {
           "id": "back-21",
@@ -427,6 +461,7 @@
           "name": "K11 ECOAST",
           "why": "Striking architecture on the waterfront",
           "search": "K11 ECOAST 深圳市南山区太子湾路56号",
+          "map_area": "shekou",
           "_note": "K11 is at 56 Taiziwan Road; 1128 Wanghai Road is Sea World"
         },
         {
@@ -447,7 +482,8 @@
               "why": "Hakka dishes, soups and family-style meals",
               "search": "客颂客家菜 K11 ECOAST北馆L7层NL704-NL706号铺"
             }
-          ]
+          ],
+          "map_area": "shekou"
         },
         {
           "id": "sea-world",
@@ -455,7 +491,8 @@
           "name": "Sea World and the Minghua ship",
           "name_zh": "海上世界",
           "why": "Walk round the old Minghua ship and the plazas; plenty of cafés",
-          "search": "海上世界 深圳市南山区望海路1128号"
+          "search": "海上世界 深圳市南山区望海路1128号",
+          "map_area": "shekou"
         },
         {
           "id": "break-22",
@@ -468,14 +505,16 @@
           "name": "Seafood claypot congee dinner",
           "name_zh": "金稻园砂锅粥",
           "try": "Crab or prawn claypot congee, stir-fried vegetables, a few side dishes",
-          "search": "金稻园砂锅粥 海上世界C区L1层101号铺"
+          "search": "金稻园砂锅粥 海上世界C区L1层101号铺",
+          "map_area": "shekou"
         },
         {
           "id": "sea-world-lights",
           "time": "19:00",
           "name": "Sea World evening lights and fountain",
           "optional": true,
-          "note": "Skip it if anyone is tired."
+          "note": "Skip it if anyone is tired.",
+          "map_area": "shekou"
         },
         {
           "id": "back-22",
@@ -501,7 +540,8 @@
           "name": "Nantou Ancient City",
           "name_zh": "南头古城",
           "why": "Old streets, little shops and cafés; 1½ to 2 hours at your own pace",
-          "search": "南头古城 深圳市南山区南山大道与深南大道交叉口"
+          "search": "南头古城 深圳市南山区南山大道与深南大道交叉口",
+          "map_area": "nanshan"
         },
         {
           "id": "chaoxiang-lunch",
@@ -509,7 +549,9 @@
           "name": "Lunch in the old city: Chaozhou noodles",
           "name_zh": "潮巷·潮州粿条",
           "try": "Chaoshan noodles, oyster omelette or braised dishes",
-          "search": "潮巷·潮州粿条·潮汕风味专门店 南头古城中山南街84号101号铺"
+          "search": "潮巷·潮州粿条·潮汕风味专门店 南头古城中山南街84号101号铺",
+          "map_area": "nanshan",
+          "card_art": "noodles"
         },
         {
           "id": "binma",
@@ -518,7 +560,9 @@
           "name_zh": "彬妈糖水",
           "optional": true,
           "why": "Traditional Cantonese sweet soups; a seated snack stop",
-          "search": "彬妈糖水 南头古城中山南街41号101"
+          "search": "彬妈糖水 南头古城中山南街41号101",
+          "map_area": "nanshan",
+          "card_art": "dessert"
         },
         {
           "id": "to-happy-harbour",
@@ -531,7 +575,8 @@
           "until": "16:30",
           "name": "Happy Harbour: waterfront mall and park",
           "name_zh": "欢乐港湾",
-          "search": "欢乐港湾 深圳市宝安区海天路与宝华路交汇处"
+          "search": "欢乐港湾 深圳市宝安区海天路与宝华路交汇处",
+          "map_area": "bao-an"
         },
         {
           "id": "bay-glory",
@@ -541,7 +586,8 @@
           "name_zh": "湾区之光",
           "optional": true,
           "why": "Enclosed cabins: sightseeing sitting down",
-          "search": "湾区之光摩天轮 欢乐港湾"
+          "search": "湾区之光摩天轮 欢乐港湾",
+          "map_area": "bao-an"
         },
         {
           "id": "chaoxiang-sihai",
@@ -551,6 +597,7 @@
           "why": "A long-time favourite on Dianping’s must-eat list",
           "try": "Braised goose (卤鹅拼盘), oyster omelette (招牌蚝仔烙), Puning fried tofu (普宁炸豆腐), taro rice (一颗芋头饭), sugar-crusted taro (反沙芋头)",
           "search": "潮香四海 南山大道1112-7号",
+          "map_area": "nanshan",
           "options_title": "If everyone is tired",
           "options": [
             {
@@ -583,7 +630,8 @@
           "time": "07:45",
           "name": "Taxi to Shekou Cruise Homeport",
           "name_zh": "蛇口邮轮母港",
-          "search": "蛇口邮轮母港 深圳市南山区海运路1号"
+          "search": "蛇口邮轮母港 深圳市南山区海运路1号",
+          "city": "SZ"
         },
         {
           "id": "shekou-arrive",
@@ -626,7 +674,8 @@
       "optional": true,
       "why": "Handmade egg rolls, a classic Hong Kong gift",
       "note": "Sold Thursday to Saturday, with very long queues: only if it’s easy.",
-      "search": "德成號 北角渣華道64號"
+      "search": "德成號 北角渣華道64號",
+      "map_area": "north-point"
     },
     {
       "id": "upperhills",
@@ -635,7 +684,8 @@
       "name_zh": "深业上城",
       "optional": true,
       "why": "Rooftop streets and colourful buildings; could replace one of the malls",
-      "search": "深业上城 深圳市福田区皇岗路5001号"
+      "search": "深业上城 深圳市福田区皇岗路5001号",
+      "map_area": "futian"
     }
   ]
 }

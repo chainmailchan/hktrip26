@@ -5,7 +5,8 @@
 // - KEEP: fonts, icons and every image in art/art-manifest.json. Downloaded once,
 //   never again. A changed image needs a new file name.
 // - Not stored: phone setup (app/setup.js, app/vendor/), fetched only when a setup screen
-//   opens, and the live data on GitHub (other origins are left to the browser).
+//   opens, and the live data on GitHub and the weather (other origins are left to the browser;
+//   the app keeps its own last copy of each).
 
 const SHELL = 'shell';
 const KEEP = 'keep';
@@ -17,6 +18,9 @@ const SHELL_FILES = [
   'app/app.js',
   'app/art.js',
   'app/live.js',
+  'app/trip.js',
+  'app/util.js',
+  'app/weather.js',
   'art/art-manifest.json',
   'data/art-schedule.json',
   'data/emergency.json',
@@ -24,7 +28,8 @@ const SHELL_FILES = [
   'data/itinerary.json',
   'data/packing.json',
   'data/people.json',
-  'data/trip.json'
+  'data/trip.json',
+  'data/weather.json'
 ];
 
 const KEEP_FILES = [

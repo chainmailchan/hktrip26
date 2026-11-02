@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.35, 2 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.36, 2 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -117,6 +117,13 @@ Top to bottom:
 5. **Art** as the full background (§4.2).
 6. **Plan button, always at the bottom** [stated]: "Today's plan" / "Tonight's plan" / "Tomorrow's plan" (late night). Opens F3 on the right day. Nothing below it.
 - Admin phones: a small "Admin" text link next to Help [proposal] (F8).
+- **As built (phase 3, `app/app.js`)** [proposal on the details, except where marked]:
+  - From 17 Nov the home is in trip mode; before that it is the pre-trip home (F9).
+  - Date line: "Wednesday 18 November · Hong Kong", using each day's `label` in the itinerary ("· to Shenzhen", "· fly home"). While a flight is on (`data/trip.json` → flights, `home_from`/`home_until`: 17 Nov until 14:00, 24 Nov from 12:00, as for the flight art): "Tuesday 17 November · SQ882 to Hong Kong". From 22:00 to 05:00 it shows the time instead, 24-hour like the Schedule: "Wednesday · 23:48" [stated: plan OK, 2 Nov (D5)].
+  - Plan button: "Today's plan" (05:00–17:30), "Tonight's plan" (17:30–22:00), "Tomorrow's plan" (22:00–05:00; opens the coming day, after midnight too). On the last evening and after the trip: "The trip plan", opening 24 Nov. The times are the art slots in `data/art-schedule.json`.
+  - No packing lines and no Packing button during the trip; the Packing list stays reachable from the Hidden pages [stated: plan OK (D4)].
+  - The trip home checks only the announcement, not the packing ticks, to save data.
+  - If the app stays open, the art, greeting, plan button and late-night clock move on by themselves (checked every 20 s; only what changed is redrawn).
 
 ### F3. Schedule [stated + proposal] (`Schedule`)
 - Large stacked day names (Tuesday … Tuesday) with "17 · Hong Kong"-style meta on the right. Tap a day to open it; one open at a time; today opens by default.
@@ -132,6 +139,13 @@ Top to bottom:
   - Ratings and the reasoning behind each pick are left out. Two unscheduled places (Duck Shing Ho egg rolls, UpperHills) sit in `extras`; phase 3 decides whether to show them [proposal].
 - One correction: the plan says to "clear arrival formalities" at Futian, but both the Hong Kong exit and Mainland entry checks are done at West Kowloon before boarding (§1a, sourced). The data says so at the West Kowloon stop.
 - The current stop is highlighted by clock time [proposal]; there is no "Now/Next" admin control in Concept B (Q31).
+- **As built (phase 3, `app/trip.js`)** [proposal on the details, except where marked]:
+  - Day rows as in the wireframe. The open day shows "18 November · {title}", the day's tip, the stops, then "Tonight · {hotel}" (24 Nov: "Home to Singapore", not tappable). Home and Help stay at the top while the list scrolls; an opened day scrolls into view.
+  - Times: "14:30" with "to 15:30", "by 09:00" or "about 10:40" on two lines; optional stops say "Optional".
+  - **"Now"** (bold) marks the stop under way: the last one that has started today, by the phone's clock (Q31).
+  - Only stops with something to show (a search line, why, try, a note or choices) open a Place card. Travel and rest rows ("Taxi or MTR to Central") are plain grey text, not buttons.
+  - Duck Shing Ho and UpperHills: a last section, "If there's time · Optional" [stated: plan OK (D3)].
+  - "Weather from Open-Meteo.com" at the bottom (F5, Q45).
 
 ### F4. Place card [stated] (`Place`)
 - Background: **Chan's Hong Kong street map** (paper style by default; navy available), zoomed ~160% and softened 30%, framed on the area of the place [proposal: per-place focus point in data]. A dotted line and a pin are drawn over it, **for mood only** [stated].
@@ -139,13 +153,44 @@ Top to bottom:
 - "More about this place" opens the detail view [carried over from v0.15 F4]: About | Getting there switch, 2–4 short lines, numbered plain-language steps, and one **"Open in maps"** button (Google Maps in HK; Amap or Apple Maps in Shenzhen, §5.2). No prices.
 - "Open in maps" can search by each stop's `search` line (Chinese name and address) instead of coordinates. That avoids the GCJ-02 offset problem in §5.2, and the plan recommends searching by Chinese name [proposal for phase 3].
 - **During the Shenzhen part of the trip, this screen (opened by tapping an itinerary item in the Schedule) uses Chan's Shenzhen map**, `art/map-sz-paper.jpg`, as its background [stated, 24 Oct]. It goes by the part of the trip, not by where each place is. "Shenzhen part" = the days whose city in `data/itinerary.json` is SZ (20–23 Nov) [proposal].
+- **As built (phase 3, `app/trip.js`)** [proposal on the details, except where marked]:
+  - **Map:** the paper Hong Kong map, or the Shenzhen map on the Shenzhen days (`data/art-schedule.json` → `place_map`), scaled to cover the screen, zoom 1.6, soften 30%. The navy map is not used.
+  - **Framed on the stop's area** [stated: plan OK (D1)]. Each map lists its areas in `art/art-manifest.json`: Hong Kong Central, Peak, Wan Chai, Causeway Bay, North Point, West Kowloon; Shenzhen Nanshan, Shenzhen Bay, Shekou, Futian, Bao'an. They were read off Chan's drawings by eye [assumption: check on the phone (Q47)]. Each stop names its area (`map_area`), matched from its address. A stop without one, or whose area isn't on that day's map (West Kowloon on 20 Nov), gets the map's default view (the harbour; Shenzhen Bay).
+  - The pin sits in the middle of the map, between the top bar and the card. The map may end behind the card, where it fades out, so low-lying areas such as the Peak still sit under the pin.
+  - **Card:** a line drawing where one fits (`card_art`: dim sum, noodles, dessert or char siu, from the wireframe; Q47), the name, the Chinese name, the time (and "Optional"), one line (why, else "Try: …", else the note), and "More about this place" when the details add something.
+    - No distance: the itinerary has no travel data.
+    - The card is a solid card, as drawn in the wireframe; the halo rule is for text over the home art.
+  - **Details page:** name, Chinese name, day and time; why, "Try: …" and the note; **"Open in maps"** (filled) and **"Copy the address for Uber"** (DiDi in Shenzhen) [stated: plan OK (D6)]; then the choices or backups, each with its own "Open in maps" and "Copy for Uber/DiDi".
+    - No "About | Getting there" switch: the itinerary has no steps. It can come back for any stop that is given steps [stated: plan OK (D2)].
+  - **Open in maps** searches by the stop's `search` line: Google Maps in Hong Kong; in Shenzhen, Apple Maps on iPhones and Amap on Android (Papa) [assumption: link formats from memory, as the build session couldn't reach the docs; test on the phones (Q46)].
+    - A stop's own `city` overrides the day's for this: West Kowloon on 20 Nov gets Google Maps and Uber; Shekou on 24 Nov gets Apple Maps or Amap, and DiDi.
+    - The links open outside the app.
+  - Chinese names use the phone's own Chinese font (the app's font holds only the greeting characters): Traditional in Hong Kong, Simplified in Shenzhen.
 
 ### F5. Weather and what to wear [stated: keep] [carried over]
 - Today's forecast for the city we're in (tomorrow's after 22:00); one plain line of advice from simple rules ("Light layers. Bring the umbrella.").
 - Free API with no key [assumption: Open-Meteo, or Hong Kong Observatory open data; builder to check terms and reachability]. Cache the last forecast.
+- **As built (phase 3, `app/weather.js`, `data/weather.json`)** [proposal]:
+  - **Source:** Open-Meteo. It covers both cities (the Observatory covers only Hong Kong), in one request of about 2 KB.
+    - Fetched at most once an hour while the trip home is open, and from two days before the trip, so the flight morning has a forecast in airplane mode.
+    - The last forecast stays on the phone.
+    - [assumption: free for non-commercial use, with credit asked; the build session couldn't reach open-meteo.com to read the terms or test the service (Q45)]
+  - **First line:** the day's high and sky, e.g. "23°, cloudy, rain likely" ("rain likely" from a 50% chance).
+    - After 22:00: "Tomorrow 22°, sunny", or "Shenzhen tomorrow: …" when tomorrow is in the other city.
+    - Flight windows: "Hong Kong today: …".
+  - **Second line**, by the day's high:
+    - 29° and up: "Light clothes. Drink plenty of water."
+    - 24–28°: "Light clothes."
+    - 19–23°: "Light layers."
+    - 15–18°: "Bring a warm layer."
+    - Below 15°: "Wear warm layers."
+    - Plus "Bring the umbrella." when rain is likely. On flights: "Keep a jacket handy on the plane."
+  - All wording and thresholds are in `data/weather.json`, editable without code. The city coordinates are the hotels' districts [assumption: approximate].
+  - With no forecast (offline and nothing kept), the two lines are hidden.
 
 ### F6. Hotel info [stated: "store hotel information just in case"] [carried over]
 - Opened from the "Tonight" row in F3. Name, address, check-in/out, "Open in maps". No phone button, no booking references [stated].
+- **As built (phase 3):** a dialog over the Schedule; tapping outside it or "Close" closes it. It shows the name, Chinese name, full name (Mercury Garden), address, "Check in from 15:00 · check out by 11:00", "Open in maps" and "Copy the address for Uber" (DiDi in Shenzhen) [proposal].
 
 ### F7. Help [stated, 23 Oct] (`Help`)
 1. **"Lost? Stay where you are."** Then: "message the family, or call Chan. We will come to you."
@@ -173,6 +218,7 @@ Top to bottom:
 - Greeting, "Saturday 31 October · Singapore", **"17 days to Hong Kong"**, the viewer's packing progress, announcement, **"Packing list"** button at the bottom, and a second line with the other list's progress (admins) [wireframe].
 - Art: **Chan's drawing of a suitcase on a terrace above Victoria Harbour** (`home-pretrip-suitcase`) [stated, 2 Nov]. The placeholder suitcase line art stays in the code and shows only if `pretrip.image` in `data/art-schedule.json` is emptied.
 - Before a phone is set up, the first progress line is Mama & Papa's list and the second Chan & Belle's [proposal]. "Singapore" and the city names come from `data/trip.json` (`home_city`, `cities`).
+- During the trip the home has no Packing button; Hidden pages → Packing list opens it [stated: plan OK, 2 Nov (D4)].
 
 ### F10. Packing lists [stated] (`Packing`)
 - **Two lists**: Chan & Belle (full) and Mama & Papa (essentials only) [stated]. Seed items in `data/packing.json`.
@@ -242,6 +288,10 @@ Full table in `art/art-manifest.json`. Summary:
 - Art format for new images: **9 : 19.5 portrait** [stated, 24 Oct], 1320 × 2868 px, JPEG ~80%, <700 KB; keep the top ~40% and bottom ~15% calm and the outer ~8% each side free of anything important. 1320 × 2868 is the 16 Pro Max screen in pixels; the other three phones are the same shape within 0.3%, so a full-height drawing fills each with about 1 px trimmed. The clock sits over the top ~7% (62 of 956 pt). Set the image's `background` to the colour along its top edge: Safari paints its status-bar band in that colour.
 - **Phones keep each image forever once downloaded, so a changed image needs a new file name** [proposal].
 - **Hidden preview** [stated: kickoff]: `?preview` lists every home image as a button. `?preview=evening&date=2026-11-18` shows what the home screen would show then (slots: `morning`, `afternoon`, `evening`, `late`; add `&time=18:40` for an exact time, which also tests the flight-day overrides); `?preview=day-repulse-bay` shows any image from the manifest; `?preview=pretrip&date=2026-11-05` shows the pre-trip home on that date. The preview fills the weather lines with the date, time and file name, shows an example announcement, and the bottom button is "Close preview". **In the installed app** (no address bar), five quick taps on the date line open the preview list [proposal]. Since phase 2 that page is called "Hidden pages" and also links to "Set up this phone" and "Make setup codes" (§5.5).
+  - **Trip preview (phase 3)** [proposal]: `?preview=trip&date=2026-11-21&time=18:40` shows the real trip screens (home, Schedule, Place, hotel) at that date and time, so "Now", the open day, the Shenzhen map and the plan button can be checked before the trip.
+    - A date with no forecast yet shows example weather marked "Example:".
+    - "Close preview" sits under the plan button.
+    - Hidden pages → **Trip days** lists each day, with a choice of 09:00, 15:00, 18:40 or 23:00. The page also links to the Packing list.
 
 ### 4.3 Type [stated + proposal]
 - Body: **Figtree**. Chinese: **Noto Sans HK**. Date lines and screen titles: **Barlow Condensed** (current default from the test bench; final typeface is Chan's call, Q33). Self-host all fonts (§5.2).
@@ -282,6 +332,7 @@ Full table in `art/art-manifest.json`. Summary:
 - If live data fails: "No connection · last updated 10:42". In Shenzhen, Help can add "Turn off Wi-Fi and use mobile data" [carried over].
 - **No runtime dependency on Google**: self-host fonts; no Google Maps embed; no Firebase.
 - "Open in maps" in Shenzhen: Amap or Apple Maps. Mainland maps use GCJ-02 while GPS/OSM use WGS-84 (offsets of hundreds of metres); store the datum with coordinates and convert before building Amap links [assumption: verify Amap URI parameters].
+  - As built (phase 3): the links search by each stop's Chinese name and address (`search`), so no coordinates or conversion are needed (F4, Q46).
 
 ### 5.3 Live data: GitHub only (no server, no bot [stated])
 - **A second, small, public repo holds the live files: `hktrip26scrt`** [stated, 24 Oct], so the phones' tokens can't touch the app. Read and written through the **GitHub REST API**, polled every 30 s while the app is open and immediately on reopen. Only the changed parts update; no reload, no scroll jump [stated].
@@ -306,6 +357,7 @@ Full table in `art/art-manifest.json`. Summary:
 - **Chan's two static Hong Kong street maps** (`art/map-hk-paper.jpg`, `art/map-hk-navy.jpg`), plus his Shenzhen map (`art/map-sz-paper.jpg`, 24 Oct), replace the per-stop rendered maps of v0.15 [stated]. They are mood images, not navigation [stated].
 - Source of the maps is unknown; **if they derive from OpenStreetMap data, show "© OpenStreetMap contributors"** on the Place screen (Q35) [assumption].
 - No live tiles; nothing to fetch at runtime.
+- Phase 3 frames each map on the stop's area (F4); the areas sit with each map in `art/art-manifest.json`.
 
 ### 5.5 Setup and access [stated: QR setup]
 - No accounts. **One QR code per person** (Chan, Belle, Mama, Papa) carrying their id, their token, admin yes/no, and the family phone numbers for the Call buttons. Scanning it sets the phone up in one step; all of it stays on the phone. **The code is scanned inside the app** (a "Set up this phone" button that opens the camera), so it sets up the installed app rather than Safari [stated, 24 Oct].
@@ -340,14 +392,18 @@ Seed files are in `data/`:
 - `itinerary.json`: eight days with placeholder stops (only travel items are real); places come with the itinerary.
 - `packing.json`: the two lists (groups → items with optional notes).
 - `greetings.json`: time windows and phrase pools.
-- `art-schedule.json`: which home image shows when, plus flight-day overrides and day images (unassigned).
+- `art-schedule.json`: which home image shows when, plus flight-day overrides, day images (unassigned) and `place_map` (the Place screen's map per city, phase 3).
 - `emergency.json`: HK and SZ numbers.
+- `weather.json` (phase 3): the forecast source, each city's coordinates, and the wording rules (F5).
 - `art/art-manifest.json`: image metadata.
 
 ```jsonc
-// itinerary stop as entered 2 Nov (data/itinerary.json; see F3)
+// itinerary stop as entered 2 Nov (data/itinerary.json; see F3). Phase 3 added map_area (the Place map's
+// framing, areas in art-manifest.json), card_art (dimsum|noodles|dessert|charsiu) and city (only where the
+// place is not in the day's city: Open in maps and Uber/DiDi go by it)
 { "id": "maxims-city-hall", "time": "11:00", "until": "", "name": "Dim sum at Maxim’s Palace, City Hall", "name_zh": "大會堂美心皇宮",
   "why": "", "try": "", "note": "", "search": "大會堂美心皇宮 香港中環愛丁堡廣場5-7號…", "optional": false,
+  "map_area": "central", "card_art": "dimsum", "city": "HK",
   "options_title": "Backup", "options": [{ "name": "", "name_zh": "", "why": "", "search": "" }] }
 
 // place (first idea, before the itinerary; phase 3 may fold its map framing into the stops)
@@ -379,7 +435,7 @@ Seed files are in `data/`:
 | ~31 Oct | Chan sends the link | View-only for Mama and Papa [stated] |
 | **~1 Nov** | **2. Setup and sync** | QR setup (§5.5), tokens, ticking with sync via `live/packing.json`, announcement writing (F8) and display (F1). **Built 24 Oct (v0.32)**; setup guide in `spec/SETUP.md`. **Works on Chan's and Belle's phones** (27 Oct) [stated] |
 | Week of 2 Nov | Chan's setup visit | Install on all four phones, scan QR codes [stated] |
-| **~10 Nov** | **3. Trip mode** | Schedule (F3), Place card + detail (F4), Weather (F5), Hotel (F6), trip-mode home with time-based art, offline test |
+| **~10 Nov** | **3. Trip mode** | Schedule (F3), Place card + detail (F4), Weather (F5), Hotel (F6), trip-mode home with time-based art, offline test. **Built 2 Nov (v0.36)**; `tools/check.mjs` covers every day, place card and detail page at the four sizes, and airplane mode after install |
 | 10 Nov | Checks | SQ882/SQ883 times and the Shekou ferry (scheduled) |
 | **~14 Nov** | **4. Real data** | Itinerary and places entered as data; no code change. **Itinerary entered 2 Nov**, ahead of phase 3 |
 | 15–24 Nov | Data-only changes | Itinerary, images, phrases; no code changes unless Chan asks [proposal] |
@@ -395,7 +451,7 @@ Seed files are in `data/`:
 | Q27 | Shekou → SkyPier ferry running on 24 Nov | Open; check scheduled 10 Nov |
 | Q28 | Hotel dates (3 + 4 nights) | **Answered:** Stellar 17–20, Mercury Garden 20–24 [stated: itinerary, 2 Nov] |
 | Q30 | SQ882 / SQ883 exact times | **Partly answered:** SQ883 departs 14:10 [stated, 2 Nov]. SQ882 lands 12:30 per the itinerary vs 12:40 per Trip.com; re-check on 10 Nov |
-| Q31 | Without Now/Next, is a clock-time highlight on the Schedule enough, or does Chan want an admin "we've moved on" control? | Open [proposal: clock time] |
+| Q31 | Without Now/Next, is a clock-time highlight on the Schedule enough, or does Chan want an admin "we've moved on" control? | **Built** with the clock-time "Now" (F3) [proposal]; an admin control only if Chan asks |
 | Q32 | Greeting phrases | **Answered:** Chan's full list (F11) [stated]; window times are proposals |
 | Q33 | Final typeface | Chan will decide later [stated] |
 | Q34 | **One afternoon image per day** (Chan to supply); are Victoria Peak, Shenzhen city and Victoria Harbour afternoon images (which days)? Kowloon drawings received, for the mostly-Kowloon days [stated, 24 Oct]: which days? Chan not sure yet (24 Oct). Shenzhen evening drawings: Chan looking [stated, 24 Oct]. Sunsets received at ~852 px wide; slightly soft is OK [stated, 24 Oct] | Needs art / itinerary |
@@ -409,6 +465,9 @@ Seed files are in `data/`:
 | Q42 | *Bottom* drawings are about 2 : 3, so the background colour fills the top third or more of the screen; "longer is probably nicer" [stated, 24 Oct] | **Answered:** no cropping ("the cropped all look worse"); keep the drawings and let them run under Safari's address bar [stated, 24 Oct] |
 | Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | **Partly answered:** Belle scanned Chan's code with the camera on her iPhone 16 Pro [stated, 27 Oct]. Mama's and Papa's phones still to test at the visit; "Take a photo of the code instead" is the fallback |
 | Q44 | `hktrip26scrt` is empty (no branches, 24 Oct); can the app create the first file there? | **Answered:** Chan added a README; announcements and ticks save [stated, 27 Oct] |
+| Q45 | Weather (F5): Open-Meteo's terms and the live service couldn't be checked from the build session (its network blocks open-meteo.com) [assumption: free for non-commercial use, with credit; the credit line is on the Schedule] | Open: check that the weather lines appear on the phones from 15 Nov. To let a session read the terms, allow `open-meteo.com` and `api.open-meteo.com` in the environment's network settings |
+| Q46 | "Open in maps" link formats (Google Maps in HK; Apple Maps on iPhones and Amap on Android in Shenzhen) are from memory [assumption] | Open: tap Open in maps for one Hong Kong and one Shenzhen place on each phone (Hidden pages → Trip days) |
+| Q47 | Place-map areas, read off the two drawings by eye, and the card drawings per stop (the dessert drawing is two ice-cream cones, used for Fook Yuen, Yee Shun and Bin Ma) [assumption / proposal] | Open: check in Hidden pages → Trip days |
 
 ---
 
@@ -454,8 +513,10 @@ Seed files are in `data/`:
 | 27 Oct | **Phase 2 works** on Chan's and Belle's phones: setup codes, Belle's camera scan, announcements from both, ticks. README added to `hktrip26scrt`; all four tokens made. A long announcement over the suitcase drawing is fine with the halo [stated] |
 | 2 Nov | Chan's drawing of a suitcase above Victoria Harbour is the pre-trip home art (Q37). It goes on the pre-trip home, not behind the packing list [stated] |
 | 2 Nov | Chan's itinerary (screenshots) goes into the app, shortened: time, names, one line on why or what to try, the map search line, optional stops and choices. Flight home SQ883 at **14:10**. Hotel dates 17–20 / 20–24 [stated] |
+| 2 Nov | **Phase 3 plan approved** [stated: "Ok"]. D1: the Place map is framed on each stop's area. D2: no "Getting there" switch until a stop has steps. D3: Duck Shing Ho and UpperHills in an "If there's time" section. D4: no Packing button on the trip home. D5: the late-night time is 24-hour. D6: "Copy the address for Uber/DiDi" on the place details |
 
 ## 11. Changelog
+- **v0.36 (2 Nov 2026):** Phase 3 built: trip home (F2), Schedule (F3), Place card and details (F4), weather (F5), hotel card (F6), trip preview and Hidden pages → Trip days (§4.2). Phase 3 decisions D1–D6 (§10). New data `data/weather.json`, plus `place_map`, map areas, and `map_area`, `card_art` and `city` on stops (§6). Q31 built; Q45–Q47 added.
 - **v0.35 (2 Nov 2026):** Chan's itinerary entered in `data/itinerary.json` (F3) and hotel Chinese names and search lines added to `data/trip.json`; SQ883 at 14:10 (§1a); Q28 answered, Q30 partly answered; "Open in maps" by search line proposed (F4); itinerary stop format (§6).
 - **v0.34 (2 Nov 2026):** Pre-trip home art: Chan's suitcase drawing replaces the placeholder (F9, §4.2, Q37); offline download size updated (§5.1).
 - **v0.33 (27 Oct 2026):** Phase 2 tested on Chan's and Belle's phones (§7); Q44 answered, Q43 partly answered (camera works on Belle's iPhone); long announcements over the art are fine (F1).

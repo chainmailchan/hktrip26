@@ -1,11 +1,15 @@
 // Layout check at the four family phones (CLAUDE.md). Serves the repo like GitHub Pages
 // (ETag + 304), opens each screen in Chromium and fails on: text under 17 px, primary
-// buttons outside 60–64 px, tap targets under 48 px, sideways scrolling, a home screen
-// that needs scrolling, a greeting that overflows, or stretched art. Screens are checked
-// as a phone that isn't set up, as Mama's phone and as Chan's (admin).
+// buttons outside 60–64 px, tap targets under 48 px, sideways scrolling, a home screen or
+// place card that needs scrolling, a greeting that overflows, stretched art, or a map pin
+// hidden behind the card. Screens are checked as a phone that isn't set up, as Mama's phone
+// and as Chan's (admin): pre-trip and trip-mode homes, every Schedule day, every place card
+// and its details, and both hotel cards. A fake weather service gives the longest lines.
 // Then, against a fake GitHub for the live-data repo: ticking (with another phone saving at
 // the same time), ticks waiting offline, writing and clearing the announcement, and making a
-// setup code and setting up a phone from it (photo and camera).
+// setup code and setting up a phone from it (photo and camera). Then trip mode: plan button,
+// date line and weather by time of day, Schedule → Place → details → hotel, Open in maps and
+// copying on iPhone and Android, and the whole trip mode in airplane mode after install.
 //
 //   NODE_PATH="$(npm root -g)" node tools/check.mjs [screenshot-folder]
 
@@ -57,10 +61,30 @@ const seed = () => ({
   'live/packing.json': { mp: { passports: { done: true, by: 'm', at: '' } }, cb: { phones: { done: true, by: 'c', at: '' } } }
 });
 
-const greetings = JSON.parse(await readFile(join(root, 'data/greetings.json'), 'utf8'));
+const load = async (path) => JSON.parse(await readFile(join(root, path), 'utf8'));
+const greetings = await load('data/greetings.json');
 const phrases = [...new Set([...greetings.special_days, ...greetings.windows].flatMap((g) => g.phrases))];
-const schedule = JSON.parse(await readFile(join(root, 'data/art-schedule.json'), 'utf8'));
-const manifest = JSON.parse(await readFile(join(root, 'art/art-manifest.json'), 'utf8'));
+const schedule = await load('data/art-schedule.json');
+const manifest = await load('art/art-manifest.json');
+const itinerary = await load('data/itinerary.json');
+const trip = await load('data/trip.json');
+
+// Trip mode, shown through the trip preview (the real screens at a set date and time).
+const at = (date, time) => `?preview=trip&date=${date}&time=${time}`;
+const hasCard = (s) => !!(s.search || s.why || s.try || s.note || s.options?.length); // as app/trip.js
+const places = [
+  ...itinerary.days.flatMap((d) => d.stops.filter(hasCard).map((s) => [`${d.date}-${s.id}`, `${at(d.date, '12:00')}#place/${d.date}/${s.id}`])),
+  ...(itinerary.extras || []).map((e) => [`extra-${e.id}`, `${at(trip.start, '12:00')}#place/extra/${e.id}`])
+];
+const tripHomes = [
+  ['flight-out', at('2026-11-17', '09:00')],
+  ['morning', at('2026-11-18', '09:00')],
+  ['late-moving-day', at('2026-11-19', '23:00')],
+  ['evening-sz', at('2026-11-20', '18:40')],
+  ['afternoon-sz', at('2026-11-22', '15:00')],
+  ['flight-home', at('2026-11-24', '13:00')]
+];
+const openHotel = (page) => page.click('[data-hotel]').then(() => page.waitForSelector('.dialog'));
 
 const pages = [
   ['home', '?preview=pretrip&date=2026-10-31', { noScroll: true }],
@@ -84,7 +108,15 @@ const pages = [
   ['chan-home', '?preview=pretrip&date=2026-10-31', { who: 'chan', noScroll: true }],
   ['chan-packing', '#packing/cb', { who: 'chan' }],
   ['chan-help', '#help', { who: 'chan' }],
-  ['chan-admin', '#admin', { who: 'chan', prepare: (page) => page.fill('#board-text', 'Taxi to the station at 10:15. Meet in the lobby.') }]
+  ['chan-admin', '#admin', { who: 'chan', prepare: (page) => page.fill('#board-text', 'Taxi to the station at 10:15. Meet in the lobby.') }],
+  ...tripHomes.map(([name, url]) => [`trip-${name}`, url, { noScroll: true }]),
+  ...tripHomes.map(([name, url]) => [`chan-trip-${name}`, url, { who: 'chan', noScroll: true }]),
+  ...itinerary.days.map((d) => [`schedule-${d.date}`, `${at(d.date, '12:00')}#schedule/${d.date}`]),
+  ['schedule-extras', `${at(trip.start, '12:00')}#schedule/extras`],
+  ['hotel-hk', `${at('2026-11-18', '12:00')}#schedule/2026-11-18`, { prepare: openHotel }],
+  ['hotel-sz', `${at('2026-11-21', '12:00')}#schedule/2026-11-21`, { prepare: openHotel }],
+  ...places.map(([name, url]) => [`place-${name}`, url, { noScroll: true, place: true }]),
+  ...places.map(([name, url]) => [`more-${name}`, url + '/more'])
 ];
 
 const problems = [];
@@ -141,20 +173,53 @@ async function fakeGitHub(ctx, files = seed()) {
   return gh;
 }
 
+// A fake Open-Meteo with the longest lines the rules make (29°, partly cloudy, rain likely) for every
+// trip day, in both cities. wx.calls counts requests; wx.down makes it fail.
+async function fakeWeather(ctx) {
+  const wx = { calls: 0, down: false };
+  const dates = itinerary.days.map((d) => d.date);
+  await ctx.route('https://api.open-meteo.com/**', (route) => {
+    wx.calls++;
+    if (wx.down) return route.abort('internetdisconnected');
+    const n = new URL(route.request().url()).searchParams.get('latitude').split(',').length;
+    const one = { daily: { time: dates, weather_code: dates.map(() => 2), temperature_2m_max: dates.map(() => 29.4),
+      temperature_2m_min: dates.map(() => 24.1), precipitation_probability_max: dates.map(() => 70) } };
+    const body = n > 1 ? Array(n).fill(one) : one;
+    return route.fulfill({ status: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  });
+  return wx;
+}
+
 async function phoneContext(browser, phone, who, opts = {}) {
   const ctx = await browser.newContext({ viewport: { width: phone.width, height: phone.height }, deviceScaleFactor: 2, isMobile: true,
-    hasTouch: true, serviceWorkers: 'block', reducedMotion: 'reduce', ...opts });
+    hasTouch: true, serviceWorkers: 'block', reducedMotion: 'reduce', timezoneId: 'Asia/Hong_Kong', ...opts });
   if (profiles[who]) {
     await ctx.addInitScript((p) => { try { localStorage.setItem('hktrip.profile', p); } catch {} }, JSON.stringify(profiles[who]));
   }
   ctx.gh = await fakeGitHub(ctx);
+  ctx.wx = await fakeWeather(ctx);
   return ctx;
 }
 
 const open = async (page, url) => {
   await page.goto(base + url.replace(/^#/, '?x#'));
-  await page.waitForSelector('#screen > .page > *, #screen > .home');
+  await page.waitForSelector('#screen > .page > *, #screen > .home, #screen > .place');
 };
+
+// Place card: the map covers the screen above the card and the pin shows between the bar and the card.
+function pinAudit() {
+  const out = [];
+  const card = document.querySelector('.place .card').getBoundingClientRect();
+  const bar = document.querySelector('.place .bar').getBoundingClientRect();
+  const img = document.querySelector('#art .fit-map').getBoundingClientRect();
+  const m = document.querySelector('.map-pin g')?.getAttribute('transform').match(/translate\(([\d.-]+) ([\d.-]+)\)/);
+  if (!m) return ['no map pin'];
+  const [x, y] = [+m[1], +m[2]];
+  if (y - 44 < bar.bottom - 1 || y > card.top) out.push(`map pin not between the bar and the card (${Math.round(y)})`);
+  if (x < 15 || x > innerWidth - 15) out.push('map pin off the side');
+  if (img.left > 0.5 || img.right < innerWidth - 0.5 || img.top > 0.5 || img.bottom < card.top + 119) out.push('map does not cover the screen above the card');
+  return out;
+}
 
 // Codes screen: fill in Mama's token and everyone's numbers, then make the codes.
 async function makeCodes(page) {
@@ -211,10 +276,16 @@ for (const phone of phones) {
     const page = ctxs[opts.who || 'viewer'].page;
     await open(page, url);
     if (opts.prepare) await opts.prepare(page);
-    // Live data arrives just after the screen is drawn.
-    if (url.includes('preview=pretrip')) await page.waitForSelector('.announcement', { timeout: 3000 }).catch(() => fail(`${phone.name} ${name}`, 'announcement did not show'));
+    // Live data and the forecast arrive just after the screen is drawn.
+    const home = await page.locator('#screen > .home').count();
+    if (home && /preview=(pretrip|trip)/.test(url)) await page.waitForSelector('.announcement', { timeout: 3000 }).catch(() => fail(`${phone.name} ${name}`, 'announcement did not show'));
+    if (home && url.includes('preview=trip')) {
+      await page.waitForFunction(() => /^[^E].*\d°/.test(document.querySelector('.lines .line')?.textContent || ''), null, { timeout: 3000 })
+        .catch(() => fail(`${phone.name} ${name}`, 'weather did not show'));
+    }
     await page.evaluate(() => Promise.all([document.fonts.ready, ...[...document.images].map((i) => i.decode().catch(() => {}))]));
     for (const p of await page.evaluate(audit, !!opts.noScroll)) fail(`${phone.name} ${name}`, p);
+    if (opts.place) for (const p of await page.evaluate(pinAudit)) fail(`${phone.name} ${name}`, p);
     if (shots) await page.screenshot({ path: `${shots}/${phone.name}-${name}.png` });
     await page.goto('about:blank');
   }
@@ -384,6 +455,181 @@ if (code) {
   await rm(dir, { recursive: true, force: true });
 }
 
+// ---------- trip mode, on Mama's phone size ----------
+const homeAt = async (page, date, time) => {
+  await open(page, at(date, time));
+  await page.waitForFunction(() => /\d°/.test(document.querySelector('.lines .line')?.textContent || ''), null, { timeout: 1500 }).catch(() => {});
+  return page.evaluate(() => ({
+    dateline: document.querySelector('.dateline').textContent,
+    lines: [...document.querySelectorAll('.lines > div')].map((d) => d.textContent),
+    plan: document.querySelector('.bottom .btn-primary').textContent,
+    href: document.querySelector('.bottom .btn-primary').getAttribute('href')
+  }));
+};
+
+await flow('trip home by time', 'viewer', async (page) => {
+  const sky = '29°, partly cloudy, rain likely';
+  const cases = [
+    ['2026-11-17', '09:00', { dateline: 'Tuesday 17 November · SQ882 to Hong Kong', plan: 'Today’s plan', href: '#schedule/2026-11-17',
+      lines: ['Hong Kong today: ' + sky, 'Keep a jacket handy on the plane. Bring the umbrella.'] }],
+    ['2026-11-18', '09:00', { dateline: 'Wednesday 18 November · Hong Kong', plan: 'Today’s plan', href: '#schedule/2026-11-18',
+      lines: [sky, 'Light clothes. Drink plenty of water. Bring the umbrella.'] }],
+    ['2026-11-18', '18:40', { plan: 'Tonight’s plan', href: '#schedule/2026-11-18' }],
+    ['2026-11-18', '23:00', { dateline: 'Wednesday · 23:00', plan: 'Tomorrow’s plan', href: '#schedule/2026-11-19', lines: ['Tomorrow ' + sky] }],
+    ['2026-11-19', '01:00', { dateline: 'Thursday · 01:00', plan: 'Tomorrow’s plan', href: '#schedule/2026-11-19' }],
+    ['2026-11-19', '23:00', { href: '#schedule/2026-11-20', lines: ['Shenzhen tomorrow: ' + sky] }],
+    ['2026-11-20', '10:00', { dateline: 'Friday 20 November · to Shenzhen' }],
+    ['2026-11-24', '13:00', { dateline: 'Tuesday 24 November · SQ883 to Singapore', plan: 'Today’s plan' }],
+    ['2026-11-24', '18:40', { plan: 'The trip plan', href: '#schedule/2026-11-24' }],
+    ['2026-11-25', '10:00', { plan: 'The trip plan', href: '#schedule/2026-11-24', lines: [] }]
+  ];
+  for (const [date, time, want] of cases) {
+    const got = await homeAt(page, date, time);
+    for (const [k, v] of Object.entries(want)) {
+      const ok = k === 'lines' ? (v.length ? v.every((l, i) => got.lines[i] === l) : !got.lines.length) : got[k] === v;
+      if (!ok) fail('trip home by time', `${date} ${time} ${k}: ${JSON.stringify(got[k])}, wanted ${JSON.stringify(v)}`);
+    }
+  }
+});
+
+// The real trip home (no preview), with the phone's clock set to an afternoon in Shenzhen.
+await flow('trip home, real clock', 'mama', async (page, gh, ctx) => {
+  const name = 'trip home, real clock';
+  await ctx.clock.setFixedTime(new Date('2026-11-21T15:20:00+08:00'));
+  ctx.wx.down = true;
+  await open(page, '');
+  const got = await page.evaluate(() => ({ dateline: document.querySelector('.dateline').textContent,
+    lines: document.querySelectorAll('.lines > div').length, plan: document.querySelector('.bottom .btn-primary').getAttribute('href'),
+    close: document.querySelectorAll('.bottom .quiet-link').length }));
+  if (got.dateline !== 'Saturday 21 November · Shenzhen') fail(name, 'date line ' + got.dateline);
+  if (got.lines) fail(name, 'weather lines shown with no forecast');
+  if (got.close) fail(name, 'something under the plan button');
+  if (got.plan !== '#schedule/2026-11-21') fail(name, 'plan button opens ' + got.plan);
+  ctx.wx.down = false;
+  await page.reload();
+  if (!(await until(() => page.locator('.lines .line', { hasText: '29°, partly cloudy, rain likely' }).count()))) fail(name, 'forecast did not show');
+  // Data: the forecast isn't downloaded again within the hour, and the trip home doesn't check packing ticks.
+  const calls = ctx.wx.calls;
+  gh.log.length = 0;
+  await page.reload();
+  await until(() => gh.log.some((l) => l.includes('live/board.json')));
+  await page.waitForTimeout(300);
+  if (ctx.wx.calls !== calls) fail(name, 'forecast downloaded again within the hour');
+  if (gh.log.some((l) => l.includes('live/packing.json'))) fail(name, 'trip home checked the packing ticks');
+});
+
+// Left open across 17:30, the home screen moves to the evening by itself; late at night the clock moves on.
+await flow('home moves on while open', 'viewer', async (page, gh, ctx) => {
+  const name = 'home moves on while open';
+  await ctx.clock.install({ time: new Date('2026-11-18T17:29:30+08:00') });
+  await open(page, '');
+  const art = () => page.getAttribute('#art .art-img', 'src');
+  const before = await art();
+  await ctx.clock.runFor(45 * 1000);
+  if ((await art()) === before) fail(name, 'art did not change at 17:30');
+  if ((await page.textContent('.bottom .btn-primary')) !== 'Tonight’s plan') fail(name, 'plan button did not become "Tonight’s plan"');
+  await ctx.clock.setSystemTime(new Date('2026-11-18T23:10:00+08:00'));
+  await ctx.clock.runFor(25 * 1000);
+  await ctx.clock.setSystemTime(new Date('2026-11-18T23:11:00+08:00'));
+  await ctx.clock.runFor(25 * 1000);
+  if (!(await page.textContent('.dateline')).startsWith('Wednesday · 23:11')) fail(name, 'late-night clock: ' + await page.textContent('.dateline'));
+});
+
+await flow('schedule, place and hotel', 'viewer', async (page, gh, ctx) => {
+  const name = 'schedule, place and hotel';
+  await ctx.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: base });
+  await open(page, at('2026-11-18', '12:50'));
+  await page.click('.bottom .btn-primary');
+  await page.waitForSelector('.schedule');
+  const openDays = async () => page.locator('.day-head[aria-expanded="true"] .day-name').allTextContents();
+  if ((await openDays()).join() !== 'Wednesday') fail(name, 'open day: ' + (await openDays()).join());
+  if ((await page.locator('.stop[aria-current] .stop-name').textContent().catch(() => '')) !== 'Apple Store, IFC mall') fail(name, '"Now" is not on the Apple Store at 12:50');
+  if (await page.locator('a.stop', { hasText: 'Taxi or MTR to Central' }).count()) fail(name, 'a travel row opens a place card');
+  await page.click('a.stop[href$="/maxims-city-hall"]');
+  await page.waitForSelector('.place .card');
+  // Opened from the long Schedule, the map must be framed for the card screen, not the page before it.
+  for (const p of await page.evaluate(pinAudit)) fail(name, 'from the Schedule: ' + p);
+  if (!(await page.getAttribute('#art .fit-map', 'src')).includes('map-hk-paper')) fail(name, 'not the Hong Kong map');
+  if (!(await page.textContent('[data-back]')).includes('Wednesday')) fail(name, 'back button is not "Wednesday"');
+  await page.click('.card .btn-primary');
+  await page.waitForSelector('.detail');
+  const search = itinerary.days.find((d) => d.date === '2026-11-18').stops.find((s) => s.id === 'maxims-city-hall').search;
+  const maps = page.locator('.detail .maps .btn-primary').first();
+  if ((await maps.getAttribute('href')) !== 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search)) fail(name, 'Open in maps: ' + await maps.getAttribute('href'));
+  if ((await maps.getAttribute('target')) !== '_blank') fail(name, 'Open in maps would leave the app');
+  await page.click('[data-copy]');
+  if (!(await until(() => page.locator('[data-copied]', { hasText: 'Copied. Paste it into Uber.' }).count()))) fail(name, 'no "Copied" message');
+  if ((await page.evaluate(() => navigator.clipboard.readText())) !== search) fail(name, 'copied the wrong text');
+  await page.click('[data-back]');
+  await page.waitForSelector('.place .card');
+  await page.click('[data-back]');
+  await page.waitForSelector('.schedule');
+  if ((await openDays()).join() !== 'Wednesday') fail(name, 'back to the Schedule: open day ' + (await openDays()).join());
+  await page.click('[data-day="2026-11-19"]');
+  if ((await openDays()).join() !== 'Thursday') fail(name, 'tapping Thursday opened: ' + (await openDays()).join());
+  await page.click('[data-hotel]');
+  if ((await page.textContent('.dialog .dialog-title')) !== 'The Stellar') fail(name, 'hotel card is not The Stellar');
+  if (!(await page.getAttribute('.dialog .btn-primary', 'href')).startsWith('https://www.google.com/maps/search/')) fail(name, 'hotel Open in maps');
+  await page.mouse.click(phone.width / 2, 8);
+  if (await page.locator('.dialog').count()) fail(name, 'tapping outside did not close the hotel card');
+  await page.click('[data-home]');
+  await page.waitForSelector('.home');
+});
+
+// Shenzhen places open Apple Maps on iPhones and Amap on Android; a Hong Kong place on a Shenzhen day stays Google Maps.
+const UA = {
+  iPhone: ['Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1', 'https://maps.apple.com/?q='],
+  Android: ['Mozilla/5.0 (Linux; Android 14; SM-S926B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36', 'https://uri.amap.com/search?keyword=']
+};
+for (const [os, [userAgent, prefix]] of Object.entries(UA)) {
+  const name = `Shenzhen maps on ${os}`;
+  await flow(name, 'viewer', async (page) => {
+    await open(page, at('2026-11-21', '12:00') + '#place/2026-11-21/shenzhen-bay-mixc');
+    if (!(await page.getAttribute('#art .fit-map', 'src')).includes('map-sz-paper')) fail(name, 'not the Shenzhen map on a Shenzhen day');
+    await page.click('.card .btn-primary');
+    await page.waitForSelector('.detail');
+    if (!(await page.getAttribute('.detail .maps .btn-primary', 'href')).startsWith(prefix)) fail(name, 'Open in maps: ' + await page.getAttribute('.detail .maps .btn-primary', 'href'));
+    if ((await page.textContent('[data-copy]')) !== 'Copy the address for DiDi') fail(name, 'copy button: ' + await page.textContent('[data-copy]'));
+    await open(page, at('2026-11-20', '06:00') + '#place/2026-11-20/west-kowloon/more');
+    if (!(await page.getAttribute('.detail .maps .btn-primary', 'href')).startsWith('https://www.google.com/maps/')) fail(name, 'West Kowloon is not Google Maps');
+    if ((await page.textContent('[data-copy]')) !== 'Copy the address for Uber') fail(name, 'West Kowloon copy button is not Uber');
+  }, { userAgent });
+}
+
+// Airplane mode after install (§5.2): everything but the announcement, ticks and weather works,
+// and the last forecast still shows.
+await flow('airplane mode', 'mama', async (page, gh, ctx) => {
+  const name = 'airplane mode';
+  await open(page, at('2026-11-21', '12:00'));
+  await page.evaluate(() => navigator.serviceWorker.ready.then(() => true));
+  const files = manifest.images.length + 7; // every image plus fonts and icons (sw.js KEEP_FILES)
+  if (!(await until(() => page.evaluate(async (n) => (await (await caches.open('keep')).keys()).length >= n, files), 30000))) return fail(name, 'not everything was stored on the phone');
+  if (!(await until(() => page.evaluate(() => !!navigator.serviceWorker.controller)))) return fail(name, 'service worker not in charge');
+  if (!(await until(() => page.locator('.lines .line', { hasText: '29°' }).count()))) fail(name, 'forecast did not arrive while online');
+  await ctx.setOffline(true);
+  gh.offline = true;
+  ctx.wx.down = true;
+  await page.reload();
+  await page.waitForSelector('.home');
+  const loaded = () => page.evaluate(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {})))
+    .then(() => { const i = document.querySelector('#art:not([hidden]) .art-img'); return !!i && i.complete && i.naturalWidth > 0; }));
+  if (!(await loaded())) fail(name, 'home art did not load');
+  if (!(await page.locator('.lines .line', { hasText: '29°, partly cloudy, rain likely' }).count())) fail(name, 'last forecast not shown');
+  if (!(await until(() => page.locator('.live-note', { hasText: 'No connection' }).count()))) fail(name, 'no "No connection" line');
+  await page.click('.bottom .btn-primary');
+  await page.waitForSelector('.schedule');
+  await page.click('a.stop >> nth=0');
+  await page.waitForSelector('.place .card');
+  if (!(await loaded())) fail(name, 'map did not load');
+  await page.click('.card .btn-primary');
+  await page.waitForSelector('.detail');
+  await page.click('[data-back]');
+  await page.click('[data-back]');
+  await page.waitForSelector('.schedule');
+  await page.click('[data-hotel]');
+  if (!(await page.locator('.dialog .dialog-title').count())) fail(name, 'hotel card did not open');
+}, { serviceWorkers: 'allow' });
+
 await browser.close();
 server.close();
 
@@ -392,4 +638,5 @@ if (problems.length) {
   process.exit(1);
 }
 console.log(`OK: ${pages.length} screens, ${phrases.length} greetings and the emergency flow at ${phones.length} phone sizes; `
-  + 'ticking, offline ticks, the announcement and phone setup (photo and camera).');
+  + 'ticking, offline ticks, the announcement and phone setup (photo and camera); '
+  + 'trip mode by time of day, Schedule → Place → hotel, maps on iPhone and Android, and airplane mode.');

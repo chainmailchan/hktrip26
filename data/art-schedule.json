@@ -56,6 +56,11 @@
     ],
     "_note": "Chan to assign once the itinerary is set; existing day drawings are likely afternoon images [assumption]. Victoria Harbour is a candidate [stated 24 Oct]. The two Kowloon drawings are for the days that are mostly in Kowloon [stated 24 Oct]; a day can list both to take turns."
   },
+  "place_map": {
+    "HK": "map-hk-paper.jpg",
+    "SZ": "map-sz-paper.jpg",
+    "_note": "Place screen background (F4), by the city of the day in itinerary.json: Chan's Shenzhen map on the Shenzhen days [stated 24 Oct], the paper Hong Kong map otherwise. Framing: zoom, focus and areas in art-manifest.json"
+  },
   "pretrip": {
     "image": "home-pretrip-suitcase.jpg",
     "_note": "Chan's drawing [stated 2 Nov]; from 31 Oct until the trip starts"

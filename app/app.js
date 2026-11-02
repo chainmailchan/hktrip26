@@ -1,9 +1,14 @@
-// Phases 1–2 (APP_SPEC §7): pre-trip home (F9), packing lists with ticks (F10), greetings (F11),
-// Help (F7), the announcement (F1) and Admin (F8), phone setup (§5.5), the art engine (§4.2)
-// and a hidden art preview. All trip content comes from data/; nothing about the trip is written here.
+// Phases 1–3 (APP_SPEC §7): pre-trip home (F9), packing lists with ticks (F10), greetings (F11),
+// Help (F7), the announcement (F1) and Admin (F8), phone setup (§5.5), the art engine (§4.2),
+// a hidden art preview, and trip mode: the trip home (F2) with the weather (F5), and the Schedule,
+// Place and Hotel screens (F3, F4, F6, in app/trip.js).
+// All trip content comes from data/; nothing about the trip is written here.
 
 import { pickArt, paintArt, themeVars, inWindow, findImage } from './art.js';
 import { createLive } from './live.js';
+import { createWeather, weatherLines } from './weather.js';
+import { createTrip } from './trip.js';
+import { esc, ymd, hm, addDays, daysBetween, longDate, weekday } from './util.js';
 
 // Set by phone setup (§5.5, app/setup.js). Stays on the phone; never in the repo.
 const PROFILE_KEY = 'hktrip.profile';
@@ -20,9 +25,9 @@ const json = (path) => fetch(path).then((r) => {
   return r.json();
 });
 
-const [trip, greetings, schedule, manifest, packing, itinerary, emergency, people] = await Promise.all([
+const [trip, greetings, schedule, manifest, packing, itinerary, emergency, people, wx] = await Promise.all([
   'data/trip.json', 'data/greetings.json', 'data/art-schedule.json', 'art/art-manifest.json',
-  'data/packing.json', 'data/itinerary.json', 'data/emergency.json', 'data/people.json'
+  'data/packing.json', 'data/itinerary.json', 'data/emergency.json', 'data/people.json', 'data/weather.json'
 ].map(json));
 
 const profile = readProfile();
@@ -44,6 +49,9 @@ const preview = params.has('preview') ? params.get('preview') : null;
 const screen = document.getElementById('screen');
 const artEl = document.getElementById('art');
 const dialogEl = document.getElementById('dialog');
+// F5: refreshed while a home screen that needs it is open; a new forecast redraws only the weather lines.
+const weather = createWeather(wx, () => { if (route === 'home') updateHome(); });
+const tripScreens = createTrip({ trip, itinerary, schedule, manifest, credit: wx.credit, screen, artEl, setVars, paper: PAPER, now });
 let firstHome = true;
 let lastGreeting = null;
 let route = 'home';
@@ -69,18 +77,6 @@ function restart() {
   location.reload();
 }
 
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-const pad = (n) => String(n).padStart(2, '0');
-const ymd = (d) => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-const hm = (d) => pad(d.getHours()) + ':' + pad(d.getMinutes());
-const dayMs = 86400000;
-const addDays = (date, n) => new Date(Date.parse(date) + n * dayMs).toISOString().slice(0, 10);
-const daysBetween = (from, to) => Math.round((Date.parse(to) - Date.parse(from)) / dayMs);
-const longDate = (date) => new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' })
-  .format(new Date(date + 'T00:00:00Z')).replace(',', '');
 const shortDate = (d) => new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' }).format(d);
 const when = (ms) => { const d = new Date(ms); return (ymd(d) === ymd(new Date()) ? '' : shortDate(d) + ', ') + hm(d); };
 
@@ -92,17 +88,26 @@ function setVars(vars) {
 const cityOn = (date) => itinerary.days.find((d) => d.date === date)?.city || null;
 
 // The date and time the screens use. Preview links can set both (?date=…&time=…).
+// ?preview=trip shows the real trip screens at that date and time (default: the second day, now).
 function now() {
   const d = new Date();
   let date = ymd(d);
   let time = hm(d);
   if (preview !== null) {
     const slot = schedule.default.find((s) => s.id === preview);
+    const clock = preview === 'pretrip' || preview === 'trip';
     date = params.get('date') || (preview === 'pretrip' ? date : addDays(trip.start, 1));
-    time = params.get('time') || (slot ? slot.from : preview === 'pretrip' ? time : '09:00');
+    time = params.get('time') || (slot ? slot.from : clock ? time : '09:00');
   }
   return { date, time };
 }
+
+const slotAt = (time) => schedule.default.find((s) => inWindow(time, s.from, s.to))?.id;
+// A late-night time after midnight still belongs to the evening before (as the art does).
+const eveningOf = (date, time) => (slotAt(time) === 'late' && time < '12:00' ? addDays(date, -1) : date);
+// The flight on this date, while the home screen names it (trip.json → flights: home_from, home_until).
+const flightNow = (date, time) => trip.flights.find((f) => f.date === date && f.home_from && inWindow(time, f.home_from, f.home_until));
+const tripPreview = () => preview === 'trip';
 
 // F11: special days first, then the time-of-day window; one phrase at random.
 function pickGreeting(date, time) {
@@ -158,7 +163,7 @@ function onLive() {
 
 // Which live files the screen showing now needs; the others aren't checked (saves data).
 function liveNeeds() {
-  if (route === 'home') return home?.slotPreview ? [] : ['board', 'packing'];
+  if (route === 'home') return home?.slotPreview ? [] : home?.pretrip ? ['board', 'packing'] : ['board'];
   if (route === 'packing') return ['packing'];
   if (route === 'admin') return ['board'];
   return [];
@@ -166,28 +171,38 @@ function liveNeeds() {
 
 // ---------- screens ----------
 
-function renderHome() {
-  const { date, time } = now();
-  const slotPreview = preview !== null && preview !== 'pretrip';
+// The home screen for a date and time: pre-trip (F9) before the trip, trip mode (F2) from its first day.
+function homeFor(date, time) {
+  const slotPreview = preview !== null && preview !== 'pretrip' && preview !== 'trip';
   const pretrip = !slotPreview && date < trip.start;
   const file = slotPreview && !schedule.default.some((s) => s.id === preview) ? preview : undefined;
   const art = pickArt({ schedule, manifest, date, time, pretrip, file, cityOn });
+  return { date, time, art, slotPreview, pretrip, greeting: pickGreeting(date, time) };
+}
+
+function renderHome() {
+  const { date, time } = now();
+  home = homeFor(date, time);
+  const { art } = home;
   setVars(themeVars(manifest, art));
-  paintArt(artEl, art, { animate: firstHome });
+  // Repaint only when the picture changes, so returning Home or a new minute doesn't flash.
+  const key = art.src || 'placeholder';
+  if (artEl.dataset.key !== key) {
+    paintArt(artEl, art, { animate: firstHome });
+    artEl.dataset.key = key;
+  } else {
+    artEl.classList.remove('animate'); // or the rise would play again when the art is shown again
+  }
   artEl.hidden = false;
   firstHome = false;
-
-  const place = pretrip ? trip.home_city : trip.cities[cityOn(date)] || '';
-  const dateLine = longDate(date) + (place ? ' · ' + place : '');
-  home = { date, time, art, slotPreview };
   home.parts = homeParts(home);
 
   screen.innerHTML = `
     <div class="home halo">
       <header class="top">
         <div class="top-left">
-          ${greetingHtml(pickGreeting(date, time))}
-          <div class="dateline">${esc(dateLine)}</div>
+          ${greetingHtml(home.greeting)}
+          <div class="dateline">${esc(dateLine(home))}</div>
         </div>
         <div class="top-links">
           <a class="help-link" href="#help">Help</a>
@@ -198,16 +213,86 @@ function renderHome() {
       <div data-part="news">${home.parts.news}</div>
       <div class="bottom" data-part="bottom">${home.parts.bottom}</div>
     </div>`;
+  wantWeather(home);
 }
 
-// The parts of the home screen that show live data: packing progress and the announcement.
-function homeParts({ date, time, art, slotPreview }) {
+// F2: the date and the day's place; the flight on flight days; the time late at night.
+function dateLine({ date, time, pretrip, slotPreview }) {
+  if (pretrip) return longDate(date) + ' · ' + trip.home_city;
+  const city = trip.cities[cityOn(date)] || '';
+  if (slotPreview) return longDate(date) + (city ? ' · ' + city : '');
+  const f = flightNow(date, time);
+  if (f) return `${longDate(date)} · ${f.code} to ${f.to}`;
+  if (slotAt(time) === 'late') return `${weekday(date)} · ${time}`;
+  const place = tripScreens.dayOf(date)?.label || city;
+  return longDate(date) + (place ? ' · ' + place : '');
+}
+
+// F5: today's forecast for the day's city; after 22:00, tomorrow's.
+function weatherHtml(date, time) {
+  const f = flightNow(date, time);
+  const late = !f && slotAt(time) === 'late';
+  const evening = eveningOf(date, time);
+  const day = late ? addDays(evening, 1) : date;
+  const city = cityOn(day);
+  if (!city) return '';
+  const lead = f ? trip.cities[city] + ' today:'
+    : !late ? '' : cityOn(evening) && cityOn(evening) !== city ? trip.cities[city] + ' tomorrow:' : 'Tomorrow';
+  let lines = weatherLines(wx, weather.day(city, day), { lead, flight: !!f });
+  // A preview date with no forecast yet: example lines, so the layout can still be checked.
+  if (!lines && tripPreview()) {
+    lines = weatherLines(wx, { high: 23, code: 3, rain: 60 }, { lead, flight: !!f });
+    lines[0] = 'Example: ' + lines[0];
+  }
+  return lines ? `<div class="line">${esc(lines[0])}</div><div class="line-bold">${esc(lines[1])}</div>` : '';
+}
+
+// From two days before the trip, so the first morning has a forecast even in airplane mode.
+function wantWeather({ date, pretrip, slotPreview }) {
+  if (slotPreview || (pretrip && daysBetween(date, trip.start) > 2)) return;
+  weather.refresh(ymd(new Date()));
+}
+
+// F2 plan button: "Today's plan", "Tonight's plan" (evening), "Tomorrow's plan" (late night).
+function planFor(date, time) {
+  const slot = slotAt(time);
+  const days = itinerary.days;
+  const last = days[days.length - 1].date;
+  let target = date;
+  let label = 'Today’s plan';
+  if (slot === 'evening') label = 'Tonight’s plan';
+  if (slot === 'late') {
+    label = 'Tomorrow’s plan';
+    target = addDays(eveningOf(date, time), 1);
+  }
+  // After the trip, and on its last evening: the whole plan, on the last day.
+  if (!tripScreens.dayOf(target) || (target === last && slot === 'evening')) {
+    label = 'The trip plan';
+    target = target < days[0].date ? days[0].date : last;
+  }
+  return { label, href: '#schedule/' + target };
+}
+
+// The parts of the home screen that change while it is showing: the weather or packing lines,
+// the announcement, and the button(s) at the bottom.
+function homeParts({ date, time, art, slotPreview, pretrip }) {
   if (slotPreview) {
     return {
       lines: `<div class="line">Preview · ${esc(date)} ${esc(time)}</div>
         <div class="line-bold">${esc(art.file || 'placeholder art')}</div>`,
       news: announcementHtml({ by: 'c', text: 'Example: meet in the lobby at 9:30.' }),
       bottom: '<a class="btn-primary" href="./">Close preview</a>'
+    };
+  }
+  const note = liveNote();
+  const news = (live.board?.text ? announcementHtml(live.board) : '') + (note ? `<div class="live-note">${esc(note)}</div>` : '');
+  if (!pretrip) {
+    const plan = planFor(date, time);
+    return {
+      lines: weatherHtml(date, time),
+      news,
+      bottom: `<a class="btn-primary" href="${plan.href}">${esc(plan.label)}</a>`
+        + (tripPreview() ? '<a class="quiet-link" href="./">Close preview</a>' : '')
     };
   }
   let lines = '';
@@ -222,9 +307,22 @@ function homeParts({ date, time, art, slotPreview }) {
     const b = count(other);
     bottom += `<a class="quiet-link" href="#packing/${other}">${esc(packing.lists[other].title)} have packed ${b.done} of ${b.total} things</a>`;
   }
-  const note = liveNote();
-  const news = (live.board?.text ? announcementHtml(live.board) : '') + (note ? `<div class="live-note">${esc(note)}</div>` : '');
   return { lines, news, bottom };
+}
+
+// While the home screen stays open: a new date, picture or greeting window redraws it; otherwise
+// only the late-night clock and the parts that changed (§5.3: no reload, no jump).
+function tickHome() {
+  if (route !== 'home' || !home || home.slotPreview || document.visibilityState !== 'visible') return;
+  const { date, time } = now();
+  const next = homeFor(date, time);
+  if (date !== home.date || next.art.src !== home.art.src || next.greeting !== home.greeting || next.pretrip !== home.pretrip) return renderHome();
+  home.time = time;
+  const line = screen.querySelector('.dateline');
+  const text = dateLine(home);
+  if (line && line.textContent !== text) line.textContent = text;
+  updateHome();
+  wantWeather(home);
 }
 
 function updateHome() {
@@ -429,7 +527,6 @@ function renderPreviewList() {
   artEl.hidden = true;
   const day2 = addDays(trip.start, 1);
   const label = (id) => id.charAt(0).toUpperCase() + id.slice(1);
-  const slotAt = (time) => schedule.default.find((s) => inWindow(time, s.from, s.to)).id;
   const links = [
     ['Pre-trip home, today', '?preview=pretrip'],
     ...schedule.default.map((s) => [`${label(s.id)}, ${longDate(day2)}`, `?preview=${s.id}&date=${day2}`]),
@@ -440,15 +537,36 @@ function renderPreviewList() {
     })
   ];
   const buttons = (list) => list.map(([text, href]) => `<a class="btn-outline left" href="${esc(href)}">${esc(text)}</a>`).join('');
+  // Trip mode before the trip: the real trip screens on each day, at the time picked here.
+  const times = PREVIEW_TIMES;
+  const dayLinks = itinerary.days.map((d) => [longDate(d.date), `?preview=trip&date=${d.date}&time=${times[0]}`]);
   screen.innerHTML = `
     <div class="page">
       <div class="bar"><a class="pill" href="./"><span aria-hidden="true">←</span>Home</a></div>
       <h1 class="title">Hidden pages</h1>
       <h2 class="list-head">Phone setup</h2>
       <div class="preview-list">${buttons([['Set up this phone', './#setup'], ['Make setup codes', './#codes']])}</div>
+      <h2 class="list-head">Packing</h2>
+      <div class="preview-list">${buttons([['Packing list', './#packing']])}</div>
+      <h2 class="list-head">Trip days</h2>
+      <p class="note">The trip screens as they will look on that day, at this time:</p>
+      <div class="tabs four" role="tablist" aria-label="Time of day">
+        ${times.map((t, i) => `<button type="button" class="tab" role="tab" aria-selected="${i === 0}" data-ptime="${t}">${t}</button>`).join('')}
+      </div>
+      <div class="preview-list" data-trip-days>${buttons(dayLinks)}</div>
       <h2 class="list-head">Art preview</h2>
       <div class="preview-list">${buttons(links)}</div>
     </div>`;
+}
+
+// Hidden pages → Trip days: morning, afternoon, evening and late night.
+const PREVIEW_TIMES = ['09:00', '15:00', '18:40', '23:00'];
+
+function pickPreviewTime(tab) {
+  for (const t of screen.querySelectorAll('[data-ptime]')) t.setAttribute('aria-selected', String(t === tab));
+  for (const a of screen.querySelectorAll('[data-trip-days] a')) {
+    a.setAttribute('href', a.getAttribute('href').replace(/time=[\d:]+/, 'time=' + tab.dataset.ptime));
+  }
 }
 
 // ---------- §5.5 phone setup (app/setup.js, loaded only when needed) ----------
@@ -473,12 +591,13 @@ function renderSetupScreen(name) {
   });
 }
 
-// ---------- F7 emergency numbers: list, then three confirmations ----------
+// ---------- dialogs: F7 emergency numbers (a list, then three confirmations), F6 hotel ----------
 
-let emg = null;
+let emg = null;      // { step, number }
+let hotelId = null;  // the hotel card opened from "Tonight" on the Schedule
 
-function renderEmergency() {
-  if (!emg) {
+function renderDialog() {
+  if (!emg && !hotelId) {
     dialogEl.replaceChildren();
     return;
   }
@@ -486,7 +605,9 @@ function renderEmergency() {
   const city = cityOn(date);
   const back = '<button type="button" class="btn-back" data-close>No, go back</button>';
   let body;
-  if (emg.step === 0) {
+  if (hotelId) {
+    body = tripScreens.hotelHtml(hotelId);
+  } else if (emg.step === 0) {
     const cities = city ? [city] : Object.keys(emergency);
     const title = 'Emergency numbers' + (city ? ' · ' + trip.cities[city] : '');
     body = `<div class="dialog-title" id="dialog-title">${esc(title)}</div>
@@ -506,29 +627,37 @@ function renderEmergency() {
       <div class="actions ${pos}">${back}${confirm}</div>`;
   }
   dialogEl.innerHTML = `<div class="backdrop" data-close></div>
-    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabindex="-1">${body}</div>`;
+    <div class="dialog${hotelId ? ' tall' : ''}" role="dialog" aria-modal="true" aria-labelledby="dialog-title" tabindex="-1">${body}</div>`;
   dialogEl.querySelector('.dialog').focus();
 }
 
+function closeDialog() {
+  emg = null;
+  hotelId = null;
+  renderDialog();
+}
+
 dialogEl.addEventListener('click', (e) => {
+  const copy = e.target.closest('[data-copy]');
+  if (copy) return tripScreens.copy(copy);
   const t = e.target.closest('[data-close], [data-number], [data-yes], [data-call]');
-  if (!t) return;
-  if (t.hasAttribute('data-close')) emg = null;
-  else if (t.hasAttribute('data-number')) emg = { step: 1, number: t.dataset.number };
+  if (!t) return; // "Open in maps" opens on its own
+  if (t.hasAttribute('data-close')) return closeDialog();
+  if (t.hasAttribute('data-number')) emg = { step: 1, number: t.dataset.number };
   else if (t.hasAttribute('data-yes')) emg = { ...emg, step: emg.step + 1 };
   else if (t.hasAttribute('data-call')) {
-    setTimeout(() => { emg = null; renderEmergency(); }, 300);
+    setTimeout(closeDialog, 300);
     return; // let the tel: link open the phone's dialler
   }
-  renderEmergency();
+  renderDialog();
 });
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && emg) { emg = null; renderEmergency(); }
+  if (e.key === 'Escape' && (emg || hotelId)) closeDialog();
 });
 
 function knownPreview() {
-  return preview === 'pretrip' || schedule.default.some((s) => s.id === preview) || !!findImage(manifest, preview);
+  return preview === 'pretrip' || preview === 'trip' || schedule.default.some((s) => s.id === preview) || !!findImage(manifest, preview);
 }
 
 // ---------- routing ----------
@@ -537,24 +666,33 @@ function knownPreview() {
 
 function render() {
   emg = null;
-  renderEmergency();
+  hotelId = null;
+  renderDialog();
   leave?.();
   leave = null;
-  const [name, arg] = location.hash.slice(1).split('/');
+  const [name, ...args] = location.hash.slice(1).split('/');
+  const arg = args[0];
   const setup = name === 'setup' || name === 'codes';
   if (profileChanged && !setup) return restart();
   home = null;
-  route = name === 'packing' || name === 'help' || setup ? name
+  route = ['packing', 'help', 'schedule', 'place'].includes(name) || setup ? name
     : name === 'admin' && profile?.admin ? 'admin'
     : preview !== null && !knownPreview() ? 'hidden' : 'home';
-  if (route === 'packing') renderPacking(arg);
+  window.scrollTo(0, 0);
+  if (route === 'place' && !tripScreens.renderPlace(args)) route = 'schedule';
+  if (route === 'schedule') tripScreens.renderSchedule(arg); // a place that isn't found: its day
+  else if (route === 'packing') renderPacking(arg);
   else if (route === 'help') renderHelp();
   else if (route === 'admin') renderAdmin();
   else if (setup) renderSetupScreen(name);
   else if (route === 'hidden') renderPreviewList();
-  else renderHome();
+  else if (route === 'home') renderHome();
   live.refresh();
-  window.scrollTo(0, 0);
+}
+
+function openHotel(id) {
+  hotelId = id;
+  renderDialog();
 }
 
 // The installed app has no address bar: five quick taps on the date line open the art preview list.
@@ -567,6 +705,9 @@ screen.addEventListener('click', (e) => {
     if (dateTaps.length >= 5) location.href = './?preview';
     return;
   }
+  if (tripScreens.onClick(e, openHotel)) return;
+  const ptime = e.target.closest('[data-ptime]');
+  if (ptime) return pickPreviewTime(ptime);
   const row = e.target.closest('button[data-item]');
   if (row) {
     live.tick(screen.querySelector('[data-packing]').dataset.packing, row.dataset.item, row.getAttribute('aria-checked') !== 'true');
@@ -589,7 +730,7 @@ screen.addEventListener('click', (e) => {
   }
   if (e.target.closest('[data-emergency]')) {
     emg = { step: 0 };
-    return renderEmergency();
+    return renderDialog();
   }
   const link = e.target.closest('a[href]');
   if (!link) return;
@@ -598,6 +739,13 @@ screen.addEventListener('click', (e) => {
     const depth = history.state?.depth || 0;
     if (depth > 0) history.go(-depth);
     else { history.replaceState(null, '', location.pathname + location.search); render(); }
+    return;
+  }
+  // "← Wednesday", "← Back": one step back; opened from a link, its own href.
+  if (link.hasAttribute('data-back')) {
+    e.preventDefault();
+    if ((history.state?.depth || 0) > 0) history.back();
+    else { history.replaceState(null, '', location.pathname + location.search + link.getAttribute('href')); render(); }
     return;
   }
   const href = link.getAttribute('href');
@@ -616,10 +764,11 @@ window.addEventListener('popstate', render);
 render();
 live.start(liveNeeds);
 
-// Date, countdown and greeting move on when the app comes back to the front.
+// Date, countdown and greeting move on when the app comes back to the front, and while it stays open.
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && screen.querySelector('.home')) renderHome();
 });
+setInterval(tickHome, 20 * 1000);
 
 // ---------- update on next open ----------
 // The service worker re-checks files each time the app opens. When something changed,

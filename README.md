@@ -13,6 +13,6 @@
 | `index.html`, `app/`, `sw.js`, `manifest.webmanifest` | The app (plain static site, no build step) |
 | `fonts/`, `icons/` | Self-hosted fonts (OFL licences included) and app icons |
 | `app/vendor/` | QR reader (jsQR, Apache-2.0) and QR maker (qrcode-generator, MIT), licences included |
-| `tools/` | Layout check at the four phone sizes; Chinese font subsetting |
+| `tools/` | Layout, trip-mode and airplane-mode check at the four phone sizes; Chinese font subsetting |
 
 The app itself sits at the root of `main` and is published by GitHub Pages.
