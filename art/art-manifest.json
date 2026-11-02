@@ -26,6 +26,18 @@
   },
   "images": [
     {
+      "file": "art/home-pretrip-suitcase.jpg",
+      "use": "Pre-trip home: suitcase on a terrace above Victoria Harbour",
+      "width": 852,
+      "height": 1846,
+      "fit": "cover",
+      "background": "#FBEDD2",
+      "theme": "paper",
+      "soften_pct": 30,
+      "note": "Chan's drawing for the pre-trip home (2 Nov), replacing the placeholder suitcase line art. Full-height 9:19.5; background = colour along its top edge. Sent in chat at 852 px wide",
+      "bytes": 288572
+    },
+    {
       "file": "art/home-morning-hk.jpg",
       "use": "Home, morning (Hong Kong days)",
       "width": 1024,
