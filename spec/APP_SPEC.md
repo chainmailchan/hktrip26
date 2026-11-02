@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.34, 2 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.35, 2 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -37,7 +37,7 @@ This file is the handoff to the Claude Code session that builds the app. It repl
 | Mobile data | Chan and Belle: GOMO roaming, China coverage confirmed [stated]. Mama and Papa: **SIMBA seniors' plan** (as of June 2025): 5 GB in Hong Kong, 3 GB in China [stated]; Chan understands it routes through Singapore or another country so Telegram isn't blocked [stated, "if I'm not wrong"], and has used SIMBA in China himself [stated] |
 | Hosting | GitHub Pages; Chan has a GitHub account [stated]. "No private data on this app" [stated] |
 | Trip | Tue 17 – Tue 24 Nov 2026, Hong Kong + Shenzhen [stated]. Pre-trip phase from Sat 31 Oct [stated] |
-| Itinerary | Not locked; Chan will supply it later [stated]. Build with placeholder days |
+| Itinerary | **Received 2 Nov** as screenshots of Chan's plan [stated]; entered, shortened, in `data/itinerary.json` |
 | Payments | Chan pays for everything, so **no prices** anywhere [stated] |
 | Getting around | Uber in Hong Kong, DiDi in Shenzhen [stated] |
 | Visas | No one needs a visa [stated] |
@@ -48,10 +48,10 @@ This file is the handoff to the Claude Code session that builds the app. It repl
 | Tue 17 – Thu 19 Nov | Hong Kong, at **The Stellar** [stated] | Arrive on SQ882 [stated]. Scheduled arrival 12:40 at HKG T1 per Trip.com's October timetable, which lists the departure as 08:40, not 08:25 [source: Trip.com flight status]; re-check on 10 Nov |
 | **Fri 20 Nov** | Move to Shenzhen [stated] | **High-speed rail from Hong Kong West Kowloon to Futian** [stated] |
 | Fri 20 – Mon 23 Nov | Shenzhen, at **The Mercury Garden** [stated] | — |
-| **Tue 24 Nov** | Fly home on **SQ883 at 15:10** from Hong Kong International Airport [stated] | **Ferry from Shekou straight to the airport** [stated] |
-| Day-by-day plans | Not yet planned [stated] | — |
+| **Tue 24 Nov** | Fly home on **SQ883 at 14:10** from Hong Kong International Airport [stated, 2 Nov; was 15:10] | **Ferry from Shekou straight to the airport** [stated] |
+| Day-by-day plans | Chan's itinerary, 2 Nov [stated]: `data/itinerary.json` | — |
 
-[assumption: check-out of The Stellar on 20 Nov and of The Mercury Garden on 24 Nov (3 + 4 nights); confirm against the bookings (Q28).]
+The Stellar 17–20 Nov and The Mercury Garden 20–24 Nov (3 + 4 nights), per Chan's itinerary [stated, 2 Nov] (Q28). Chinese names for maps: 星寓 [source: Trip.com listing]; 深圳南山水璟花园臻品之选酒店, 深圳市南山区科技路13号 [stated: itinerary].
 
 **Hotels**
 | | The Stellar (HK) | The Mercury Garden (SZ) |
@@ -71,7 +71,7 @@ This file is the handoff to the Claude Code session that builds the app. It repl
 - Needs a same-day flight from HKIA on a participating airline; arrive at the port 60–90 min before sailing [sources: Trip.com guide; HKIA "Ferry transfer" page].
 - **Singapore Airlines takes part at Shekou** (upstream check-in: baggage, boarding pass, departure-tax refund at the port; arrive at SkyPier at least 80 min before departure; hand baggage max 9" × 14" × 22"; extra baggage bought online ≥6 h before) [source: Singapore Airlines, "Sea-to-air Transfer Ferry Service"].
 - ⚠ **Status conflict:** HKIA shows notices that the ferry is "temporarily unavailable" [source: HKIA, 21 Oct 2026] and Direct Ferries shows no sailings [source: Direct Ferries], while the Aug 2026 Trip.com guide says it runs daily. **Chan to confirm (Q27)**; a check is scheduled for 10 Nov.
-- Working back from SQ883 at 15:10 [assumption: arithmetic from the sourced rules]: at SkyPier by 13:50 → ferry leaves Shekou by ~13:10 → at the port ~11:40–12:10. Hotel check-out is 12:00; hotel → Shekou time not yet researched.
+- Working back from SQ883 at 14:10 [assumption: arithmetic from the sourced rules]: at SkyPier by 12:50 → ferry leaves Shekou by about 12:10. Chan's itinerary plans the **10:00 ferry**: check-out 07:00, at the port 08:30, check-in done by 09:00, at SkyPier about 10:40 [stated, 2 Nov], which leaves plenty of margin.
 
 ---
 
@@ -123,12 +123,21 @@ Top to bottom:
 - An open day shows its stops (time + name) and a final **"Tonight"** row with the hotel name [stated], which opens F6.
 - Tapping a stop opens F4.
 - Placeholder days show "Plans coming soon" until the itinerary is entered (data only, no code change).
+- **Itinerary data (2 Nov):** Chan's plan is in `data/itinerary.json`, shortened for the app [stated: "Shortened"]. Each stop has:
+  - a 24-hour time, and `until` for time ranges;
+  - an English name and, for places, the Chinese name;
+  - one line on why we're going and one on what to try, where the plan has them;
+  - **`search`**: the line to paste into Google Maps/Uber or Amap/DiDi;
+  - an `optional` mark, and `options` for backups and lunch or dinner choices.
+  - Ratings and the reasoning behind each pick are left out. Two unscheduled places (Duck Shing Ho egg rolls, UpperHills) sit in `extras`; phase 3 decides whether to show them [proposal].
+- One correction: the plan says to "clear arrival formalities" at Futian, but both the Hong Kong exit and Mainland entry checks are done at West Kowloon before boarding (§1a, sourced). The data says so at the West Kowloon stop.
 - The current stop is highlighted by clock time [proposal]; there is no "Now/Next" admin control in Concept B (Q31).
 
 ### F4. Place card [stated] (`Place`)
 - Background: **Chan's Hong Kong street map** (paper style by default; navy available), zoomed ~160% and softened 30%, framed on the area of the place [proposal: per-place focus point in data]. A dotted line and a pin are drawn over it, **for mood only** [stated].
 - Card at the bottom: small line-art drawing of the food or activity, name, time and distance, one line on why we're going, and **"More about this place"**.
 - "More about this place" opens the detail view [carried over from v0.15 F4]: About | Getting there switch, 2–4 short lines, numbered plain-language steps, and one **"Open in maps"** button (Google Maps in HK; Amap or Apple Maps in Shenzhen, §5.2). No prices.
+- "Open in maps" can search by each stop's `search` line (Chinese name and address) instead of coordinates. That avoids the GCJ-02 offset problem in §5.2, and the plan recommends searching by Chinese name [proposal for phase 3].
 - **During the Shenzhen part of the trip, this screen (opened by tapping an itinerary item in the Schedule) uses Chan's Shenzhen map**, `art/map-sz-paper.jpg`, as its background [stated, 24 Oct]. It goes by the part of the trip, not by where each place is. "Shenzhen part" = the days whose city in `data/itinerary.json` is SZ (20–23 Nov) [proposal].
 
 ### F5. Weather and what to wear [stated: keep] [carried over]
@@ -336,7 +345,12 @@ Seed files are in `data/`:
 - `art/art-manifest.json`: image metadata.
 
 ```jsonc
-// place (to be filled when the itinerary arrives)
+// itinerary stop as entered 2 Nov (data/itinerary.json; see F3)
+{ "id": "maxims-city-hall", "time": "11:00", "until": "", "name": "Dim sum at Maxim’s Palace, City Hall", "name_zh": "大會堂美心皇宮",
+  "why": "", "try": "", "note": "", "search": "大會堂美心皇宮 香港中環愛丁堡廣場5-7號…", "optional": false,
+  "options_title": "Backup", "options": [{ "name": "", "name_zh": "", "why": "", "search": "" }] }
+
+// place (first idea, before the itinerary; phase 3 may fold its map framing into the stops)
 { "id": "", "city": "HK|SZ", "name": "", "about": ["", ""], "why": "", "card_art": "dimsum|noodles|dessert|charsiu|…",
   "map": { "image": "map-hk-paper.jpg", "focus": { "x": 0.47, "y": 0.60 }, "zoom": 1.6 },
   "coords": { "lat": 0, "lng": 0, "datum": "WGS84|GCJ02" },
@@ -367,7 +381,7 @@ Seed files are in `data/`:
 | Week of 2 Nov | Chan's setup visit | Install on all four phones, scan QR codes [stated] |
 | **~10 Nov** | **3. Trip mode** | Schedule (F3), Place card + detail (F4), Weather (F5), Hotel (F6), trip-mode home with time-based art, offline test |
 | 10 Nov | Checks | SQ882/SQ883 times and the Shekou ferry (scheduled) |
-| **~14 Nov** | **4. Real data** | Itinerary and places entered as data; no code change |
+| **~14 Nov** | **4. Real data** | Itinerary and places entered as data; no code change. **Itinerary entered 2 Nov**, ahead of phase 3 |
 | 15–24 Nov | Data-only changes | Itinerary, images, phrases; no code changes unless Chan asks [proposal] |
 | 17–24 Nov | Trip | |
 
@@ -379,8 +393,8 @@ Seed files are in `data/`:
 | Q1 | Mama's and Papa's SIMs | **Answered:** SIMBA seniors' plan, 5 GB HK / 3 GB China, routed out of China, tested by Chan [stated] |
 | Q3 | Mama's and Papa's phone models | **Answered:** iPhone 14 Pro and Galaxy S24+ [stated] |
 | Q27 | Shekou → SkyPier ferry running on 24 Nov | Open; check scheduled 10 Nov |
-| Q28 | Hotel dates (3 + 4 nights) | Open [assumption] |
-| Q30 | SQ882 / SQ883 exact times | Deferred to 10 Nov [stated] |
+| Q28 | Hotel dates (3 + 4 nights) | **Answered:** Stellar 17–20, Mercury Garden 20–24 [stated: itinerary, 2 Nov] |
+| Q30 | SQ882 / SQ883 exact times | **Partly answered:** SQ883 departs 14:10 [stated, 2 Nov]. SQ882 lands 12:30 per the itinerary vs 12:40 per Trip.com; re-check on 10 Nov |
 | Q31 | Without Now/Next, is a clock-time highlight on the Schedule enough, or does Chan want an admin "we've moved on" control? | Open [proposal: clock time] |
 | Q32 | Greeting phrases | **Answered:** Chan's full list (F11) [stated]; window times are proposals |
 | Q33 | Final typeface | Chan will decide later [stated] |
@@ -439,8 +453,10 @@ Seed files are in `data/`:
 | 24 Oct | Phones: Mama iPhone 14 Pro, Papa Galaxy S24+. SIMBA seniors' plan works in China. Telegram link OK in the public repo; reminder on 28 Nov to remove public links. **Afternoon image per day.** Greeting phrases supplied [stated] |
 | 27 Oct | **Phase 2 works** on Chan's and Belle's phones: setup codes, Belle's camera scan, announcements from both, ticks. README added to `hktrip26scrt`; all four tokens made. A long announcement over the suitcase drawing is fine with the halo [stated] |
 | 2 Nov | Chan's drawing of a suitcase above Victoria Harbour is the pre-trip home art (Q37). It goes on the pre-trip home, not behind the packing list [stated] |
+| 2 Nov | Chan's itinerary (screenshots) goes into the app, shortened: time, names, one line on why or what to try, the map search line, optional stops and choices. Flight home SQ883 at **14:10**. Hotel dates 17–20 / 20–24 [stated] |
 
 ## 11. Changelog
+- **v0.35 (2 Nov 2026):** Chan's itinerary entered in `data/itinerary.json` (F3) and hotel Chinese names and search lines added to `data/trip.json`; SQ883 at 14:10 (§1a); Q28 answered, Q30 partly answered; "Open in maps" by search line proposed (F4); itinerary stop format (§6).
 - **v0.34 (2 Nov 2026):** Pre-trip home art: Chan's suitcase drawing replaces the placeholder (F9, §4.2, Q37); offline download size updated (§5.1).
 - **v0.33 (27 Oct 2026):** Phase 2 tested on Chan's and Belle's phones (§7); Q44 answered, Q43 partly answered (camera works on Belle's iPhone); long announcements over the art are fine (F1).
 - **v0.32 (24 Oct 2026):** Phase 2 built: phone setup by QR inside the app, with a photo fallback and a hidden code maker (§5.5); packing ticks sync through `hktrip26scrt`, batched and kept offline (F10, §5.3); the announcement is shown (F1) and written on the Admin screen (F8); "Hidden pages" (§4.2); setup code format (§6); setup guide `spec/SETUP.md`; Q43–Q44 added.

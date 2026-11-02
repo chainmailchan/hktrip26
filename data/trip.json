@@ -1,5 +1,5 @@
 {
-  "_note": "Facts from APP_SPEC §1a. Hotel dates are an assumption until checked against the bookings (Q28).",
+  "_note": "Facts from APP_SPEC §1a. Hotel dates from Chan's itinerary, 2 Nov (Q28).",
   "start": "2026-11-17",
   "end": "2026-11-24",
   "pretrip_start": "2026-10-31",
@@ -20,7 +20,9 @@
       "id": "hk",
       "city": "HK",
       "name": "The Stellar",
+      "name_zh": "星寓",
       "address": "68 Chun Yeung Street, North Point, Hong Kong Island",
+      "search": "香港北角春秧街68號",
       "check_in": "15:00",
       "check_out": "11:00",
       "nights": [
@@ -34,7 +36,9 @@
       "city": "SZ",
       "name": "The Mercury Garden",
       "full_name": "The Mercury Garden Shenzhen Nanshan, A Tribute Portfolio Hotel",
+      "name_zh": "深圳南山水璟花园臻品之选酒店",
       "address": "13 Keji Road, Nanshan District, Shenzhen 518057",
+      "search": "深圳南山水璟花园臻品之选酒店 深圳市南山区科技路13号",
       "check_in": "15:00",
       "check_out": "12:00",
       "nights": [
@@ -55,8 +59,9 @@
     {
       "code": "SQ883",
       "date": "2026-11-24",
-      "departs": "15:10 HKT",
-      "from": "HKG"
+      "departs": "14:10 HKT",
+      "from": "HKG",
+      "note": "Time stated by Chan, 2 Nov (was 15:10)"
     }
   ]
 }

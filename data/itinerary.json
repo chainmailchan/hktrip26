@@ -1,19 +1,59 @@
 {
-  "_note": "PLACEHOLDER days. Only the travel items are real; everything marked placeholder will be replaced when Chan sends the itinerary.",
+  "_note": "Chan’s itinerary (screenshots, 2 Nov) [stated], shortened for the app. Times are 24-hour; 'until' ends a time range; 'by' = done by that time; 'approx' = about. 'search' is the line to paste into Google Maps or Uber (Hong Kong) or Amap or DiDi (Shenzhen). 'options' are backups or choices, headed by 'options_title'. Keys starting with _ are notes for Chan, not shown. The Schedule and Place screens that show this come in phase 3. 'extras' are optional places the itinerary mentions without a time.",
   "days": [
     {
       "date": "2026-11-17",
       "city": "HK",
       "label": "Hong Kong",
+      "title": "Arrival and traditional afternoon tea",
       "stops": [
         {
-          "time": "",
-          "name": "Fly in on SQ882"
+          "id": "arrive-hkia",
+          "time": "12:30",
+          "name": "Land at Hong Kong airport (SQ882)",
+          "_note": "Itinerary time. Trip.com lists 12:40; re-check on 10 Nov (Q30)"
         },
         {
-          "time": "",
-          "name": "Land, then to North Point",
-          "placeholder": true
+          "id": "to-stellar",
+          "time": "14:30",
+          "until": "15:30",
+          "name": "To The Stellar: check in and rest"
+        },
+        {
+          "id": "peninsula-ice-room",
+          "time": "16:00",
+          "name": "Afternoon tea at Peninsula Ice Room",
+          "name_zh": "半島冰室",
+          "try": "French toast, corned-beef and egg sandwich, pineapple bun, milk tea",
+          "note": "Order lightly: dinner is two hours later.",
+          "search": "半島冰室 北角炮台山宏安道14-28號威德閣地下2號舖",
+          "options_title": "Backup",
+          "options": [
+            {
+              "name": "Cheung Fat Restaurant",
+              "name_zh": "祥發茶餐小廚",
+              "why": "Known for Swiss-sauce chicken legs; further from Sister Wah",
+              "search": "祥發茶餐小廚 北角七姊妹道27D號"
+            }
+          ]
+        },
+        {
+          "id": "sister-wah",
+          "time": "18:00",
+          "name": "Dinner at Sister Wah",
+          "name_zh": "華姐清湯腩",
+          "why": "A short taxi ride from Peninsula Ice Room",
+          "try": "Clear-soup beef brisket noodles, beef tendon and tripe",
+          "search": "華姐清湯腩 香港天后電氣道13A號"
+        },
+        {
+          "id": "fook-yuen",
+          "time": "19:15",
+          "name": "Dessert at Fook Yuen, or back to the hotel",
+          "name_zh": "福元湯圓",
+          "optional": true,
+          "try": "Peanut or black-sesame rice balls in ginger syrup",
+          "search": "福元湯圓 北角炮台山福元街7號利都樓地下I-1號舖"
         }
       ]
     },
@@ -21,11 +61,81 @@
       "date": "2026-11-18",
       "city": "HK",
       "label": "Hong Kong",
+      "title": "Old Hong Kong, dim sum, Apple Store and Victoria Peak",
+      "tip": "If anyone is tired, skip the waterfront, sit down at IFC and go straight to the Peak.",
       "stops": [
         {
-          "time": "",
-          "name": "Plans coming soon",
-          "placeholder": true
+          "id": "chun-yeung-market",
+          "time": "09:00",
+          "name": "Chun Yeung Street market",
+          "name_zh": "春秧街街市",
+          "why": "Right by the hotel: trams, market stalls and old streets",
+          "search": "春秧街街市 北角春秧街"
+        },
+        {
+          "id": "lee-keung-kee",
+          "time": "09:30",
+          "name": "Egg waffles at Lee Keung Kee",
+          "name_zh": "利強記北角雞蛋仔",
+          "try": "Original egg waffle (原味雞蛋仔), freshly made",
+          "search": "利強記北角雞蛋仔 北角英皇道492號"
+        },
+        {
+          "id": "to-central",
+          "time": "10:15",
+          "name": "Taxi or MTR to Central"
+        },
+        {
+          "id": "maxims-city-hall",
+          "time": "11:00",
+          "name": "Dim sum at Maxim’s Palace, City Hall",
+          "name_zh": "大會堂美心皇宮",
+          "why": "Classic banquet-hall dim sum with comfortable seats. Pushcarts are not guaranteed.",
+          "try": "Har gow, siu mai, char siu bao, spare ribs, turnip cake, egg tarts",
+          "search": "大會堂美心皇宮 香港中環愛丁堡廣場5-7號香港大會堂低座2樓"
+        },
+        {
+          "id": "apple-ifc",
+          "time": "12:45",
+          "name": "Apple Store, IFC mall",
+          "search": "Apple ifc mall 8 Finance Street Central Hong Kong"
+        },
+        {
+          "id": "waterfront-break",
+          "time": "13:30",
+          "until": "14:30",
+          "name": "Waterfront, coffee and a sit-down"
+        },
+        {
+          "id": "victoria-peak",
+          "time": "15:00",
+          "until": "17:45",
+          "name": "Victoria Peak, staying for sunset if clear",
+          "name_zh": "山頂凌霄閣",
+          "why": "Harbour views from the Peak Tower, no long walks. Take a taxi up if the Peak Tram queue is long.",
+          "search": "山頂凌霄閣 香港山頂山頂道128號",
+          "options_title": "Peak Tram",
+          "options": [
+            {
+              "name": "Peak Tram, lower station",
+              "name_zh": "山頂纜車中環總站",
+              "search": "山頂纜車中環總站 33 Garden Road Central Hong Kong"
+            }
+          ]
+        },
+        {
+          "id": "maks-noodle",
+          "time": "18:30",
+          "until": "19:00",
+          "name": "Dinner at Mak’s Noodle",
+          "name_zh": "麥奀雲吞麵世家",
+          "try": "Wonton noodle soup; a small bowl is enough after a big lunch",
+          "search": "麥奀雲吞麵世家 中環威靈頓街77號"
+        },
+        {
+          "id": "back-18",
+          "time": "20:00",
+          "name": "Back to The Stellar"
         }
       ]
     },
@@ -33,11 +143,85 @@
       "date": "2026-11-19",
       "city": "HK",
       "label": "Hong Kong",
+      "title": "Wan Chai, roast meats and Causeway Bay food",
+      "tip": "Kong Chai Kee, Yee Shun and Keung Kee are tasting stops: share portions and skip any if everyone is full.",
       "stops": [
         {
-          "time": "",
-          "name": "Plans coming soon",
-          "placeholder": true
+          "id": "leave-19",
+          "time": "09:00",
+          "name": "Leave The Stellar"
+        },
+        {
+          "id": "bakehouse",
+          "time": "09:30",
+          "name": "Bakehouse, Wan Chai",
+          "try": "Sourdough egg tart. Buy pastries for later rather than filling up before lunch.",
+          "search": "Bakehouse 灣仔大王東街14號"
+        },
+        {
+          "id": "blue-house",
+          "time": "10:15",
+          "name": "Blue House and nearby streets",
+          "name_zh": "藍屋",
+          "optional": true,
+          "why": "Colourful heritage building; a short look outside is enough",
+          "search": "藍屋 香港灣仔石水渠街72號"
+        },
+        {
+          "id": "chukfo-taipan",
+          "time": "11:30",
+          "name": "Roast-meat lunch at Chukfo Taipan",
+          "name_zh": "竺扶大班燒味",
+          "try": "Roast goose, char siu, crispy pork belly or the mixed roast rice",
+          "search": "竺扶大班燒味 灣仔三角街2-3號華欣閣地下3號舖"
+        },
+        {
+          "id": "to-causeway-bay",
+          "time": "12:45",
+          "name": "To Causeway Bay for browsing"
+        },
+        {
+          "id": "kong-chai-kee",
+          "time": "14:30",
+          "name": "Fishball noodles at Kong Chai Kee: share a light portion",
+          "name_zh": "江仔記粉麵專家",
+          "try": "Fishball noodles, fish-skin dumplings, chilli oil",
+          "note": "Search by the restaurant name: nearby street numbers get mixed up.",
+          "search": "江仔記粉麵專家 銅鑼灣堅拿道東2號",
+          "options_title": "Instead",
+          "options": [
+            {
+              "name": "Keung Kee: old-school street snacks",
+              "name_zh": "強記美食",
+              "try": "Pan-fried dried-shrimp rice rolls (香煎蝦米腸粉) or preserved-meat sticky rice (臘味糯米飯)",
+              "search": "強記美食 灣仔駱克道406號"
+            }
+          ]
+        },
+        {
+          "id": "yee-shun",
+          "time": "15:30",
+          "name": "Yee Shun Milk Company",
+          "name_zh": "港澳義順牛奶公司",
+          "try": "Steamed milk pudding: try it hot and chilled",
+          "search": "港澳義順牛奶公司 銅鑼灣駱克道506號"
+        },
+        {
+          "id": "victoria-park",
+          "time": "16:15",
+          "name": "Victoria Park",
+          "optional": true
+        },
+        {
+          "id": "rest-19",
+          "time": "17:00",
+          "name": "Back to the hotel to rest"
+        },
+        {
+          "id": "dinner-19",
+          "time": "18:30",
+          "name": "Local dinner, only if hungry",
+          "optional": true
         }
       ]
     },
@@ -45,10 +229,93 @@
       "date": "2026-11-20",
       "city": "SZ",
       "label": "to Shenzhen",
+      "title": "First train to Shenzhen and MixC World",
       "stops": [
         {
-          "time": "",
-          "name": "Train: West Kowloon to Futian"
+          "id": "leave-20",
+          "time": "05:15",
+          "until": "05:30",
+          "name": "Check out of The Stellar; taxi to West Kowloon station"
+        },
+        {
+          "id": "west-kowloon",
+          "time": "06:00",
+          "name": "Arrive at West Kowloon station",
+          "name_zh": "香港西九龍站",
+          "note": "Hong Kong exit and Mainland entry checks are both done here, before boarding.",
+          "search": "香港西九龍站 香港九龍柯士甸道西3號"
+        },
+        {
+          "id": "train-futian",
+          "time": "07:07",
+          "name": "High-speed train to Futian",
+          "_note": "First direct Futian train in MTR’s October 2026 timetable; re-check when booking"
+        },
+        {
+          "id": "futian",
+          "time": "07:21",
+          "name": "Arrive at Futian station",
+          "name_zh": "福田站",
+          "search": "福田站 深圳市福田区福田高铁站",
+          "_note": "The itinerary says 'clear arrival formalities' here; per APP_SPEC §1a both checks are at West Kowloon"
+        },
+        {
+          "id": "to-mercury",
+          "time": "08:15",
+          "until": "09:00",
+          "name": "Taxi to The Mercury Garden; leave the luggage"
+        },
+        {
+          "id": "hongli-village",
+          "time": "09:00",
+          "name": "Breakfast at Hongli Village Rice Rolls",
+          "name_zh": "红荔村肠粉",
+          "try": "Freshly steamed rice rolls, congee and tea",
+          "search": "红荔村肠粉 科技园文化广场 深南大道一层1-02E商铺"
+        },
+        {
+          "id": "mixc-world",
+          "time": "10:15",
+          "until": "14:00",
+          "name": "MixC World, with lunch",
+          "name_zh": "万象天地",
+          "why": "Open-air and indoor shopping streets, plenty of seats, close to the hotel",
+          "search": "深圳万象天地 深圳市南山区深南大道9668号",
+          "options_title": "Lunch: choose one",
+          "options": [
+            {
+              "name": "Hakka food (first choice)",
+              "name_zh": "客语山河之鲜",
+              "try": "Salt-baked chicken, stuffed tofu, soups",
+              "search": "客语山河之鲜 万象天地L3层NL310号铺"
+            },
+            {
+              "name": "Roast pigeon",
+              "name_zh": "野当鲜鸽皇饭店",
+              "try": "Roast pigeon, pigeon soup, Guangdong dishes",
+              "search": "野当鲜鸽皇饭店 万象天地北区LG层NLG31号铺"
+            },
+            {
+              "name": "Cantonese",
+              "name_zh": "唐宫",
+              "try": "Dim sum and seafood",
+              "search": "唐宫 万象天地L1层SL135号铺"
+            }
+          ]
+        },
+        {
+          "id": "check-in-20",
+          "time": "15:00",
+          "name": "Hotel check-in and rest"
+        },
+        {
+          "id": "haishangchao",
+          "time": "17:30",
+          "name": "Early dinner: Chaoshan food at MixC World",
+          "name_zh": "海上潮",
+          "try": "Chaoshan braised dishes, fresh fish, vegetables",
+          "note": "If everyone is tired, eat at the hotel or nearby instead.",
+          "search": "海上潮 万象天地L2层NL218号铺"
         }
       ]
     },
@@ -56,11 +323,90 @@
       "date": "2026-11-21",
       "city": "SZ",
       "label": "Shenzhen",
+      "title": "Shenzhen Bay waterfront and the modern skyline",
       "stops": [
         {
-          "time": "",
-          "name": "Plans coming soon",
-          "placeholder": true
+          "id": "fan-lou",
+          "time": "09:00",
+          "name": "Dim sum breakfast at Fan Lou",
+          "name_zh": "蘩楼",
+          "try": "Red-rice prawn rolls, har gow, chicken feet, spare ribs",
+          "note": "Breakfast from 8:30.",
+          "search": "蘩楼 信和购物广场 南海大道2088号L3层"
+        },
+        {
+          "id": "shenzhen-bay-park",
+          "time": "10:45",
+          "name": "Shenzhen Bay Park: short waterfront walk",
+          "name_zh": "深圳湾公园北湾鹭港",
+          "why": "Flat seaside path with birds and greenery; 40 to 50 minutes is plenty",
+          "note": "Search this exact section: the park is 13 km long.",
+          "search": "深圳湾公园北湾鹭港 深圳市南山区滨海大道"
+        },
+        {
+          "id": "shenzhen-bay-mixc",
+          "time": "12:15",
+          "name": "Shenzhen Bay MixC: lunch and coffee",
+          "name_zh": "深圳湾万象城",
+          "why": "A comfortable mall for lunch and a long sit-down",
+          "search": "深圳湾万象城 深圳市南山区科苑南路2888号"
+        },
+        {
+          "id": "culture-plaza",
+          "time": "14:00",
+          "name": "Shenzhen Bay Culture Plaza, from outside",
+          "name_zh": "深圳湾文化广场",
+          "optional": true,
+          "why": "Nine stone-shaped buildings, worth seeing from outside",
+          "note": "Open Tuesday to Sunday, 10:00 to 18:00.",
+          "search": "深圳湾文化广场 深圳市南山区科苑南路与创业路交汇处"
+        },
+        {
+          "id": "rest-21",
+          "time": "15:15",
+          "until": "17:15",
+          "name": "Back to the hotel to rest"
+        },
+        {
+          "id": "coastal-city",
+          "time": "17:45",
+          "name": "Dinner around Coastal City",
+          "name_zh": "海岸城",
+          "options_title": "Choose one",
+          "options": [
+            {
+              "name": "Coconut-chicken hotpot",
+              "name_zh": "润园四季椰子鸡火锅",
+              "why": "A mild, comforting broth everyone can enjoy",
+              "search": "润园四季椰子鸡火锅 海岸城购物中心L4层401号铺"
+            },
+            {
+              "name": "Chaoshan beef hotpot",
+              "name_zh": "八合里潮汕鲜牛肉火锅",
+              "why": "Freshly sliced beef, meatballs and clear broth",
+              "search": "八合里潮汕鲜牛肉火锅 海德三道19号海岸大厦西座301A-302A"
+            }
+          ]
+        },
+        {
+          "id": "to-talent-park",
+          "time": "18:45",
+          "name": "To Talent Park"
+        },
+        {
+          "id": "talent-park",
+          "time": "19:00",
+          "name": "Light show at Shenzhen Talent Park",
+          "name_zh": "深圳人才公园",
+          "optional": true,
+          "why": "Shenzhen’s skyline lit up",
+          "note": "Shows are usually at 19:00, 20:00 and 21:00 on show nights; check the Saturday schedule nearer the time.",
+          "search": "深圳人才公园 深圳市南山区科苑南路3329号"
+        },
+        {
+          "id": "back-21",
+          "time": "19:30",
+          "name": "Taxi back to the hotel"
         }
       ]
     },
@@ -68,11 +414,73 @@
       "date": "2026-11-22",
       "city": "SZ",
       "label": "Shenzhen",
+      "title": "K11 ECOAST and Sea World",
       "stops": [
         {
-          "time": "",
-          "name": "Plans coming soon",
-          "placeholder": true
+          "id": "breakfast-22",
+          "time": "09:00",
+          "name": "Breakfast at the hotel or nearby"
+        },
+        {
+          "id": "k11-ecoast",
+          "time": "10:00",
+          "name": "K11 ECOAST",
+          "why": "Striking architecture on the waterfront",
+          "search": "K11 ECOAST 深圳市南山区太子湾路56号",
+          "_note": "K11 is at 56 Taiziwan Road; 1128 Wanghai Road is Sea World"
+        },
+        {
+          "id": "k11-lunch",
+          "time": "12:15",
+          "name": "Lunch at K11",
+          "options_title": "Choose one",
+          "options": [
+            {
+              "name": "Shunde food (first choice)",
+              "name_zh": "大榕树下顺德菜",
+              "why": "Shunde dishes, close to Cantonese home cooking",
+              "search": "大榕树下顺德菜 K11 ECOAST北馆L4层NL422号铺"
+            },
+            {
+              "name": "Hakka food",
+              "name_zh": "客颂客家菜",
+              "why": "Hakka dishes, soups and family-style meals",
+              "search": "客颂客家菜 K11 ECOAST北馆L7层NL704-NL706号铺"
+            }
+          ]
+        },
+        {
+          "id": "sea-world",
+          "time": "14:00",
+          "name": "Sea World and the Minghua ship",
+          "name_zh": "海上世界",
+          "why": "Walk round the old Minghua ship and the plazas; plenty of cafés",
+          "search": "海上世界 深圳市南山区望海路1128号"
+        },
+        {
+          "id": "break-22",
+          "time": "15:30",
+          "name": "Coffee, ice cream or a sit-down"
+        },
+        {
+          "id": "jindaoyuan",
+          "time": "17:30",
+          "name": "Seafood claypot congee dinner",
+          "name_zh": "金稻园砂锅粥",
+          "try": "Crab or prawn claypot congee, stir-fried vegetables, a few side dishes",
+          "search": "金稻园砂锅粥 海上世界C区L1层101号铺"
+        },
+        {
+          "id": "sea-world-lights",
+          "time": "19:00",
+          "name": "Sea World evening lights and fountain",
+          "optional": true,
+          "note": "Skip it if anyone is tired."
+        },
+        {
+          "id": "back-22",
+          "time": "19:30",
+          "name": "Back to the hotel"
         }
       ]
     },
@@ -80,11 +488,82 @@
       "date": "2026-11-23",
       "city": "SZ",
       "label": "Shenzhen",
+      "title": "Nantou Ancient City and Happy Harbour",
       "stops": [
         {
-          "time": "",
-          "name": "Plans coming soon",
-          "placeholder": true
+          "id": "breakfast-23",
+          "time": "09:00",
+          "name": "Breakfast at the hotel"
+        },
+        {
+          "id": "nantou",
+          "time": "10:00",
+          "name": "Nantou Ancient City",
+          "name_zh": "南头古城",
+          "why": "Old streets, little shops and cafés; 1½ to 2 hours at your own pace",
+          "search": "南头古城 深圳市南山区南山大道与深南大道交叉口"
+        },
+        {
+          "id": "chaoxiang-lunch",
+          "time": "12:00",
+          "name": "Lunch in the old city: Chaozhou noodles",
+          "name_zh": "潮巷·潮州粿条",
+          "try": "Chaoshan noodles, oyster omelette or braised dishes",
+          "search": "潮巷·潮州粿条·潮汕风味专门店 南头古城中山南街84号101号铺"
+        },
+        {
+          "id": "binma",
+          "time": "13:00",
+          "name": "Warm sweet soup at Bin Ma",
+          "name_zh": "彬妈糖水",
+          "optional": true,
+          "why": "Traditional Cantonese sweet soups; a seated snack stop",
+          "search": "彬妈糖水 南头古城中山南街41号101"
+        },
+        {
+          "id": "to-happy-harbour",
+          "time": "13:30",
+          "name": "Taxi to Happy Harbour"
+        },
+        {
+          "id": "happy-harbour",
+          "time": "14:15",
+          "until": "16:30",
+          "name": "Happy Harbour: waterfront mall and park",
+          "name_zh": "欢乐港湾",
+          "search": "欢乐港湾 深圳市宝安区海天路与宝华路交汇处"
+        },
+        {
+          "id": "bay-glory",
+          "time": "16:30",
+          "until": "17:30",
+          "name": "Bay Glory Ferris wheel",
+          "name_zh": "湾区之光",
+          "optional": true,
+          "why": "Enclosed cabins: sightseeing sitting down",
+          "search": "湾区之光摩天轮 欢乐港湾"
+        },
+        {
+          "id": "chaoxiang-sihai",
+          "time": "18:15",
+          "name": "Dinner at Chao Xiang Si Hai",
+          "name_zh": "潮香四海·家传潮汕菜",
+          "why": "A long-time favourite on Dianping’s must-eat list",
+          "try": "Braised goose (卤鹅拼盘), oyster omelette (招牌蚝仔烙), Puning fried tofu (普宁炸豆腐), taro rice (一颗芋头饭), sugar-crusted taro (反沙芋头)",
+          "search": "潮香四海 南山大道1112-7号",
+          "options_title": "If everyone is tired",
+          "options": [
+            {
+              "name": "Stay at Happy Harbour for dinner",
+              "name_zh": "观海",
+              "search": "观海 欢乐港湾西岸商业街18号3楼"
+            }
+          ]
+        },
+        {
+          "id": "back-23",
+          "time": "19:45",
+          "name": "Back to the hotel and pack"
         }
       ]
     },
@@ -92,19 +571,71 @@
       "date": "2026-11-24",
       "city": "HK",
       "label": "fly home",
+      "title": "Shekou ferry to the airport",
       "stops": [
         {
-          "time": "",
-          "name": "Ferry: Shekou to the airport"
+          "id": "checkout-24",
+          "time": "07:00",
+          "name": "Breakfast and check-out"
         },
         {
-          "time": "15:10",
-          "name": "SQ883 home"
+          "id": "to-shekou",
+          "time": "07:45",
+          "name": "Taxi to Shekou Cruise Homeport",
+          "name_zh": "蛇口邮轮母港",
+          "search": "蛇口邮轮母港 深圳市南山区海运路1号"
+        },
+        {
+          "id": "shekou-arrive",
+          "time": "08:30",
+          "name": "Arrive at the ferry terminal"
+        },
+        {
+          "id": "shekou-checkin",
+          "time": "09:00",
+          "name": "Ferry check-in and Singapore Airlines check-in done",
+          "by": true,
+          "note": "Singapore Airlines takes the bags and gives boarding passes here."
+        },
+        {
+          "id": "ferry",
+          "time": "10:00",
+          "name": "Ferry to the airport (SkyPier)",
+          "_note": "Book and reconfirm the 10:00 ferry with the SQ flight details; if it isn't running, take an earlier one, not a later one. Ferry status still to confirm (Q27)"
+        },
+        {
+          "id": "skypier",
+          "time": "10:40",
+          "name": "Arrive at SkyPier; straight into the departures area",
+          "approx": true
+        },
+        {
+          "id": "fly-home",
+          "time": "14:10",
+          "name": "Fly home on SQ883"
         }
       ]
     }
   ],
-  "places": {
-    "_note": "Place records (about lines, travel steps, map focus, card art) come with the itinerary."
-  }
+  "extras": [
+    {
+      "id": "duck-shing-ho",
+      "city": "HK",
+      "name": "Duck Shing Ho egg rolls",
+      "name_zh": "德成號",
+      "optional": true,
+      "why": "Handmade egg rolls, a classic Hong Kong gift",
+      "note": "Sold Thursday to Saturday, with very long queues: only if it’s easy.",
+      "search": "德成號 北角渣華道64號"
+    },
+    {
+      "id": "upperhills",
+      "city": "SZ",
+      "name": "UpperHills",
+      "name_zh": "深业上城",
+      "optional": true,
+      "why": "Rooftop streets and colourful buildings; could replace one of the malls",
+      "search": "深业上城 深圳市福田区皇岗路5001号"
+    }
+  ]
 }
