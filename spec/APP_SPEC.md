@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.38, 3 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.39, 3 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -371,7 +371,7 @@ Full table in `art/art-manifest.json`. Summary:
 ### 5.5 Setup and access [stated: QR setup]
 - No accounts. **One QR code per person** (Chan, Belle, Mama, Papa) carrying their id, their token, admin yes/no, and the family phone numbers for the Call buttons. Scanning it sets the phone up in one step; all of it stays on the phone. **The code is scanned inside the app** (a "Set up this phone" button that opens the camera), so it sets up the installed app rather than Safari [stated, 24 Oct].
 - Before setup the site still works **view-only** (countdown, lists, guide), which is what Mama and Papa see from the link Chan sends around 31 Oct [stated].
-- Chan sets up Mama's and Papa's phones in person, week of 2 Nov [stated]. Include a one-page install guide: **`spec/SETUP.md`**.
+- Chan sets up Mama's and Papa's phones in person, week of 2 Nov [stated]. Include a one-page install guide: **`spec/SETUP.md`**. **Done: all four phones are set up** [stated, 3 Nov].
 - **One token per phone**, expiring **30 Nov 2026** [stated, 24 Oct], so a lost phone's token can be revoked alone.
 - **As built (phase 2, `app/setup.js`):**
   - **"Set up this phone"**: on the Packing screen until the phone is set up [stated: OK, 24 Oct], and on the Hidden pages (§4.2) for changing a phone later.
@@ -383,7 +383,7 @@ Full table in `art/art-manifest.json`. Summary:
     - "Use Chan's code on this phone" sets up the phone showing the codes, without scanning.
     - Codes can't be made in a Claude session: tokens pasted there would stay in the transcript.
   - The camera reader and the code maker download only when a setup screen opens; they are not part of the offline set.
-  - [assumption: the live camera works in the installed app on Mama's iPhone 14 Pro and Papa's S24+; test at the visit (Q43)]
+  - The live camera works in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [stated, 3 Nov] (Q43).
 
 ### 5.6 Privacy (public site and repo)
 - Never commit phone numbers, booking references, passport details or payment details.
@@ -443,7 +443,7 @@ Seed files are in `data/`:
 | **~30 Oct** | **1. Pre-trip, view-only** | Repo + Pages, PWA shell (manifest, service worker, icons), self-hosted fonts, home with art and halo (F2 rules), pre-trip home (F9), packing lists read-only (F10), greetings (F11), Help (F7) with placeholder link. Works in any browser without setup |
 | ~31 Oct | Chan sends the link | View-only for Mama and Papa [stated] |
 | **~1 Nov** | **2. Setup and sync** | QR setup (§5.5), tokens, ticking with sync via `live/packing.json`, announcement writing (F8) and display (F1). **Built 24 Oct (v0.32)**; setup guide in `spec/SETUP.md`. **Works on Chan's and Belle's phones** (27 Oct) [stated] |
-| Week of 2 Nov | Chan's setup visit | Install on all four phones, scan QR codes [stated] |
+| Week of 2 Nov | Chan's setup visit | Install on all four phones, scan QR codes [stated]. **Done 3 Nov: all four phones set up** [stated] |
 | **~10 Nov** | **3. Trip mode** | Schedule (F3), Place card + detail (F4), Weather (F5), Hotel (F6), trip-mode home with time-based art, offline test. **Built 2 Nov (v0.36)**; `tools/check.mjs` covers every day, place card and detail page at the four sizes, and airplane mode after install |
 | 10 Nov | Checks | SQ882/SQ883 times and the Shekou ferry (scheduled) |
 | **~14 Nov** | **4. Real data** | Itinerary and places entered as data; no code change. **Itinerary entered 2 Nov**, ahead of phase 3 |
@@ -472,7 +472,7 @@ Seed files are in `data/`:
 | Q40 | QR setup on iPhone: an installed home-screen app keeps its storage separate from Safari [assumption], so a code scanned with the Camera app would set up Safari, not the app | **Answered:** a "Set up this phone" button inside the app scans the code with the camera [stated, 24 Oct] |
 | Q41 | Phone tokens can write to the whole repo, including the app code on `main` | **Answered:** live data goes in a second, small repo; tokens limited to it [stated, 24 Oct]. Repo: `hktrip26scrt` [stated, 24 Oct] |
 | Q42 | *Bottom* drawings are about 2 : 3, so the background colour fills the top third or more of the screen; "longer is probably nicer" [stated, 24 Oct] | **Answered:** no cropping ("the cropped all look worse"); keep the drawings and let them run under Safari's address bar [stated, 24 Oct] |
-| Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | **Partly answered:** Belle scanned Chan's code with the camera on her iPhone 16 Pro [stated, 27 Oct]. Mama's and Papa's phones still to test at the visit; "Take a photo of the code instead" is the fallback |
+| Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | **Answered:** the camera scan worked on Mama's and Papa's phones [stated, 3 Nov]; Belle's iPhone 16 Pro on 27 Oct [stated] |
 | Q44 | `hktrip26scrt` is empty (no branches, 24 Oct); can the app create the first file there? | **Answered:** Chan added a README; announcements and ticks save [stated, 27 Oct] |
 | Q45 | Weather (F5): Open-Meteo's terms and the live service couldn't be checked from the build session (its network blocks open-meteo.com) [assumption: free for non-commercial use, with credit; the credit line is on the Schedule]. Other services were discussed on 3 Nov (the Hong Kong Observatory, MET Norway); **Open-Meteo kept** [stated] | Open: test on the phones. (1) Open the forecast link in Safari: https://api.open-meteo.com/v1/forecast?latitude=22.29,22.54&longitude=114.2,113.95&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FHong_Kong&forecast_days=16. It should show two blocks of numbers, one per city, each with 16 dates. (2) After merging, open the trip preview for 17 or 18 Nov: the weather lines should show real numbers, without "Example:". To let a session read the terms, allow `open-meteo.com` and `api.open-meteo.com` in the environment's network settings |
 | Q46 | "Open in maps": Google Maps for Hong Kong, Amap for Shenzhen (3 Nov). The Amap link format is from memory, and it opens the Amap app only if it is installed [assumption] | Open: install Amap on the phones that will use it; tap Open in maps for one Hong Kong and one Shenzhen place on each phone (Hidden pages → Trip days) |
@@ -525,8 +525,10 @@ Seed files are in `data/`:
 | 2 Nov | **Phase 3 plan approved** [stated: "Ok"]. D1: the Place map is framed on each stop's area. D2: no "Getting there" switch until a stop has steps. D3: Duck Shing Ho and UpperHills in an "If there's time" section. D4: no Packing button on the trip home. D5: the late-night time is 24-hour. D6: "Copy the address for Uber/DiDi" on the place details |
 | 3 Nov | Place card: everything on one screen with the map, no "More about this place" (F4). Open in maps: Google Maps, not Apple Maps. Hong Kong addresses: Uber, never DiDi [stated] |
 | 3 Nov | Amap for Shenzhen addresses ("google maps doesn't work in Shenzhen"), Google Maps for Hong Kong. Keep Open-Meteo for the weather (Q45) [stated] |
+| 3 Nov | All four phones set up (setup visit done); the camera scan worked on Mama's and Papa's phones (Q43) [stated] |
 
 ## 11. Changelog
+- **v0.39 (3 Nov 2026):** All four phones set up (§5.5, §7, §10); Q43 answered (the camera scan worked on Mama's and Papa's phones).
 - **v0.38 (3 Nov 2026):** Open in maps: Amap for Shenzhen addresses, Google Maps for Hong Kong (F4, F6, §5.2). Open-Meteo kept, with the forecast now 16 days ahead so it can be tested in the trip preview before the trip (F5). Q45 and Q46 updated; 3 Nov decisions (§10).
 - **v0.37 (3 Nov 2026):** Place card: all details and copy buttons on the one screen with the map; the details screen is removed (F4). Open in maps is Google Maps everywhere; Uber for every Hong Kong address (F4, F6, §5.2). Q45 and Q46 updated; 3 Nov decisions (§10).
 - **v0.36 (2 Nov 2026):** Phase 3 built: trip home (F2), Schedule (F3), Place card and details (F4), weather (F5), hotel card (F6), trip preview and Hidden pages → Trip days (§4.2). Phase 3 decisions D1–D6 (§10). New data `data/weather.json`, plus `place_map`, map areas, and `map_area`, `card_art` and `city` on stops (§6). Q31 built; Q45–Q47 added.
