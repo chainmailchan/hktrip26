@@ -7,9 +7,9 @@ Family trip app (PWA) for Chan, Belle, Mama and Papa: Hong Kong and Shenzhen, 17
 - `spec/wireframes/*.dc.html`: approved screens (Concept B). Design-tool files that won't run on their own; read them for layout, sizes, colours and copy.
 - `spec/KICKOFF.md`: the phase 1 brief. `spec/PHONE.md`: Chan's own guide for working from his phone. `spec/SETUP.md`: the setup-visit guide (tokens, install, setup codes).
 - `art/` + `art/art-manifest.json`: every image and how it is shown. `art/incoming/`: new images Chan uploads; optimise them into `art/` and update the manifest.
-- `data/`: all trip content (trip facts, itinerary, packing lists, greetings, art schedule, emergency numbers). **Trip content goes in data files, never in code.**
-- The app itself is served by GitHub Pages from the root of `main`: `index.html`, `app/` (code and styles; `app/live.js` = announcement and ticks via the `hktrip26scrt` repo; `app/setup.js` + `app/vendor/` = QR setup), `sw.js` (offline cache, update on next open), `manifest.webmanifest`, `fonts/`, `icons/`.
-- `tools/check.mjs`: layout check at the four phone sizes, plus ticking, announcement and setup tests against a fake GitHub (`NODE_PATH="$(npm root -g)" node tools/check.mjs`). `tools/subset-noto.py`: rebuild the Chinese font after greetings change.
+- `data/`: all trip content (trip facts, itinerary, packing lists, greetings, art schedule, emergency numbers, weather wording). **Trip content goes in data files, never in code.**
+- The app itself is served by GitHub Pages from the root of `main`: `index.html`, `app/` (code and styles; `app/trip.js` = Schedule, Place card and hotel; `app/weather.js` = forecast; `app/live.js` = announcement and ticks via the `hktrip26scrt` repo; `app/setup.js` + `app/vendor/` = QR setup), `sw.js` (offline cache, update on next open), `manifest.webmanifest`, `fonts/`, `icons/`.
+- `tools/check.mjs`: layout check at the four phone sizes (every trip day, place card and details too), plus ticking, announcement, setup and trip-mode tests against a fake GitHub and a fake weather service, and an airplane-mode test (`NODE_PATH="$(npm root -g)" node tools/check.mjs`; about 1½ minutes, longer with a screenshot folder). `tools/subset-noto.py`: rebuild the Chinese font after greetings change.
 
 ## How Chan works
 - Chan mostly works **from the Claude app on his iPhone** in cloud sessions. Each session starts fresh, from `main`, with no memory of earlier sessions. The spec and this file are the memory.
@@ -29,6 +29,6 @@ Family trip app (PWA) for Chan, Belle, Mama and Papa: Hong Kong and Shenzhen, 17
 
 ## End every session with a short, phone-friendly message
 1. **What changed:** up to 3 bullets.
-2. **How to check it:** what to open on the phone after merging (URL, and a `?preview=` link if relevant).
+2. **How to check it:** what to open on the phone after merging (URL, and a `?preview=` link if relevant; `?preview=trip&date=…&time=…` shows the trip screens on any day).
 3. **Needs your answer:** questions, if any.
 Then remind Chan: open the diff → Create PR → merge on GitHub.

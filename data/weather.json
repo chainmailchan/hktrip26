@@ -1,0 +1,35 @@
+{
+  "_note": "F5 weather and what to wear. Forecast from Open-Meteo, no key [assumption: free for non-commercial use, credit asked; its terms could not be read from the build session, 2 Nov]. All wording and thresholds are proposals: change them freely. 'places' are the two hotels' districts (North Point, Nanshan) [assumption: approximate coordinates; weather is per city, so precision doesn't matter].",
+  "source": "https://api.open-meteo.com/v1/forecast",
+  "timezone": "Asia/Hong_Kong",
+  "credit": "Weather from Open-Meteo.com",
+  "refresh_minutes": 60,
+  "places": {
+    "HK": { "lat": 22.29, "lon": 114.2 },
+    "SZ": { "lat": 22.54, "lon": 113.95 }
+  },
+  "rain_chance_pct": 50,
+  "rain_words": "rain likely",
+  "umbrella": "Bring the umbrella.",
+  "flight_wear": "Keep a jacket handy on the plane.",
+  "sky": [
+    { "codes": [0], "words": "sunny" },
+    { "codes": [1], "words": "mostly sunny" },
+    { "codes": [2], "words": "partly cloudy" },
+    { "codes": [3], "words": "cloudy" },
+    { "codes": [45, 48], "words": "foggy" },
+    { "codes": [51, 53, 55, 56, 57], "words": "drizzle", "wet": true },
+    { "codes": [61, 63, 65, 66, 67], "words": "rain", "wet": true },
+    { "codes": [80, 81, 82], "words": "showers", "wet": true },
+    { "codes": [95, 96, 99], "words": "thunderstorms", "wet": true }
+  ],
+  "_sky_note": "WMO weather codes, as Open-Meteo reports them. A 'wet' sky already says rain, so 'rain likely' isn't added; the umbrella line is.",
+  "wear": [
+    { "from": 29, "text": "Light clothes. Drink plenty of water." },
+    { "from": 24, "text": "Light clothes." },
+    { "from": 19, "text": "Light layers." },
+    { "from": 15, "text": "Bring a warm layer." },
+    { "from": -50, "text": "Wear warm layers." }
+  ],
+  "_wear_note": "Chosen by the day's high (°C): the first row whose 'from' it reaches."
+}

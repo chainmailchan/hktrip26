@@ -4,7 +4,7 @@
   "fits": {
     "bottom": "full screen width, height in proportion, pinned to the bottom, raised by raise_pct_of_screen_height; background colour fills the sky above",
     "cover": "scaled to cover the whole screen without distortion; trim equally from both sides",
-    "map": "Place screen background behind the card; zoom ~160%, focus on the harbour (x 47%, y 60% of the image) under the pin"
+    "map": "Place screen background behind the card: scaled to cover the screen, then zoomed by zoom (1.6); the stop's area (or focus) sits under the pin, 30% down the screen, as far as the edges allow"
   },
   "themes": {
     "paper": {
@@ -196,7 +196,17 @@
       "background": "#F6EAD0",
       "theme": "paper",
       "soften_pct": 30,
-      "note": "Mood only; centred on the harbour; source/attribution TBD",
+      "zoom": 1.6,
+      "focus": { "x": 0.47, "y": 0.6 },
+      "areas": {
+        "central": { "x": 0.39, "y": 0.64 },
+        "peak": { "x": 0.36, "y": 0.69 },
+        "wan-chai": { "x": 0.49, "y": 0.65 },
+        "causeway-bay": { "x": 0.55, "y": 0.64 },
+        "north-point": { "x": 0.64, "y": 0.61 },
+        "west-kowloon": { "x": 0.38, "y": 0.55 }
+      },
+      "note": "Mood only; source/attribution TBD. focus = default framing (the harbour); areas = where each district sits on this drawing (x, y as shares of the image), read off it by eye [assumption, 2 Nov]; a stop names its area with map_area",
       "bytes": 484039
     },
     {
@@ -208,7 +218,17 @@
       "background": "#1E4880",
       "theme": "navy",
       "soften_pct": 30,
-      "note": "Mood only; source/attribution TBD",
+      "zoom": 1.6,
+      "focus": { "x": 0.47, "y": 0.6 },
+      "areas": {
+        "central": { "x": 0.39, "y": 0.64 },
+        "peak": { "x": 0.36, "y": 0.69 },
+        "wan-chai": { "x": 0.49, "y": 0.65 },
+        "causeway-bay": { "x": 0.55, "y": 0.64 },
+        "north-point": { "x": 0.64, "y": 0.61 },
+        "west-kowloon": { "x": 0.38, "y": 0.55 }
+      },
+      "note": "Mood only; source/attribution TBD. Not used yet: the Place screen uses the paper map [proposal]. Same drawing as the paper map, so the same areas",
       "bytes": 523243
     },
     {
@@ -220,7 +240,16 @@
       "background": "#F7ECD5",
       "theme": "paper",
       "soften_pct": 30,
-      "note": "Sent by Chan 24 Oct for the Shenzhen part of the trip (answers the Shenzhen map in Q34). Mood only; source/attribution TBD (Q35)",
+      "zoom": 1.6,
+      "focus": { "x": 0.42, "y": 0.45 },
+      "areas": {
+        "nanshan": { "x": 0.36, "y": 0.42 },
+        "shenzhen-bay": { "x": 0.4, "y": 0.47 },
+        "shekou": { "x": 0.29, "y": 0.51 },
+        "futian": { "x": 0.73, "y": 0.42 },
+        "bao-an": { "x": 0.14, "y": 0.35 }
+      },
+      "note": "Sent by Chan 24 Oct for the Shenzhen part of the trip (answers the Shenzhen map in Q34). Mood only; source/attribution TBD (Q35). focus = default framing (Shenzhen Bay); areas read off the drawing by eye [assumption, 2 Nov]",
       "bytes": 450662
     }
   ],
