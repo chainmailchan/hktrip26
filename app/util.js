@@ -19,10 +19,6 @@ export const weekday = (date) => fmt({ weekday: 'long' }).format(utc(date));
 export const dayMonth = (date) => fmt({ day: 'numeric', month: 'long' }).format(utc(date));
 export const dayOfMonth = (date) => String(utc(date).getUTCDate());
 
-// iPhones and iPads (iPadOS reports itself as a Mac with a touch screen).
-export const isApple = () => /iPhone|iPad|iPod/.test(navigator.userAgent)
-  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
 // Copies text for pasting into Uber or DiDi. Resolves true when it worked.
 export async function copyText(text) {
   try {

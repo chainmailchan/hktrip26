@@ -1,8 +1,8 @@
-// Trip mode (APP_SPEC F3, F4, F6): the Schedule, the Place card over Chan's map, the place details
-// with "Open in maps", and the hotel card. Everything shown comes from data/itinerary.json,
+// Trip mode (APP_SPEC F3, F4, F6): the Schedule, the Place card over Chan's map (everything about
+// the place, with "Open in maps" and the copy button), and the hotel card. Everything shown comes from data/itinerary.json,
 // data/trip.json, data/art-schedule.json and art/art-manifest.json.
 
-import { esc, weekday, longDate, dayOfMonth, dayMonth, isApple, copyText } from './util.js';
+import { esc, weekday, dayOfMonth, dayMonth, copyText } from './util.js';
 import { themeVars, rgba, findImage } from './art.js';
 
 const PIN_Y = 0.3; // fallback: the pin 30% down the screen (spec/wireframes/Place.dc.html: 250 of 844)
@@ -19,8 +19,6 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
 
   // A stop opens a Place card only when there is something to show; travel and rest rows don't.
   const hasCard = (s) => !!(s.search || s.why || s.try || s.note || s.options?.length);
-  const cardLine = (s) => s.why || (s.try ? 'Try: ' + s.try : '') || s.note || '';
-  const hasMore = (s) => !!(s.search || s.options?.length || [s.why, s.try, s.note].filter(Boolean).length > 1);
 
   function timeParts(s) {
     if (!s.time) return [];
@@ -134,17 +132,17 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
     if (!wasOpen) revealOpen();
   }
 
-  // ---------- F4 Place card and details ----------
+  // ---------- F4 Place card: everything about the place on one screen, over the map ----------
 
-  // parts: [date, stopId, "more"?] or ["extra", id, "more"?]
+  // parts: [date, stopId] or ["extra", id]. (An old ".../more" link opens the same card.)
   function findStop([a, b]) {
     if (a === 'extra') {
       const stop = (itinerary.extras || []).find((e) => e.id === b);
-      return stop && { stop, date: null, city: stop.city, back: '#schedule/extras', backLabel: 'Schedule', base: `#place/extra/${b}` };
+      return stop && { stop, date: null, city: stop.city, back: '#schedule/extras', backLabel: 'Schedule' };
     }
     const day = dayOf(a);
     const stop = day?.stops.find((s) => s.id === b);
-    return stop && { stop, date: a, city: day.city, back: '#schedule/' + a, backLabel: weekday(a), base: `#place/${a}/${b}` };
+    return stop && { stop, date: a, city: day.city, back: '#schedule/' + a, backLabel: weekday(a) };
   }
 
   function metaText(p) {
@@ -154,84 +152,66 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
   }
 
   const zhHtml = (name, city, cls = '') => (name ? `<div class="zh${cls}" lang="${zhLang(city)}">${esc(name)}</div>` : '');
+  const linesHtml = (lines) => lines.filter(Boolean).map((l) => `<p class="card-line">${esc(l)}</p>`).join('');
 
   // Returns false when the stop isn't in the itinerary (the caller shows the Schedule instead).
   function renderPlace(parts) {
     const p = findStop(parts);
     if (!p) return false;
-    if (parts[2] === 'more') renderDetail(p);
-    else renderCard(p);
+    renderCard(p);
     return true;
   }
 
+  // One screen [stated, 3 Nov]: the map at the top, and a card with the drawing, name, time, why,
+  // what to try, notes, Open in maps and the copy button, then the choices. A long card scrolls.
   function renderCard(p) {
     const s = p.stop;
+    const city = s.city || p.city; // where the place really is: maps app and Uber or DiDi go by this
     // The map goes by the part of the trip (the day's city), not by where the place is [stated, 24 Oct].
     const img = findImage(manifest, schedule.place_map[p.city] || schedule.place_map.HK);
     setVars(themeVars(manifest, { background: img.background, theme: img.theme }));
-    const line = cardLine(s);
-    screen.innerHTML = `
-      <div class="place">
-        <div class="bar halo"><a class="pill on-map" href="${p.back}" data-back><span aria-hidden="true">←</span>${esc(p.backLabel)}</a><a class="help-link" href="#help">Help</a></div>
-        <section class="card" aria-label="${esc(s.name)}">
-          ${CARD_ART[s.card_art] ? `<div class="card-art">${CARD_ART[s.card_art]}</div>` : ''}
-          <h1 class="card-name">${esc(s.name)}</h1>
-          ${zhHtml(s.name_zh, s.city || p.city)}
-          <div class="card-time">${esc(metaText(p))}</div>
-          ${line ? `<p class="card-line">${esc(line)}</p>` : ''}
-          ${hasMore(s) ? `<a class="btn-primary" href="${p.base}/more">More about this place</a>` : ''}
-        </section>
-      </div>`;
-    paintMap(img, s.map_area); // after the card, so the map can be framed above it
-  }
-
-  function renderDetail(p) {
-    const s = p.stop;
-    const city = s.city || p.city;
-    setVars(paper);
-    artEl.hidden = true;
-    const about = [s.why, s.try ? 'Try: ' + s.try : '', s.note].filter(Boolean);
-    const when = p.date ? [longDate(p.date), timeText(s), s.optional ? 'Optional' : ''].filter(Boolean).join(' · ') : metaText(p);
     const options = !s.options?.length ? '' : `
       <section class="options" aria-label="${esc(s.options_title || 'Choices')}">
         <h2 class="list-head">${esc(s.options_title || 'Choices')}</h2>
         ${s.options.map((o) => `<div class="option">
           <div class="option-name">${esc(o.name)}</div>
           ${zhHtml(o.name_zh, city)}
-          ${[o.why, o.try ? 'Try: ' + o.try : ''].filter(Boolean).map((l) => `<p class="about">${esc(l)}</p>`).join('')}
+          ${linesHtml([o.why, o.try ? 'Try: ' + o.try : ''])}
           ${o.search ? mapsHtml(o.search, city, false) : ''}
         </div>`).join('')}
       </section>`;
     screen.innerHTML = `
-      <div class="page detail">
-        <div class="bar"><a class="pill" href="${p.base}" data-back><span aria-hidden="true">←</span>Back</a><a class="help-link" href="#help">Help</a></div>
-        <h1 class="detail-name">${esc(s.name)}</h1>
-        ${zhHtml(s.name_zh, city, ' zh-big')}
-        <div class="detail-when">${esc(when)}</div>
-        ${about.map((l) => `<p class="about">${esc(l)}</p>`).join('')}
-        ${s.search ? mapsHtml(s.search, city, true) : ''}
-        ${options}
+      <div class="place">
+        <div class="bar halo"><a class="pill on-map" href="${p.back}" data-back><span aria-hidden="true">←</span>${esc(p.backLabel)}</a><a class="help-link" href="#help">Help</a></div>
+        <div class="map-gap"></div>
+        <section class="card" aria-label="${esc(s.name)}">
+          ${CARD_ART[s.card_art] ? `<div class="card-art">${CARD_ART[s.card_art]}</div>` : ''}
+          <h1 class="card-name">${esc(s.name)}</h1>
+          ${zhHtml(s.name_zh, city)}
+          <div class="card-time">${esc(metaText(p))}</div>
+          ${linesHtml([s.why, s.try ? 'Try: ' + s.try : '', s.note])}
+          ${s.search ? mapsHtml(s.search, city, true) : ''}
+          ${options}
+        </section>
       </div>`;
+    paintMap(img, s.map_area); // after the card, so the map can be framed above it
   }
 
   // ---------- Open in maps (§5.2) ----------
-  // By the place's search line (Chinese name and address), not coordinates, which avoids the
-  // GCJ-02 offset in mainland China. Hong Kong: Google Maps. Shenzhen: Apple Maps on iPhones,
-  // Amap elsewhere (Papa's Android) [assumption: link formats not checked from the build session].
-  function mapsUrl(search, city) {
-    const q = encodeURIComponent(search);
-    if (city !== 'SZ') return 'https://www.google.com/maps/search/?api=1&query=' + q;
-    if (isApple()) return 'https://maps.apple.com/?q=' + q;
-    return 'https://uri.amap.com/search?keyword=' + q + '&city=' + encodeURIComponent('深圳') + '&callnative=1&src=hktrip';
-  }
+  // Google Maps everywhere [stated, 3 Nov: not Apple Maps], searching by the place's search line
+  // (Chinese name and address), which avoids the GCJ-02 offset of coordinates in mainland China
+  // [assumption: link format not checked from the build session; Q46].
+  const mapsUrl = (search) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search);
+
+  // Uber for every Hong Kong address, DiDi only for Shenzhen ones [stated, 3 Nov].
+  const rideApp = (city) => (city === 'SZ' ? 'DiDi' : 'Uber');
 
   // The filled button and "Copy the address for Uber" (DiDi in Shenzhen); outlined pair for choices.
   function mapsHtml(search, city, main) {
-    const app = city === 'SZ' ? 'DiDi' : 'Uber';
-    const href = esc(mapsUrl(search, city));
+    const app = rideApp(city);
     const copy = `<button type="button" class="btn-outline" data-copy="${esc(search)}" data-app="${app}">${main ? 'Copy the address for ' : 'Copy for '}${app}</button>`;
     return `<div class="maps${main ? '' : ' pair'}">
-      <a class="${main ? 'btn-primary' : 'btn-outline'}" href="${href}" target="_blank" rel="noopener">Open in maps</a>${copy}
+      <a class="${main ? 'btn-primary' : 'btn-outline'}" href="${esc(mapsUrl(search))}" target="_blank" rel="noopener">Open in maps</a>${copy}
       </div><p class="msg" role="status" data-copied></p>`;
   }
 
@@ -284,9 +264,10 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
       const barEnd = screen.querySelector('.place .bar')?.getBoundingClientRect().bottom || 80;
       const cardTop = screen.querySelector('.place .card')?.offsetTop || view * 0.6;
       const pinY = cardTop > barEnd ? clamp((barEnd + cardTop) / 2 + 20, barEnd + 50, cardTop - 10) : view * PIN_Y;
-      // Cover the screen, then zoom; the area sits under the pin as far as the map's edges allow.
-      // The map may end behind the card (it fades out there), so low-lying areas can still sit under the pin.
-      const scale = Math.max(W / img.width, H / img.height) * (img.zoom || 1);
+      // Cover the screen (not the whole page: a long card scrolls), then zoom; the area sits under the
+      // pin as far as the map's edges allow. The map may end behind the card (it fades out there), so
+      // low-lying areas can still sit under the pin.
+      const scale = Math.max(W / img.width, view / img.height) * (img.zoom || 1);
       const w = img.width * scale;
       const h = img.height * scale;
       const left = clamp(W / 2 - focus.x * w, W - w, 0);
