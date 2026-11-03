@@ -198,10 +198,13 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
   }
 
   // ---------- Open in maps (§5.2) ----------
-  // Google Maps everywhere [stated, 3 Nov: not Apple Maps], searching by the place's search line
-  // (Chinese name and address), which avoids the GCJ-02 offset of coordinates in mainland China
-  // [assumption: link format not checked from the build session; Q46].
-  const mapsUrl = (search) => 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search);
+  // By where the place is, on every phone: Google Maps for Hong Kong addresses, Amap for Shenzhen ones
+  // [stated, 3 Nov: Google Maps doesn't work in Shenzhen]. Both search by the place's search line (Chinese
+  // name and address), which avoids the GCJ-02 offset of coordinates in mainland China. Amap's link opens
+  // its app when installed, else its web page [assumption: link formats not checked from the build session; Q46].
+  const mapsUrl = (search, city) => (city === 'SZ'
+    ? 'https://uri.amap.com/search?keyword=' + encodeURIComponent(search) + '&city=' + encodeURIComponent('深圳') + '&callnative=1&src=hktrip'
+    : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search));
 
   // Uber for every Hong Kong address, DiDi only for Shenzhen ones [stated, 3 Nov].
   const rideApp = (city) => (city === 'SZ' ? 'DiDi' : 'Uber');
@@ -211,7 +214,7 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
     const app = rideApp(city);
     const copy = `<button type="button" class="btn-outline" data-copy="${esc(search)}" data-app="${app}">${main ? 'Copy the address for ' : 'Copy for '}${app}</button>`;
     return `<div class="maps${main ? '' : ' pair'}">
-      <a class="${main ? 'btn-primary' : 'btn-outline'}" href="${esc(mapsUrl(search))}" target="_blank" rel="noopener">Open in maps</a>${copy}
+      <a class="${main ? 'btn-primary' : 'btn-outline'}" href="${esc(mapsUrl(search, city))}" target="_blank" rel="noopener">Open in maps</a>${copy}
       </div><p class="msg" role="status" data-copied></p>`;
   }
 

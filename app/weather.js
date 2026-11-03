@@ -1,6 +1,6 @@
 // F5 Weather and what to wear (APP_SPEC F5). One small request to Open-Meteo for both cities
-// (no key), at most once an hour (data/weather.json → refresh_minutes) while a home screen that
-// needs it is open. The last forecast stays on the phone, so the lines still show offline.
+// (no key), forecast_days ahead, at most once every refresh_minutes (both in data/weather.json)
+// while a home screen that needs it is open. The last forecast stays on the phone for offline use.
 
 const STORE = 'hktrip.weather';
 const RETRY_MS = 5 * 60 * 1000; // after a failed try, wait before trying again
@@ -24,7 +24,7 @@ export function createWeather(cfg, onChange = () => {}) {
         longitude: cities.map((c) => cfg.places[c].lon).join(','),
         daily: DAILY,
         timezone: cfg.timezone,
-        forecast_days: '3'
+        forecast_days: String(cfg.forecast_days || 3)
       });
       const res = await fetch(cfg.source + '?' + q, { cache: 'no-store' });
       if (!res.ok) throw new Error('weather ' + res.status);

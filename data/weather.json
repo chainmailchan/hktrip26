@@ -4,6 +4,8 @@
   "timezone": "Asia/Hong_Kong",
   "credit": "Weather from Open-Meteo.com",
   "refresh_minutes": 60,
+  "forecast_days": 16,
+  "_forecast_days_note": "Open-Meteo's longest forecast [assumption: its documented maximum, from memory]. With 16 days the trip preview shows the real forecast for a day up to about two weeks ahead, and phones keep the whole trip's forecast for offline use once it is in range.",
   "places": {
     "HK": { "lat": 22.29, "lon": 114.2 },
     "SZ": { "lat": 22.54, "lon": 113.95 }

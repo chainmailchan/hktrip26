@@ -8,9 +8,9 @@
 // Then, against a fake GitHub for the live-data repo: ticking (with another phone saving at
 // the same time), ticks waiting offline, writing and clearing the announcement, and making a
 // setup code and setting up a phone from it (photo and camera). Then trip mode: plan button,
-// date line and weather by time of day, Schedule → Place → hotel, Open in maps (Google Maps)
-// and Uber or DiDi for every place on iPhone and Android, and the whole trip mode in airplane
-// mode after install.
+// date line and weather by time of day, Schedule → Place → hotel, Open in maps (Google Maps in
+// Hong Kong, Amap in Shenzhen) and Uber or DiDi for every place on iPhone and Android, and the
+// whole trip mode in airplane mode after install.
 //
 //   NODE_PATH="$(npm root -g)" node tools/check.mjs [screenshot-folder]
 
@@ -69,6 +69,7 @@ const schedule = await load('data/art-schedule.json');
 const manifest = await load('art/art-manifest.json');
 const itinerary = await load('data/itinerary.json');
 const trip = await load('data/trip.json');
+const weatherCfg = await load('data/weather.json');
 
 // Trip mode, shown through the trip preview (the real screens at a set date and time).
 const at = (date, time) => `?preview=trip&date=${date}&time=${time}`;
@@ -182,7 +183,9 @@ async function fakeWeather(ctx) {
   await ctx.route('https://api.open-meteo.com/**', (route) => {
     wx.calls++;
     if (wx.down) return route.abort('internetdisconnected');
-    const n = new URL(route.request().url()).searchParams.get('latitude').split(',').length;
+    const q = new URL(route.request().url()).searchParams;
+    wx.days = q.get('forecast_days');
+    const n = q.get('latitude').split(',').length;
     const one = { daily: { time: dates, weather_code: dates.map(() => 2), temperature_2m_max: dates.map(() => 29.4),
       temperature_2m_min: dates.map(() => 24.1), precipitation_probability_max: dates.map(() => 70) } };
     const body = n > 1 ? Array(n).fill(one) : one;
@@ -510,6 +513,7 @@ await flow('trip home, real clock', 'mama', async (page, gh, ctx) => {
   ctx.wx.down = false;
   await page.reload();
   if (!(await until(() => page.locator('.lines .line', { hasText: '29°, partly cloudy, rain likely' }).count()))) fail(name, 'forecast did not show');
+  if (ctx.wx.days !== String(weatherCfg.forecast_days)) fail(name, `asked for ${ctx.wx.days} forecast days, not ${weatherCfg.forecast_days}`);
   // Data: the forecast isn't downloaded again within the hour, and the trip home doesn't check packing ticks.
   const calls = ctx.wx.calls;
   gh.log.length = 0;
@@ -568,20 +572,23 @@ await flow('schedule, place and hotel', 'viewer', async (page, gh, ctx) => {
   if ((await openDays()).join() !== 'Thursday') fail(name, 'tapping Thursday opened: ' + (await openDays()).join());
   await page.click('[data-hotel]');
   if ((await page.textContent('.dialog .dialog-title')) !== 'The Stellar') fail(name, 'hotel card is not The Stellar');
-  if (!(await page.getAttribute('.dialog .btn-primary', 'href')).startsWith('https://www.google.com/maps/search/')) fail(name, 'hotel Open in maps');
+  if (!(await page.getAttribute('.dialog .btn-primary', 'href')).startsWith('https://www.google.com/maps/search/')) fail(name, 'The Stellar: Open in maps is not Google Maps');
   await page.mouse.click(phone.width / 2, 8);
   if (await page.locator('.dialog').count()) fail(name, 'tapping outside did not close the hotel card');
   await page.click('[data-home]');
   await page.waitForSelector('.home');
 });
 
-// Open in maps is Google Maps on iPhone and Android alike [stated, 3 Nov]; the copy button says Uber for
-// every Hong Kong address and DiDi only for Shenzhen ones [stated, 3 Nov], choices and hotels included.
+// Open in maps goes by where the place is, on iPhone and Android alike: Google Maps for Hong Kong addresses,
+// Amap for Shenzhen ones; the copy button says Uber for every Hong Kong address and DiDi only for Shenzhen
+// ones [stated, 3 Nov], choices and hotels included.
 const UA = {
   iPhone: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
   Android: 'Mozilla/5.0 (Linux; Android 14; SM-S926B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36'
 };
-const google = 'https://www.google.com/maps/search/?api=1&query=';
+const mapsFor = (search, city) => (city === 'SZ'
+  ? 'https://uri.amap.com/search?keyword=' + encodeURIComponent(search) + '&city=' + encodeURIComponent('深圳') + '&callnative=1&src=hktrip'
+  : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search));
 for (const [os, userAgent] of Object.entries(UA)) {
   const name = `maps and Uber or DiDi on ${os}`;
   await flow(name, 'viewer', async (page) => {
@@ -597,17 +604,18 @@ for (const [os, userAgent] of Object.entries(UA)) {
       const want = [s.search, ...(s.options || []).map((o) => o.search)].filter(Boolean);
       if (buttons.length !== want.length) fail(name, `${s.id}: ${buttons.length} map buttons, wanted ${want.length}`);
       buttons.forEach((b, i) => {
-        if (b.href !== google + encodeURIComponent(want[i] || '')) fail(name, `${s.id}: Open in maps ${b.href}`);
+        if (b.href !== mapsFor(want[i] || '', city)) fail(name, `${s.id} (${city}): Open in maps ${b.href}`);
         if (!b.copy.endsWith('for ' + app)) fail(name, `${s.id} (${city}): "${b.copy}"`);
       });
     }
     await open(page, at('2026-11-21', '12:00') + '#place/2026-11-21/shenzhen-bay-mixc');
     if (!(await page.getAttribute('#art .fit-map', 'src')).includes('map-sz-paper')) fail(name, 'not the Shenzhen map on a Shenzhen day');
-    for (const [date, hotel, app] of [['2026-11-18', 'The Stellar', 'Uber'], ['2026-11-21', 'The Mercury Garden', 'DiDi']]) {
+    for (const h of trip.hotels) {
+      const [date, hotel, app] = [h.nights[0], h.name, h.city === 'SZ' ? 'DiDi' : 'Uber'];
       await open(page, `${at(date, '12:00')}#schedule/${date}`);
       await page.click('[data-hotel]');
       const href = await page.getAttribute('.dialog .btn-primary', 'href');
-      if (!href.startsWith(google)) fail(name, `${hotel}: Open in maps ${href}`);
+      if (href !== mapsFor(h.search || h.address, h.city)) fail(name, `${hotel}: Open in maps ${href}`);
       if ((await page.textContent('.dialog [data-copy]')) !== 'Copy the address for ' + app) fail(name, `${hotel}: copy button is not ${app}`);
     }
   }, { userAgent });
@@ -654,4 +662,4 @@ if (problems.length) {
 }
 console.log(`OK: ${pages.length} screens, ${phrases.length} greetings and the emergency flow at ${phones.length} phone sizes; `
   + 'ticking, offline ticks, the announcement and phone setup (photo and camera); '
-  + 'trip mode by time of day, Schedule → Place → hotel, Google Maps and Uber or DiDi for every place on iPhone and Android, and airplane mode.');
+  + 'trip mode by time of day, Schedule → Place → hotel, Google Maps or Amap and Uber or DiDi for every place on iPhone and Android, and airplane mode.');
