@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.36, 2 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.37, 3 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -134,7 +134,7 @@ Top to bottom:
   - a 24-hour time, and `until` for time ranges;
   - an English name and, for places, the Chinese name;
   - one line on why we're going and one on what to try, where the plan has them;
-  - **`search`**: the line to paste into Google Maps/Uber or Amap/DiDi;
+  - **`search`**: the line Open in maps searches for in Google Maps, and that the copy button copies for Uber or DiDi;
   - an `optional` mark, and `options` for backups and lunch or dinner choices.
   - Ratings and the reasoning behind each pick are left out. Two unscheduled places (Duck Shing Ho egg rolls, UpperHills) sit in `extras`; phase 3 decides whether to show them [proposal].
 - One correction: the plan says to "clear arrival formalities" at Futian, but both the Hong Kong exit and Mainland entry checks are done at West Kowloon before boarding (§1a, sourced). The data says so at the West Kowloon stop.
@@ -151,20 +151,25 @@ Top to bottom:
 - Background: **Chan's Hong Kong street map** (paper style by default; navy available), zoomed ~160% and softened 30%, framed on the area of the place [proposal: per-place focus point in data]. A dotted line and a pin are drawn over it, **for mood only** [stated].
 - Card at the bottom: small line-art drawing of the food or activity, name, time and distance, one line on why we're going, and **"More about this place"**.
 - "More about this place" opens the detail view [carried over from v0.15 F4]: About | Getting there switch, 2–4 short lines, numbered plain-language steps, and one **"Open in maps"** button (Google Maps in HK; Amap or Apple Maps in Shenzhen, §5.2). No prices.
+- **Changed 3 Nov** [stated]: no "More about this place" button and no second screen. Everything, including the copy buttons, is on the one screen with the map. "Open in maps" is Google Maps everywhere: "Don't use Apple maps links, use Google Maps". Hong Kong addresses use Uber, never DiDi.
 - "Open in maps" can search by each stop's `search` line (Chinese name and address) instead of coordinates. That avoids the GCJ-02 offset problem in §5.2, and the plan recommends searching by Chinese name [proposal for phase 3].
 - **During the Shenzhen part of the trip, this screen (opened by tapping an itinerary item in the Schedule) uses Chan's Shenzhen map**, `art/map-sz-paper.jpg`, as its background [stated, 24 Oct]. It goes by the part of the trip, not by where each place is. "Shenzhen part" = the days whose city in `data/itinerary.json` is SZ (20–23 Nov) [proposal].
 - **As built (phase 3, `app/trip.js`)** [proposal on the details, except where marked]:
   - **Map:** the paper Hong Kong map, or the Shenzhen map on the Shenzhen days (`data/art-schedule.json` → `place_map`), scaled to cover the screen, zoom 1.6, soften 30%. The navy map is not used.
   - **Framed on the stop's area** [stated: plan OK (D1)]. Each map lists its areas in `art/art-manifest.json`: Hong Kong Central, Peak, Wan Chai, Causeway Bay, North Point, West Kowloon; Shenzhen Nanshan, Shenzhen Bay, Shekou, Futian, Bao'an. They were read off Chan's drawings by eye [assumption: check on the phone (Q47)]. Each stop names its area (`map_area`), matched from its address. A stop without one, or whose area isn't on that day's map (West Kowloon on 20 Nov), gets the map's default view (the harbour; Shenzhen Bay).
   - The pin sits in the middle of the map, between the top bar and the card. The map may end behind the card, where it fades out, so low-lying areas such as the Peak still sit under the pin.
-  - **Card:** a line drawing where one fits (`card_art`: dim sum, noodles, dessert or char siu, from the wireframe; Q47), the name, the Chinese name, the time (and "Optional"), one line (why, else "Try: …", else the note), and "More about this place" when the details add something.
+  - **Card, all on one screen** [stated, 3 Nov]:
+    - Contents: a line drawing where one fits (`card_art`: dim sum, noodles, dessert or char siu, from the wireframe; Q47), the name, the Chinese name, the time (and "Optional"), then every line the itinerary has: why, "Try: …" and the note.
+    - Buttons: **"Open in maps"** (filled) and **"Copy the address for Uber"** (DiDi in Shenzhen) [stated: plan OK (D6)], then the choices or backups, each with its own "Open in maps" and "Copy for Uber/DiDi".
+    - At least 28% of the screen shows the map above the card; a longer card makes the screen scroll [proposal].
     - No distance: the itinerary has no travel data.
+    - No "Getting there" steps: the itinerary has none. Steps added to a stop later would go on the same card [stated: plan OK (D2)].
     - The card is a solid card, as drawn in the wireframe; the halo rule is for text over the home art.
-  - **Details page:** name, Chinese name, day and time; why, "Try: …" and the note; **"Open in maps"** (filled) and **"Copy the address for Uber"** (DiDi in Shenzhen) [stated: plan OK (D6)]; then the choices or backups, each with its own "Open in maps" and "Copy for Uber/DiDi".
-    - No "About | Getting there" switch: the itinerary has no steps. It can come back for any stop that is given steps [stated: plan OK (D2)].
-  - **Open in maps** searches by the stop's `search` line: Google Maps in Hong Kong; in Shenzhen, Apple Maps on iPhones and Amap on Android (Papa) [assumption: link formats from memory, as the build session couldn't reach the docs; test on the phones (Q46)].
-    - A stop's own `city` overrides the day's for this: West Kowloon on 20 Nov gets Google Maps and Uber; Shekou on 24 Nov gets Apple Maps or Amap, and DiDi.
+  - **Open in maps:** Google Maps on every phone, in both cities, searching by the stop's `search` line [stated, 3 Nov].
+    - Papa's Android in Shenzhen uses Google Maps too, no longer Amap [proposal: reading "use Google Maps" as everywhere].
+    - [assumption: Google Maps may find fewer Shenzhen places than Amap does; link format from memory; test on the phones (Q46)]
     - The links open outside the app.
+  - **Uber or DiDi:** Uber for every Hong Kong address, DiDi only for Shenzhen addresses [stated, 3 Nov]. This goes by where the place is: a stop's own `city` overrides the day's. So West Kowloon on 20 Nov (a Shenzhen day) gets Uber, and the Shekou ferry terminal on 24 Nov gets DiDi. The check tests every place, its choices and both hotels.
   - Chinese names use the phone's own Chinese font (the app's font holds only the greeting characters): Traditional in Hong Kong, Simplified in Shenzhen.
 
 ### F5. Weather and what to wear [stated: keep] [carried over]
@@ -190,7 +195,7 @@ Top to bottom:
 
 ### F6. Hotel info [stated: "store hotel information just in case"] [carried over]
 - Opened from the "Tonight" row in F3. Name, address, check-in/out, "Open in maps". No phone button, no booking references [stated].
-- **As built (phase 3):** a dialog over the Schedule; tapping outside it or "Close" closes it. It shows the name, Chinese name, full name (Mercury Garden), address, "Check in from 15:00 · check out by 11:00", "Open in maps" and "Copy the address for Uber" (DiDi in Shenzhen) [proposal].
+- **As built (phase 3):** a dialog over the Schedule; tapping outside it or "Close" closes it. It shows the name, Chinese name, full name (Mercury Garden), address, "Check in from 15:00 · check out by 11:00", "Open in maps" (Google Maps) and "Copy the address for Uber" (DiDi for The Mercury Garden) [proposal; Google Maps and Uber/DiDi stated 3 Nov].
 
 ### F7. Help [stated, 23 Oct] (`Help`)
 1. **"Lost? Stay where you are."** Then: "message the family, or call Chan. We will come to you."
@@ -333,6 +338,7 @@ Full table in `art/art-manifest.json`. Summary:
 - **No runtime dependency on Google**: self-host fonts; no Google Maps embed; no Firebase.
 - "Open in maps" in Shenzhen: Amap or Apple Maps. Mainland maps use GCJ-02 while GPS/OSM use WGS-84 (offsets of hundreds of metres); store the datum with coordinates and convert before building Amap links [assumption: verify Amap URI parameters].
   - As built (phase 3): the links search by each stop's Chinese name and address (`search`), so no coordinates or conversion are needed (F4, Q46).
+  - **Changed 3 Nov:** Google Maps in Shenzhen too, not Apple Maps [stated]; and so not Amap [proposal] (F4).
 
 ### 5.3 Live data: GitHub only (no server, no bot [stated])
 - **A second, small, public repo holds the live files: `hktrip26scrt`** [stated, 24 Oct], so the phones' tokens can't touch the app. Read and written through the **GitHub REST API**, polled every 30 s while the app is open and immediately on reopen. Only the changed parts update; no reload, no scroll jump [stated].
@@ -465,8 +471,8 @@ Seed files are in `data/`:
 | Q42 | *Bottom* drawings are about 2 : 3, so the background colour fills the top third or more of the screen; "longer is probably nicer" [stated, 24 Oct] | **Answered:** no cropping ("the cropped all look worse"); keep the drawings and let them run under Safari's address bar [stated, 24 Oct] |
 | Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | **Partly answered:** Belle scanned Chan's code with the camera on her iPhone 16 Pro [stated, 27 Oct]. Mama's and Papa's phones still to test at the visit; "Take a photo of the code instead" is the fallback |
 | Q44 | `hktrip26scrt` is empty (no branches, 24 Oct); can the app create the first file there? | **Answered:** Chan added a README; announcements and ticks save [stated, 27 Oct] |
-| Q45 | Weather (F5): Open-Meteo's terms and the live service couldn't be checked from the build session (its network blocks open-meteo.com) [assumption: free for non-commercial use, with credit; the credit line is on the Schedule] | Open: check that the weather lines appear on the phones from 15 Nov. To let a session read the terms, allow `open-meteo.com` and `api.open-meteo.com` in the environment's network settings |
-| Q46 | "Open in maps" link formats (Google Maps in HK; Apple Maps on iPhones and Amap on Android in Shenzhen) are from memory [assumption] | Open: tap Open in maps for one Hong Kong and one Shenzhen place on each phone (Hidden pages → Trip days) |
+| Q45 | Weather (F5): Open-Meteo's terms and the live service couldn't be checked from the build session (its network blocks open-meteo.com) [assumption: free for non-commercial use, with credit; the credit line is on the Schedule]. Chan asked about other services (3 Nov). Options given, none checked from the session: Hong Kong Observatory open data (official, no key, Hong Kong only); MET Norway (no key, both cities); key-based services ruled out (the key would be public) [proposal] | Open: Chan to choose. Check that the weather lines appear on the phones from 15 Nov. To let a session read the terms, allow `open-meteo.com` and `api.open-meteo.com` in the environment's network settings |
+| Q46 | "Open in maps" is Google Maps everywhere (3 Nov). The link format is from memory, and Google Maps may not find every Shenzhen place by its search line [assumption] | Open: tap Open in maps for one Hong Kong and one Shenzhen place on each phone (Hidden pages → Trip days) |
 | Q47 | Place-map areas, read off the two drawings by eye, and the card drawings per stop (the dessert drawing is two ice-cream cones, used for Fook Yuen, Yee Shun and Bin Ma) [assumption / proposal] | Open: check in Hidden pages → Trip days |
 
 ---
@@ -514,8 +520,10 @@ Seed files are in `data/`:
 | 2 Nov | Chan's drawing of a suitcase above Victoria Harbour is the pre-trip home art (Q37). It goes on the pre-trip home, not behind the packing list [stated] |
 | 2 Nov | Chan's itinerary (screenshots) goes into the app, shortened: time, names, one line on why or what to try, the map search line, optional stops and choices. Flight home SQ883 at **14:10**. Hotel dates 17–20 / 20–24 [stated] |
 | 2 Nov | **Phase 3 plan approved** [stated: "Ok"]. D1: the Place map is framed on each stop's area. D2: no "Getting there" switch until a stop has steps. D3: Duck Shing Ho and UpperHills in an "If there's time" section. D4: no Packing button on the trip home. D5: the late-night time is 24-hour. D6: "Copy the address for Uber/DiDi" on the place details |
+| 3 Nov | Place card: everything on one screen with the map, no "More about this place" (F4). Open in maps: Google Maps, not Apple Maps. Hong Kong addresses: Uber, never DiDi [stated] |
 
 ## 11. Changelog
+- **v0.37 (3 Nov 2026):** Place card: all details and copy buttons on the one screen with the map; the details screen is removed (F4). Open in maps is Google Maps everywhere; Uber for every Hong Kong address (F4, F6, §5.2). Q45 and Q46 updated; 3 Nov decisions (§10).
 - **v0.36 (2 Nov 2026):** Phase 3 built: trip home (F2), Schedule (F3), Place card and details (F4), weather (F5), hotel card (F6), trip preview and Hidden pages → Trip days (§4.2). Phase 3 decisions D1–D6 (§10). New data `data/weather.json`, plus `place_map`, map areas, and `map_area`, `card_art` and `city` on stops (§6). Q31 built; Q45–Q47 added.
 - **v0.35 (2 Nov 2026):** Chan's itinerary entered in `data/itinerary.json` (F3) and hotel Chinese names and search lines added to `data/trip.json`; SQ883 at 14:10 (§1a); Q28 answered, Q30 partly answered; "Open in maps" by search line proposed (F4); itinerary stop format (§6).
 - **v0.34 (2 Nov 2026):** Pre-trip home art: Chan's suitcase drawing replaces the placeholder (F9, §4.2, Q37); offline download size updated (§5.1).

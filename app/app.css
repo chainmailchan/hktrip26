@@ -356,6 +356,8 @@ button.stop { width: 100%; border: none; border-top: 1px dashed var(--line); bac
   flex-direction: column;
 }
 .place .bar { padding: 0 8px; }
+/* At least this much map shows above the card; a long card makes the screen scroll instead. */
+.map-gap { flex: 1 0 auto; min-height: 28vh; min-height: 28svh; }
 .pill.on-map { background: rgba(243, 240, 234, 0.85); }
 .map-pin { position: absolute; left: 0; top: 0; }
 /* Placed and sized by app/trip.js. Fades out at its bottom edge, which may end behind the card. */
@@ -365,7 +367,6 @@ button.stop { width: 100%; border: none; border-top: 1px dashed var(--line); bac
 }
 .map-fade .art-img, .map-fade .map-pin { animation: fadein 1s ease-out both; }
 .card {
-  margin-top: auto;
   padding: 18px 20px 20px;
   border: 1px solid var(--line);
   border-radius: 22px;
@@ -385,19 +386,19 @@ button.stop { width: 100%; border: none; border-top: 1px dashed var(--line); bac
 .zh { font-family: -apple-system, system-ui, sans-serif; font-size: 20px; font-weight: 600; line-height: 1.3; text-wrap: balance; }
 .zh-big { font-size: 22px; }
 .card-time { font-size: 17px; color: #5F5C56; }
-.card-line { margin: 2px 0 6px; font-size: 18px; line-height: 1.4; }
+.card-line { margin: 2px 0 0; font-size: 18px; line-height: 1.4; }
+.card .maps { margin-top: 12px; }
+.card .maps.pair { margin-top: 10px; }
 .card .btn-primary, .dialog .btn-primary { background: #22211F; color: #FAF8F3; }
 
-/* Place details: paper page */
-.detail-name { margin: 14px 0 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700; line-height: 1.1; }
-.detail-when { margin-top: 6px; font-size: 17px; color: var(--ink-2); }
-.about { margin: 10px 0 0; font-size: 18px; line-height: 1.4; }
+/* Open in maps and the copy button (place card, hotel card) */
 .maps { margin-top: 18px; display: flex; flex-direction: column; gap: 10px; }
 .maps.pair { margin-top: 12px; flex-direction: row; flex-wrap: wrap; }
 .maps.pair > * { flex: 1 1 140px; }
 .maps + .msg { margin-top: 8px; }
-.options { margin-top: 10px; }
-.option { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); }
+.options { margin-top: 6px; }
+.options .list-head { margin-top: 12px; }
+.option { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--line); }
 .option-name { font-size: 19px; font-weight: 700; }
 
 /* ---------- dialog (F7: tap outside closes it) ---------- */

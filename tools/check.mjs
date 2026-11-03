@@ -1,15 +1,16 @@
 // Layout check at the four family phones (CLAUDE.md). Serves the repo like GitHub Pages
 // (ETag + 304), opens each screen in Chromium and fails on: text under 17 px, primary
-// buttons outside 60–64 px, tap targets under 48 px, sideways scrolling, a home screen or
-// place card that needs scrolling, a greeting that overflows, stretched art, or a map pin
-// hidden behind the card. Screens are checked as a phone that isn't set up, as Mama's phone
+// buttons outside 60–64 px, tap targets under 48 px, sideways scrolling, a home screen
+// that needs scrolling, a greeting that overflows, stretched art, or a place card that hides
+// the map or its pin. Screens are checked as a phone that isn't set up, as Mama's phone
 // and as Chan's (admin): pre-trip and trip-mode homes, every Schedule day, every place card
-// and its details, and both hotel cards. A fake weather service gives the longest lines.
+// and both hotel cards. A fake weather service gives the longest lines.
 // Then, against a fake GitHub for the live-data repo: ticking (with another phone saving at
 // the same time), ticks waiting offline, writing and clearing the announcement, and making a
 // setup code and setting up a phone from it (photo and camera). Then trip mode: plan button,
-// date line and weather by time of day, Schedule → Place → details → hotel, Open in maps and
-// copying on iPhone and Android, and the whole trip mode in airplane mode after install.
+// date line and weather by time of day, Schedule → Place → hotel, Open in maps (Google Maps)
+// and Uber or DiDi for every place on iPhone and Android, and the whole trip mode in airplane
+// mode after install.
 //
 //   NODE_PATH="$(npm root -g)" node tools/check.mjs [screenshot-folder]
 
@@ -115,8 +116,8 @@ const pages = [
   ['schedule-extras', `${at(trip.start, '12:00')}#schedule/extras`],
   ['hotel-hk', `${at('2026-11-18', '12:00')}#schedule/2026-11-18`, { prepare: openHotel }],
   ['hotel-sz', `${at('2026-11-21', '12:00')}#schedule/2026-11-21`, { prepare: openHotel }],
-  ...places.map(([name, url]) => [`place-${name}`, url, { noScroll: true, place: true }]),
-  ...places.map(([name, url]) => [`more-${name}`, url + '/more'])
+  // A long place card scrolls; the map must still show above it.
+  ...places.map(([name, url]) => [`place-${name}`, url, { place: true }])
 ];
 
 const problems = [];
@@ -215,6 +216,7 @@ function pinAudit() {
   const m = document.querySelector('.map-pin g')?.getAttribute('transform').match(/translate\(([\d.-]+) ([\d.-]+)\)/);
   if (!m) return ['no map pin'];
   const [x, y] = [+m[1], +m[2]];
+  if (card.top < innerHeight * 0.25) out.push(`card covers the map (starts at ${Math.round(card.top)})`);
   if (y - 44 < bar.bottom - 1 || y > card.top) out.push(`map pin not between the bar and the card (${Math.round(y)})`);
   if (x < 15 || x > innerWidth - 15) out.push('map pin off the side');
   if (img.left > 0.5 || img.right < innerWidth - 0.5 || img.top > 0.5 || img.bottom < card.top + 119) out.push('map does not cover the screen above the card');
@@ -551,17 +553,14 @@ await flow('schedule, place and hotel', 'viewer', async (page, gh, ctx) => {
   for (const p of await page.evaluate(pinAudit)) fail(name, 'from the Schedule: ' + p);
   if (!(await page.getAttribute('#art .fit-map', 'src')).includes('map-hk-paper')) fail(name, 'not the Hong Kong map');
   if (!(await page.textContent('[data-back]')).includes('Wednesday')) fail(name, 'back button is not "Wednesday"');
-  await page.click('.card .btn-primary');
-  await page.waitForSelector('.detail');
+  if (await page.locator('.card', { hasText: 'More about this place' }).count()) fail(name, 'card still has "More about this place"');
   const search = itinerary.days.find((d) => d.date === '2026-11-18').stops.find((s) => s.id === 'maxims-city-hall').search;
-  const maps = page.locator('.detail .maps .btn-primary').first();
+  const maps = page.locator('.card .maps .btn-primary').first();
   if ((await maps.getAttribute('href')) !== 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search)) fail(name, 'Open in maps: ' + await maps.getAttribute('href'));
   if ((await maps.getAttribute('target')) !== '_blank') fail(name, 'Open in maps would leave the app');
   await page.click('[data-copy]');
   if (!(await until(() => page.locator('[data-copied]', { hasText: 'Copied. Paste it into Uber.' }).count()))) fail(name, 'no "Copied" message');
   if ((await page.evaluate(() => navigator.clipboard.readText())) !== search) fail(name, 'copied the wrong text');
-  await page.click('[data-back]');
-  await page.waitForSelector('.place .card');
   await page.click('[data-back]');
   await page.waitForSelector('.schedule');
   if ((await openDays()).join() !== 'Wednesday') fail(name, 'back to the Schedule: open day ' + (await openDays()).join());
@@ -576,23 +575,41 @@ await flow('schedule, place and hotel', 'viewer', async (page, gh, ctx) => {
   await page.waitForSelector('.home');
 });
 
-// Shenzhen places open Apple Maps on iPhones and Amap on Android; a Hong Kong place on a Shenzhen day stays Google Maps.
+// Open in maps is Google Maps on iPhone and Android alike [stated, 3 Nov]; the copy button says Uber for
+// every Hong Kong address and DiDi only for Shenzhen ones [stated, 3 Nov], choices and hotels included.
 const UA = {
-  iPhone: ['Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1', 'https://maps.apple.com/?q='],
-  Android: ['Mozilla/5.0 (Linux; Android 14; SM-S926B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36', 'https://uri.amap.com/search?keyword=']
+  iPhone: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+  Android: 'Mozilla/5.0 (Linux; Android 14; SM-S926B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36'
 };
-for (const [os, [userAgent, prefix]] of Object.entries(UA)) {
-  const name = `Shenzhen maps on ${os}`;
+const google = 'https://www.google.com/maps/search/?api=1&query=';
+for (const [os, userAgent] of Object.entries(UA)) {
+  const name = `maps and Uber or DiDi on ${os}`;
   await flow(name, 'viewer', async (page) => {
+    const sweep = [
+      ...itinerary.days.flatMap((d) => d.stops.filter(hasCard).map((s) => [`${at(d.date, '12:00')}#place/${d.date}/${s.id}`, s, s.city || d.city])),
+      ...(itinerary.extras || []).map((e) => [`${at(trip.start, '12:00')}#place/extra/${e.id}`, e, e.city])
+    ];
+    for (const [url, s, city] of sweep) {
+      await open(page, url);
+      const app = city === 'SZ' ? 'DiDi' : 'Uber';
+      const buttons = await page.evaluate(() => [...document.querySelectorAll('.card .maps')].map((m) => ({
+        href: m.querySelector('a').getAttribute('href'), copy: m.querySelector('[data-copy]').textContent })));
+      const want = [s.search, ...(s.options || []).map((o) => o.search)].filter(Boolean);
+      if (buttons.length !== want.length) fail(name, `${s.id}: ${buttons.length} map buttons, wanted ${want.length}`);
+      buttons.forEach((b, i) => {
+        if (b.href !== google + encodeURIComponent(want[i] || '')) fail(name, `${s.id}: Open in maps ${b.href}`);
+        if (!b.copy.endsWith('for ' + app)) fail(name, `${s.id} (${city}): "${b.copy}"`);
+      });
+    }
     await open(page, at('2026-11-21', '12:00') + '#place/2026-11-21/shenzhen-bay-mixc');
     if (!(await page.getAttribute('#art .fit-map', 'src')).includes('map-sz-paper')) fail(name, 'not the Shenzhen map on a Shenzhen day');
-    await page.click('.card .btn-primary');
-    await page.waitForSelector('.detail');
-    if (!(await page.getAttribute('.detail .maps .btn-primary', 'href')).startsWith(prefix)) fail(name, 'Open in maps: ' + await page.getAttribute('.detail .maps .btn-primary', 'href'));
-    if ((await page.textContent('[data-copy]')) !== 'Copy the address for DiDi') fail(name, 'copy button: ' + await page.textContent('[data-copy]'));
-    await open(page, at('2026-11-20', '06:00') + '#place/2026-11-20/west-kowloon/more');
-    if (!(await page.getAttribute('.detail .maps .btn-primary', 'href')).startsWith('https://www.google.com/maps/')) fail(name, 'West Kowloon is not Google Maps');
-    if ((await page.textContent('[data-copy]')) !== 'Copy the address for Uber') fail(name, 'West Kowloon copy button is not Uber');
+    for (const [date, hotel, app] of [['2026-11-18', 'The Stellar', 'Uber'], ['2026-11-21', 'The Mercury Garden', 'DiDi']]) {
+      await open(page, `${at(date, '12:00')}#schedule/${date}`);
+      await page.click('[data-hotel]');
+      const href = await page.getAttribute('.dialog .btn-primary', 'href');
+      if (!href.startsWith(google)) fail(name, `${hotel}: Open in maps ${href}`);
+      if ((await page.textContent('.dialog [data-copy]')) !== 'Copy the address for ' + app) fail(name, `${hotel}: copy button is not ${app}`);
+    }
   }, { userAgent });
 }
 
@@ -621,9 +638,7 @@ await flow('airplane mode', 'mama', async (page, gh, ctx) => {
   await page.click('a.stop >> nth=0');
   await page.waitForSelector('.place .card');
   if (!(await loaded())) fail(name, 'map did not load');
-  await page.click('.card .btn-primary');
-  await page.waitForSelector('.detail');
-  await page.click('[data-back]');
+  if (!(await page.locator('.card .maps .btn-primary').count())) fail(name, 'no Open in maps on the card');
   await page.click('[data-back]');
   await page.waitForSelector('.schedule');
   await page.click('[data-hotel]');
@@ -639,4 +654,4 @@ if (problems.length) {
 }
 console.log(`OK: ${pages.length} screens, ${phrases.length} greetings and the emergency flow at ${phones.length} phone sizes; `
   + 'ticking, offline ticks, the announcement and phone setup (photo and camera); '
-  + 'trip mode by time of day, Schedule → Place → hotel, maps on iPhone and Android, and airplane mode.');
+  + 'trip mode by time of day, Schedule → Place → hotel, Google Maps and Uber or DiDi for every place on iPhone and Android, and airplane mode.');
