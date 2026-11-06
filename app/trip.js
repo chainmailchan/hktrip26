@@ -2,7 +2,7 @@
 // the place, with "Open in maps" and the copy button), and the hotel card. Everything shown comes from data/itinerary.json,
 // data/trip.json, data/art-schedule.json and art/art-manifest.json.
 
-import { esc, weekday, dayOfMonth, dayMonth, copyText } from './util.js';
+import { esc, weekday, dayOfMonth, dayMonth, copyText, phoneOS } from './util.js';
 import { themeVars, rgba, findImage } from './art.js';
 
 const PIN_Y = 0.3; // fallback: the pin 30% down the screen (spec/wireframes/Place.dc.html: 250 of 844)
@@ -200,11 +200,24 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
   // ---------- Open in maps (§5.2) ----------
   // By where the place is, on every phone: Google Maps for Hong Kong addresses, Amap for Shenzhen ones
   // [stated, 3 Nov: Google Maps doesn't work in Shenzhen]. Both search by the place's search line (Chinese
-  // name and address), which avoids the GCJ-02 offset of coordinates in mainland China. Amap's link opens
-  // its app when installed, else its web page [assumption: link formats not checked from the build session; Q46].
-  const mapsUrl = (search, city) => (city === 'SZ'
-    ? 'https://uri.amap.com/search?keyword=' + encodeURIComponent(search) + '&city=' + encodeURIComponent('深圳') + '&callnative=1&src=hktrip'
-    : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search));
+  // name and address), which avoids the GCJ-02 offset of coordinates in mainland China.
+  // Amap: straight into its app [proposal, 6 Nov: its web link opened a browser page instead]. iPhones use
+  // Amap's own link, so Amap must be installed; Android uses an app link that falls back to Amap's web page
+  // when the app isn't there; anything else gets the web page [assumption: link formats and the Android
+  // package name are from memory, not checked from the build session; Q46].
+  // Returns { href, app }: app links open in place, web pages in a new tab (outside the installed app).
+  function mapsLink(search, city) {
+    const q = encodeURIComponent(search);
+    if (city !== 'SZ') return { href: 'https://www.google.com/maps/search/?api=1&query=' + q, app: false };
+    const web = 'https://uri.amap.com/search?keyword=' + q + '&city=' + encodeURIComponent('深圳') + '&callnative=1&src=hktrip';
+    const os = phoneOS();
+    if (os === 'ios') return { href: 'iosamap://poi?sourceApplication=hktrip&name=' + q + '&dev=0', app: true };
+    if (os === 'android') {
+      return { href: 'intent://poi?sourceApplication=hktrip&keywords=' + q + '&dev=0#Intent;scheme=androidamap;package=com.autonavi.minimap;S.browser_fallback_url='
+        + encodeURIComponent(web) + ';end', app: true };
+    }
+    return { href: web, app: false };
+  }
 
   // Uber for every Hong Kong address, DiDi only for Shenzhen ones [stated, 3 Nov].
   const rideApp = (city) => (city === 'SZ' ? 'DiDi' : 'Uber');
@@ -212,9 +225,10 @@ export function createTrip({ trip, itinerary, schedule, manifest, credit, screen
   // The filled button and "Copy the address for Uber" (DiDi in Shenzhen); outlined pair for choices.
   function mapsHtml(search, city, main) {
     const app = rideApp(city);
+    const link = mapsLink(search, city);
     const copy = `<button type="button" class="btn-outline" data-copy="${esc(search)}" data-app="${app}">${main ? 'Copy the address for ' : 'Copy for '}${app}</button>`;
     return `<div class="maps${main ? '' : ' pair'}">
-      <a class="${main ? 'btn-primary' : 'btn-outline'}" href="${esc(mapsUrl(search, city))}" target="_blank" rel="noopener">Open in maps</a>${copy}
+      <a class="${main ? 'btn-primary' : 'btn-outline'}" href="${esc(link.href)}"${link.app ? '' : ' target="_blank" rel="noopener"'}>Open in maps</a>${copy}
       </div><p class="msg" role="status" data-copied></p>`;
   }
 

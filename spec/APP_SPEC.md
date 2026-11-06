@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.39, 3 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.40, 6 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -168,7 +168,10 @@ Top to bottom:
     - The card is a solid card, as drawn in the wireframe; the halo rule is for text over the home art.
   - **Open in maps** goes by where the place is, on every phone, and searches by the stop's `search` line [stated, 3 Nov]:
     - Hong Kong addresses open Google Maps.
-    - Shenzhen addresses open Amap. The link opens the Amap app if it is installed, otherwise Amap's web page [assumption: link format from memory; Q46].
+    - Shenzhen addresses open Amap. Until 6 Nov this was Amap's web link, which on Chan's phone opened a browser page even with Amap installed [stated, 6 Nov]. It now goes straight into the Amap app [proposal; assumption: link formats from memory; Q46]:
+      - iPhones use Amap's own app link, so **Amap must be installed on each iPhone**; without it, the iPhone says it can't open the link.
+      - Android (Papa) uses an app link that opens Amap's web page by itself if the app isn't installed.
+      - Other devices (e.g. a computer) get the web page.
     - A stop's own `city` overrides the day's: West Kowloon on 20 Nov gets Google Maps; the Shekou ferry terminal on 24 Nov gets Amap.
     - The links open outside the app.
   - **Uber or DiDi:** Uber for every Hong Kong address, DiDi only for Shenzhen addresses [stated, 3 Nov]. This goes by where the place is: a stop's own `city` overrides the day's. So West Kowloon on 20 Nov (a Shenzhen day) gets Uber, and the Shekou ferry terminal on 24 Nov gets DiDi. The check tests every place, its choices and both hotels.
@@ -475,7 +478,7 @@ Seed files are in `data/`:
 | Q43 | Live camera scanning in the installed app on Mama's iPhone 14 Pro and Papa's S24+ [assumption] | **Answered:** the camera scan worked on Mama's and Papa's phones [stated, 3 Nov]; Belle's iPhone 16 Pro on 27 Oct [stated] |
 | Q44 | `hktrip26scrt` is empty (no branches, 24 Oct); can the app create the first file there? | **Answered:** Chan added a README; announcements and ticks save [stated, 27 Oct] |
 | Q45 | Weather (F5): Open-Meteo's terms and the live service couldn't be checked from the build session (its network blocks open-meteo.com) [assumption: free for non-commercial use, with credit; the credit line is on the Schedule]. Other services were discussed on 3 Nov (the Hong Kong Observatory, MET Norway); **Open-Meteo kept** [stated] | Open: test on the phones. (1) Open the forecast link in Safari: https://api.open-meteo.com/v1/forecast?latitude=22.29,22.54&longitude=114.2,113.95&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FHong_Kong&forecast_days=16. It should show two blocks of numbers, one per city, each with 16 dates. (2) After merging, open the trip preview for 17 or 18 Nov: the weather lines should show real numbers, without "Example:". To let a session read the terms, allow `open-meteo.com` and `api.open-meteo.com` in the environment's network settings |
-| Q46 | "Open in maps": Google Maps for Hong Kong, Amap for Shenzhen (3 Nov). The Amap link format is from memory, and it opens the Amap app only if it is installed [assumption] | Open: install Amap on the phones that will use it; tap Open in maps for one Hong Kong and one Shenzhen place on each phone (Hidden pages → Trip days) |
+| Q46 | "Open in maps": Google Maps for Hong Kong, Amap for Shenzhen (3 Nov). Amap's web link opened a browser page instead of the app [stated, 6 Nov], so Shenzhen now uses Amap's app links (F4). Their format, and whether Amap finds a place from its full search line, are from memory [assumption] | Open: install Amap on every iPhone; on each phone, tap Open in maps for one Hong Kong and one Shenzhen place (Hidden pages → Trip days) and check that Amap opens on the right place |
 | Q47 | Place-map areas, read off the two drawings by eye, and the card drawings per stop (the dessert drawing is two ice-cream cones, used for Fook Yuen, Yee Shun and Bin Ma) [assumption / proposal] | Open: check in Hidden pages → Trip days |
 
 ---
@@ -528,6 +531,7 @@ Seed files are in `data/`:
 | 3 Nov | All four phones set up (setup visit done); the camera scan worked on Mama's and Papa's phones (Q43) [stated] |
 
 ## 11. Changelog
+- **v0.40 (6 Nov 2026):** Shenzhen "Open in maps" goes straight into the Amap app (iPhone: Amap's own link; Android: an app link that falls back to the web page), since the web link opened a browser page (F4, Q46).
 - **v0.39 (3 Nov 2026):** All four phones set up (§5.5, §7, §10); Q43 answered (the camera scan worked on Mama's and Papa's phones).
 - **v0.38 (3 Nov 2026):** Open in maps: Amap for Shenzhen addresses, Google Maps for Hong Kong (F4, F6, §5.2). Open-Meteo kept, with the forecast now 16 days ahead so it can be tested in the trip preview before the trip (F5). Q45 and Q46 updated; 3 Nov decisions (§10).
 - **v0.37 (3 Nov 2026):** Place card: all details and copy buttons on the one screen with the map; the details screen is removed (F4). Open in maps is Google Maps everywhere; Uber for every Hong Kong address (F4, F6, §5.2). Q45 and Q46 updated; 3 Nov decisions (§10).
