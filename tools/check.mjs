@@ -586,9 +586,16 @@ const UA = {
   iPhone: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
   Android: 'Mozilla/5.0 (Linux; Android 14; SM-S926B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36'
 };
-const mapsFor = (search, city) => (city === 'SZ'
-  ? 'https://uri.amap.com/search?keyword=' + encodeURIComponent(search) + '&city=' + encodeURIComponent('深圳') + '&callnative=1&src=hktrip'
-  : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search));
+// As app/trip.js: Shenzhen opens the Amap app (iPhone: its own link; Android: an app link that falls back to
+// Amap's web page); Hong Kong opens Google Maps in a new tab.
+const mapsFor = (search, city, os) => {
+  const q = encodeURIComponent(search);
+  if (city !== 'SZ') return 'https://www.google.com/maps/search/?api=1&query=' + q;
+  if (os === 'iPhone') return 'iosamap://poi?sourceApplication=hktrip&name=' + q + '&dev=0';
+  const web = 'https://uri.amap.com/search?keyword=' + q + '&city=' + encodeURIComponent('深圳') + '&callnative=1&src=hktrip';
+  return 'intent://poi?sourceApplication=hktrip&keywords=' + q + '&dev=0#Intent;scheme=androidamap;package=com.autonavi.minimap;S.browser_fallback_url='
+    + encodeURIComponent(web) + ';end';
+};
 for (const [os, userAgent] of Object.entries(UA)) {
   const name = `maps and Uber or DiDi on ${os}`;
   await flow(name, 'viewer', async (page) => {
@@ -600,11 +607,12 @@ for (const [os, userAgent] of Object.entries(UA)) {
       await open(page, url);
       const app = city === 'SZ' ? 'DiDi' : 'Uber';
       const buttons = await page.evaluate(() => [...document.querySelectorAll('.card .maps')].map((m) => ({
-        href: m.querySelector('a').getAttribute('href'), copy: m.querySelector('[data-copy]').textContent })));
+        href: m.querySelector('a').getAttribute('href'), target: m.querySelector('a').getAttribute('target'), copy: m.querySelector('[data-copy]').textContent })));
       const want = [s.search, ...(s.options || []).map((o) => o.search)].filter(Boolean);
       if (buttons.length !== want.length) fail(name, `${s.id}: ${buttons.length} map buttons, wanted ${want.length}`);
       buttons.forEach((b, i) => {
-        if (b.href !== mapsFor(want[i] || '', city)) fail(name, `${s.id} (${city}): Open in maps ${b.href}`);
+        if (b.href !== mapsFor(want[i] || '', city, os)) fail(name, `${s.id} (${city}): Open in maps ${b.href}`);
+        if (b.target !== (city === 'SZ' ? null : '_blank')) fail(name, `${s.id} (${city}): Open in maps target ${b.target}`);
         if (!b.copy.endsWith('for ' + app)) fail(name, `${s.id} (${city}): "${b.copy}"`);
       });
     }
@@ -615,7 +623,7 @@ for (const [os, userAgent] of Object.entries(UA)) {
       await open(page, `${at(date, '12:00')}#schedule/${date}`);
       await page.click('[data-hotel]');
       const href = await page.getAttribute('.dialog .btn-primary', 'href');
-      if (href !== mapsFor(h.search || h.address, h.city)) fail(name, `${hotel}: Open in maps ${href}`);
+      if (href !== mapsFor(h.search || h.address, h.city, os)) fail(name, `${hotel}: Open in maps ${href}`);
       if ((await page.textContent('.dialog [data-copy]')) !== 'Copy the address for ' + app) fail(name, `${hotel}: copy button is not ${app}`);
     }
   }, { userAgent });
