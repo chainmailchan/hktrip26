@@ -5,7 +5,7 @@
       "date": "2026-11-17",
       "city": "HK",
       "label": "Hong Kong",
-      "title": "Arrival and traditional afternoon tea",
+      "title": "Arrival, then Causeway Bay food and shopping",
       "stops": [
         {
           "id": "arrive-hkia",
@@ -14,53 +14,47 @@
           "_note": "Itinerary time. Trip.com lists 12:40; re-check on 10 Nov (Q30)"
         },
         {
-          "id": "to-stellar",
-          "time": "14:30",
-          "until": "15:30",
-          "name": "To The Stellar: check in and rest"
+          "id": "checkin-17",
+          "name": "Check in at The Stellar"
         },
         {
-          "id": "peninsula-ice-room",
-          "time": "16:00",
-          "name": "Afternoon tea at Peninsula Ice Room",
-          "name_zh": "半島冰室",
-          "try": "French toast, corned-beef and egg sandwich, pineapple bun, milk tea",
-          "note": "Order lightly: dinner is two hours later.",
-          "search": "半島冰室 北角炮台山宏安道14-28號威德閣地下2號舖",
-          "map_area": "north-point",
-          "options_title": "Backup",
-          "options": [
-            {
-              "name": "Cheung Fat Restaurant",
-              "name_zh": "祥發茶餐小廚",
-              "why": "Known for Swiss-sauce chicken legs; further from Sister Wah",
-              "search": "祥發茶餐小廚 北角七姊妹道27D號"
-            }
-          ]
-        },
-        {
-          "id": "sister-wah",
-          "time": "18:00",
-          "name": "Dinner at Sister Wah",
-          "name_zh": "華姐清湯腩",
-          "why": "A short taxi ride from Peninsula Ice Room",
-          "try": "Clear-soup beef brisket noodles, beef tendon and tripe",
-          "search": "華姐清湯腩 香港天后電氣道13A號",
-          "map_area": "north-point",
+          "id": "kong-chai-kee",
+          "name": "Lunch at Kong Chai Kee",
+          "name_zh": "江仔記粉麵專家",
+          "try": "Fishball noodles, fish-skin dumplings, chilli oil",
+          "note": "Search by the restaurant name: nearby street numbers get mixed up.",
+          "search": "江仔記粉麵專家 銅鑼灣堅拿道東2號",
+          "map_area": "causeway-bay",
           "card_art": "noodles"
         },
         {
-          "id": "fook-yuen",
-          "time": "19:15",
-          "name": "Dessert at Fook Yuen, or back to the hotel",
-          "name_zh": "福元湯圓",
-          "optional": true,
-          "try": "Peanut or black-sesame rice balls in ginger syrup",
-          "search": "福元湯圓 北角炮台山福元街7號利都樓地下I-1號舖",
-          "map_area": "north-point",
+          "id": "apple-causeway-bay",
+          "name": "Apple Causeway Bay and the shops around it",
+          "search": "Apple Causeway Bay",
+          "map_area": "causeway-bay",
+          "_note": "Search by name: the store's address isn't in the plan"
+        },
+        {
+          "id": "maks-percival",
+          "name": "Dinner at Mak’s Noodle, Percival Street",
+          "name_zh": "麥奀雲吞麵世家",
+          "try": "Wonton noodle soup",
+          "search": "麥奀雲吞麵世家 銅鑼灣波斯富街",
+          "map_area": "causeway-bay",
+          "card_art": "noodles",
+          "_note": "Percival Street branch [stated, 16 Nov]; search by name and street (波斯富街 = Percival Street), as the street number isn't in the plan"
+        },
+        {
+          "id": "yee-shun",
+          "name": "Dessert at Yee Shun Milk Company",
+          "name_zh": "港澳義順牛奶公司",
+          "try": "Steamed milk pudding: try it hot and chilled",
+          "search": "港澳義順牛奶公司 銅鑼灣駱克道506號",
+          "map_area": "causeway-bay",
           "card_art": "dessert"
         }
-      ]
+      ],
+      "_note": "Plan after landing from Chan, 16 Nov [stated]: check in, Kong Chai Kee, Apple Causeway Bay and the shops around it, Mak's Noodle on Percival Street, Yee Shun. No times given, so these stops have none. Replaces the 2 Nov plan (Peninsula Ice Room, Sister Wah, Fook Yuen)."
     },
     {
       "date": "2026-11-18",

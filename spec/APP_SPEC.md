@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.40, 6 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.41, 16 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -529,8 +529,10 @@ Seed files are in `data/`:
 | 3 Nov | Place card: everything on one screen with the map, no "More about this place" (F4). Open in maps: Google Maps, not Apple Maps. Hong Kong addresses: Uber, never DiDi [stated] |
 | 3 Nov | Amap for Shenzhen addresses ("google maps doesn't work in Shenzhen"), Google Maps for Hong Kong. Keep Open-Meteo for the weather (Q45) [stated] |
 | 3 Nov | All four phones set up (setup visit done); the camera scan worked on Mama's and Papa's phones (Q43) [stated] |
+| 16 Nov | **Tue 17 Nov after landing** [stated]: check in at The Stellar; lunch at Kong Chai Kee; Apple Causeway Bay and the shopping around it; dinner at Mak's Noodle on Percival Street; dessert at Yee Shun Milk Company. No times given. Replaces Peninsula Ice Room, Sister Wah and Fook Yuen |
 
 ## 11. Changelog
+- **v0.41 (16 Nov 2026):** Tue 17 Nov plan after landing replaced (`data/itinerary.json`, §10); data only.
 - **v0.40 (6 Nov 2026):** Shenzhen "Open in maps" goes straight into the Amap app (iPhone: Amap's own link; Android: an app link that falls back to the web page), since the web link opened a browser page (F4, Q46).
 - **v0.39 (3 Nov 2026):** All four phones set up (§5.5, §7, §10); Q43 answered (the camera scan worked on Mama's and Papa's phones).
 - **v0.38 (3 Nov 2026):** Open in maps: Amap for Shenzhen addresses, Google Maps for Hong Kong (F4, F6, §5.2). Open-Meteo kept, with the forecast now 16 days ahead so it can be tested in the trip preview before the trip (F5). Q45 and Q46 updated; 3 Nov decisions (§10).
