@@ -573,9 +573,15 @@ await flow('schedule, place and hotel', 'viewer', async (page, gh, ctx) => {
   if ((await openDays()).join() !== 'Wednesday') fail(name, 'back to the Schedule: open day ' + (await openDays()).join());
   await page.click('[data-day="2026-11-19"]');
   if ((await openDays()).join() !== 'Thursday') fail(name, 'tapping Thursday opened: ' + (await openDays()).join());
-  // Travel and rest rows have nothing to open.
-  const plain = itinerary.days.find((d) => d.date === '2026-11-19').stops.find((s) => !hasCard(s));
-  if (plain && await page.locator('a.stop', { hasText: plain.name }).count()) fail(name, `"${plain.name}" opens a place card`);
+  // Travel and rest rows have nothing to open (on the first day that has one).
+  const plainDay = itinerary.days.find((d) => d.stops.some((s) => !hasCard(s)) && trip.hotels.some((h) => h.city === 'HK' && h.nights.includes(d.date)));
+  if (!plainDay) fail(name, 'no Hong Kong day with a travel or rest row to test');
+  else {
+    if (plainDay.date !== '2026-11-19') await page.click(`[data-day="${plainDay.date}"]`);
+    const plain = plainDay.stops.find((s) => !hasCard(s));
+    if (!(await page.locator('.stop.plain', { hasText: plain.name }).count())) fail(name, `"${plain.name}" is not a plain row`);
+    if (await page.locator('a.stop', { hasText: plain.name }).count()) fail(name, `"${plain.name}" opens a place card`);
+  }
   await page.click('[data-hotel]');
   if ((await page.textContent('.dialog .dialog-title')) !== 'The Stellar') fail(name, 'hotel card is not The Stellar');
   if (!(await page.getAttribute('.dialog .btn-primary', 'href')).startsWith('https://www.google.com/maps/search/')) fail(name, 'The Stellar: Open in maps is not Google Maps');

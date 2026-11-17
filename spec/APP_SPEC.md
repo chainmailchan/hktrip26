@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.42, 17 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.43, 17 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -531,8 +531,10 @@ Seed files are in `data/`:
 | 3 Nov | All four phones set up (setup visit done); the camera scan worked on Mama's and Papa's phones (Q43) [stated] |
 | 16 Nov | **Tue 17 Nov after landing** [stated]: check in at The Stellar; lunch at Kong Chai Kee; Apple Causeway Bay and the shopping around it; dinner at Mak's Noodle on Percival Street; dessert at Yee Shun Milk Company. No times given. Replaces Peninsula Ice Room, Sister Wah and Fook Yuen |
 | 17 Nov | **Wed 18 Nov replaced** [stated]: 10:00 dim sum brunch at Kam Kong (Dundas St); 11:45 Shanghai Street kitchenware (Chan Chi Kee, Man Kee, Wing On Ho, Nos. 316–342); 13:00 In's Point (530 Nathan Rd; no toilets); 14:30 Sino Centre (optional, 582 Nathan Rd); 15:30 snack, Kai Kai (Mong Kok) or 仁之初; 16:15 Kowloon Park and the Heritage Discovery Centre (closes 18:00); 17:30 Avenue of Stars (sunset ~17:40); 18:15 Mak's Noodle, Lock Rd, TST (open to 23:00); 20:00 Symphony of Lights farewell (fireworks; projections 20:45). Replaces Central, Apple IFC and Victoria Peak |
+| 17 Nov | **Thu 19 Nov replaced (tentative)** [stated]: 09:30 coffee at Yeaffee (Wan Chai); 09:45 Bakehouse (~300 m away); 11:00 early lunch at Chukfo Taipan; 12:30 Central and PMQ (shops open at noon; uphill); 14:30 DON DON DONKI Central (100 Queen's Rd Central, ~330 m from PMQ); 15:30 ifc mall (rest stop, optional); 18:00 The Diplomat (burgers; arrive at opening; 45 Pottinger St); 19:30 Victoria Peak (Peak Tram up for the night view). Replaces Blue House, the Causeway Bay food stops and Victoria Park |
 
 ## 11. Changelog
+- **v0.43 (17 Nov 2026):** Thu 19 Nov replaced with Chan's tentative plan (`data/itinerary.json`, §10); data only.
 - **v0.42 (17 Nov 2026):** Wed 18 Nov replaced with Chan's Kowloon plan (`data/itinerary.json`, §10); two Kowloon map areas, Tsim Sha Tsui and Mong Kok (`art/art-manifest.json`, F4) [assumption: read off the drawing by eye]; data only.
 - **v0.41 (16 Nov 2026):** Tue 17 Nov plan after landing replaced (`data/itinerary.json`, §10); data only.
 - **v0.40 (6 Nov 2026):** Shenzhen "Open in maps" goes straight into the Amap app (iPhone: Amap's own link; Android: an app link that falls back to the web page), since the web link opened a browser page (F4, Q46).

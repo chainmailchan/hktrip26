@@ -154,36 +154,28 @@
       "date": "2026-11-19",
       "city": "HK",
       "label": "Hong Kong",
-      "title": "Wan Chai, roast meats and Causeway Bay food",
-      "tip": "Kong Chai Kee, Yee Shun and Keung Kee are tasting stops: share portions and skip any if everyone is full.",
+      "title": "Wan Chai, Central and the Peak at night",
       "stops": [
         {
-          "id": "leave-19",
-          "time": "09:00",
-          "name": "Leave The Stellar"
+          "id": "yeaffee",
+          "time": "09:30",
+          "name": "Coffee at Yeaffee",
+          "search": "Yeaffee Wan Chai",
+          "map_area": "wan-chai"
         },
         {
           "id": "bakehouse",
-          "time": "09:30",
+          "time": "09:45",
           "name": "Bakehouse, Wan Chai",
+          "why": "About 300 m away",
           "try": "Sourdough egg tart. Buy pastries for later rather than filling up before lunch.",
           "search": "Bakehouse 灣仔大王東街14號",
           "map_area": "wan-chai"
         },
         {
-          "id": "blue-house",
-          "time": "10:15",
-          "name": "Blue House and nearby streets",
-          "name_zh": "藍屋",
-          "optional": true,
-          "why": "Colourful heritage building; a short look outside is enough",
-          "search": "藍屋 香港灣仔石水渠街72號",
-          "map_area": "wan-chai"
-        },
-        {
           "id": "chukfo-taipan",
-          "time": "11:30",
-          "name": "Roast-meat lunch at Chukfo Taipan",
+          "time": "11:00",
+          "name": "Early lunch at Chukfo Taipan",
           "name_zh": "竺扶大班燒味",
           "try": "Roast goose, char siu, crispy pork belly or the mixed roast rice",
           "search": "竺扶大班燒味 灣仔三角街2-3號華欣閣地下3號舖",
@@ -191,58 +183,56 @@
           "card_art": "charsiu"
         },
         {
-          "id": "to-causeway-bay",
-          "time": "12:45",
-          "name": "To Causeway Bay for browsing"
+          "id": "pmq",
+          "time": "12:30",
+          "name": "Central and PMQ",
+          "note": "The shops open at noon. It’s uphill.",
+          "search": "PMQ Central Hong Kong",
+          "map_area": "central"
         },
         {
-          "id": "kong-chai-kee",
+          "id": "donki-central",
           "time": "14:30",
-          "name": "Fishball noodles at Kong Chai Kee: share a light portion",
-          "name_zh": "江仔記粉麵專家",
-          "try": "Fishball noodles, fish-skin dumplings, chilli oil",
-          "note": "Search by the restaurant name: nearby street numbers get mixed up.",
-          "search": "江仔記粉麵專家 銅鑼灣堅拿道東2號",
-          "map_area": "causeway-bay",
-          "card_art": "noodles",
-          "options_title": "Instead",
+          "name": "DON DON DONKI Central",
+          "why": "About 330 m from PMQ, at 100 Queen’s Road Central",
+          "search": "DON DON DONKI 100 Queen's Road Central",
+          "map_area": "central"
+        },
+        {
+          "id": "ifc",
+          "time": "15:30",
+          "name": "ifc mall: a rest stop",
+          "optional": true,
+          "search": "ifc mall 8 Finance Street Central Hong Kong",
+          "map_area": "central"
+        },
+        {
+          "id": "the-diplomat",
+          "time": "18:00",
+          "name": "Burgers at The Diplomat",
+          "note": "Arrive when it opens.",
+          "search": "The Diplomat 45 Pottinger Street Central",
+          "map_area": "central"
+        },
+        {
+          "id": "victoria-peak",
+          "time": "19:30",
+          "name": "Victoria Peak at night",
+          "name_zh": "山頂凌霄閣",
+          "why": "Peak Tram up for the night view",
+          "search": "山頂凌霄閣 香港山頂山頂道128號",
+          "map_area": "peak",
+          "options_title": "Peak Tram",
           "options": [
             {
-              "name": "Keung Kee: old-school street snacks",
-              "name_zh": "強記美食",
-              "try": "Pan-fried dried-shrimp rice rolls (香煎蝦米腸粉) or preserved-meat sticky rice (臘味糯米飯)",
-              "search": "強記美食 灣仔駱克道406號"
+              "name": "Peak Tram, lower station",
+              "name_zh": "山頂纜車中環總站",
+              "search": "山頂纜車中環總站 33 Garden Road Central Hong Kong"
             }
           ]
-        },
-        {
-          "id": "yee-shun",
-          "time": "15:30",
-          "name": "Yee Shun Milk Company",
-          "name_zh": "港澳義順牛奶公司",
-          "try": "Steamed milk pudding: try it hot and chilled",
-          "search": "港澳義順牛奶公司 銅鑼灣駱克道506號",
-          "map_area": "causeway-bay",
-          "card_art": "dessert"
-        },
-        {
-          "id": "victoria-park",
-          "time": "16:15",
-          "name": "Victoria Park",
-          "optional": true
-        },
-        {
-          "id": "rest-19",
-          "time": "17:00",
-          "name": "Back to the hotel to rest"
-        },
-        {
-          "id": "dinner-19",
-          "time": "18:30",
-          "name": "Local dinner, only if hungry",
-          "optional": true
         }
-      ]
+      ],
+      "_note": "Tentative plan from Chan, 17 Nov [stated]; replaces the 2 Nov plan (Blue House, Causeway Bay food stops, Victoria Park). Bakehouse, Chukfo Taipan, the ifc address and the Peak keep the details from Chan's 2 Nov itinerary."
     },
     {
       "date": "2026-11-20",
