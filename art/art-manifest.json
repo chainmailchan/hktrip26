@@ -204,7 +204,9 @@
         "wan-chai": { "x": 0.49, "y": 0.65 },
         "causeway-bay": { "x": 0.55, "y": 0.64 },
         "north-point": { "x": 0.64, "y": 0.61 },
-        "west-kowloon": { "x": 0.38, "y": 0.55 }
+        "west-kowloon": { "x": 0.38, "y": 0.55 },
+        "tsim-sha-tsui": { "x": 0.45, "y": 0.57 },
+        "mong-kok": { "x": 0.44, "y": 0.48 }
       },
       "note": "Mood only; source/attribution TBD. focus = default framing (the harbour); areas = where each district sits on this drawing (x, y as shares of the image), read off it by eye [assumption, 2 Nov]; a stop names its area with map_area",
       "bytes": 484039
@@ -226,7 +228,9 @@
         "wan-chai": { "x": 0.49, "y": 0.65 },
         "causeway-bay": { "x": 0.55, "y": 0.64 },
         "north-point": { "x": 0.64, "y": 0.61 },
-        "west-kowloon": { "x": 0.38, "y": 0.55 }
+        "west-kowloon": { "x": 0.38, "y": 0.55 },
+        "tsim-sha-tsui": { "x": 0.45, "y": 0.57 },
+        "mong-kok": { "x": 0.44, "y": 0.48 }
       },
       "note": "Mood only; source/attribution TBD. Not used yet: the Place screen uses the paper map [proposal]. Same drawing as the paper map, so the same areas",
       "bytes": 523243

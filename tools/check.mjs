@@ -549,16 +549,19 @@ await flow('schedule, place and hotel', 'viewer', async (page, gh, ctx) => {
   await page.waitForSelector('.schedule');
   const openDays = async () => page.locator('.day-head[aria-expanded="true"] .day-name').allTextContents();
   if ((await openDays()).join() !== 'Wednesday') fail(name, 'open day: ' + (await openDays()).join());
-  if ((await page.locator('.stop[aria-current] .stop-name').textContent().catch(() => '')) !== 'Apple Store, IFC mall') fail(name, '"Now" is not on the Apple Store at 12:50');
-  if (await page.locator('a.stop', { hasText: 'Taxi or MTR to Central' }).count()) fail(name, 'a travel row opens a place card');
-  await page.click('a.stop[href$="/maxims-city-hall"]');
+  // "Now" by the clock: the last stop on Wednesday that has started by 12:50.
+  const wed = itinerary.days.find((d) => d.date === '2026-11-18').stops;
+  const nowStop = wed.filter((s) => s.time && s.time <= '12:50').pop();
+  if ((await page.locator('.stop[aria-current] .stop-name').textContent().catch(() => '')) !== nowStop.name) fail(name, `"Now" is not on "${nowStop.name}" at 12:50`);
+  const place = wed.find((s) => s.search && s.map_area && !s.city);
+  await page.click(`a.stop[href$="/${place.id}"]`);
   await page.waitForSelector('.place .card');
   // Opened from the long Schedule, the map must be framed for the card screen, not the page before it.
   for (const p of await page.evaluate(pinAudit)) fail(name, 'from the Schedule: ' + p);
   if (!(await page.getAttribute('#art .fit-map', 'src')).includes('map-hk-paper')) fail(name, 'not the Hong Kong map');
   if (!(await page.textContent('[data-back]')).includes('Wednesday')) fail(name, 'back button is not "Wednesday"');
   if (await page.locator('.card', { hasText: 'More about this place' }).count()) fail(name, 'card still has "More about this place"');
-  const search = itinerary.days.find((d) => d.date === '2026-11-18').stops.find((s) => s.id === 'maxims-city-hall').search;
+  const search = place.search;
   const maps = page.locator('.card .maps .btn-primary').first();
   if ((await maps.getAttribute('href')) !== 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(search)) fail(name, 'Open in maps: ' + await maps.getAttribute('href'));
   if ((await maps.getAttribute('target')) !== '_blank') fail(name, 'Open in maps would leave the app');
@@ -570,6 +573,9 @@ await flow('schedule, place and hotel', 'viewer', async (page, gh, ctx) => {
   if ((await openDays()).join() !== 'Wednesday') fail(name, 'back to the Schedule: open day ' + (await openDays()).join());
   await page.click('[data-day="2026-11-19"]');
   if ((await openDays()).join() !== 'Thursday') fail(name, 'tapping Thursday opened: ' + (await openDays()).join());
+  // Travel and rest rows have nothing to open.
+  const plain = itinerary.days.find((d) => d.date === '2026-11-19').stops.find((s) => !hasCard(s));
+  if (plain && await page.locator('a.stop', { hasText: plain.name }).count()) fail(name, `"${plain.name}" opens a place card`);
   await page.click('[data-hotel]');
   if ((await page.textContent('.dialog .dialog-title')) !== 'The Stellar') fail(name, 'hotel card is not The Stellar');
   if (!(await page.getAttribute('.dialog .btn-primary', 'href')).startsWith('https://www.google.com/maps/search/')) fail(name, 'The Stellar: Open in maps is not Google Maps');

@@ -1,5 +1,5 @@
 # Family Trip App: HK & Shenzhen, 17–24 Nov 2026
-**Living build spec.** Version 0.41, 16 Nov 2026. Owner: Chan.
+**Living build spec.** Version 0.42, 17 Nov 2026. Owner: Chan.
 This file is the handoff to the Claude Code session that builds the app. It replaces v0.15 and merges in "Concept B", which Chan confirmed as the build direction on 23 Oct [stated].
 
 **Labels:**
@@ -157,7 +157,7 @@ Top to bottom:
 - **During the Shenzhen part of the trip, this screen (opened by tapping an itinerary item in the Schedule) uses Chan's Shenzhen map**, `art/map-sz-paper.jpg`, as its background [stated, 24 Oct]. It goes by the part of the trip, not by where each place is. "Shenzhen part" = the days whose city in `data/itinerary.json` is SZ (20–23 Nov) [proposal].
 - **As built (phase 3, `app/trip.js`)** [proposal on the details, except where marked]:
   - **Map:** the paper Hong Kong map, or the Shenzhen map on the Shenzhen days (`data/art-schedule.json` → `place_map`), scaled to cover the screen, zoom 1.6, soften 30%. The navy map is not used.
-  - **Framed on the stop's area** [stated: plan OK (D1)]. Each map lists its areas in `art/art-manifest.json`: Hong Kong Central, Peak, Wan Chai, Causeway Bay, North Point, West Kowloon; Shenzhen Nanshan, Shenzhen Bay, Shekou, Futian, Bao'an. They were read off Chan's drawings by eye [assumption: check on the phone (Q47)]. Each stop names its area (`map_area`), matched from its address. A stop without one, or whose area isn't on that day's map (West Kowloon on 20 Nov), gets the map's default view (the harbour; Shenzhen Bay).
+  - **Framed on the stop's area** [stated: plan OK (D1)]. Each map lists its areas in `art/art-manifest.json`: Hong Kong Central, Peak, Wan Chai, Causeway Bay, North Point, West Kowloon, and since 17 Nov Tsim Sha Tsui and Mong Kok; Shenzhen Nanshan, Shenzhen Bay, Shekou, Futian, Bao'an. They were read off Chan's drawings by eye [assumption: check on the phone (Q47)]. Each stop names its area (`map_area`), matched from its address. A stop without one, or whose area isn't on that day's map (West Kowloon on 20 Nov), gets the map's default view (the harbour; Shenzhen Bay).
   - The pin sits in the middle of the map, between the top bar and the card. The map may end behind the card, where it fades out, so low-lying areas such as the Peak still sit under the pin.
   - **Card, all on one screen** [stated, 3 Nov]:
     - Contents: a line drawing where one fits (`card_art`: dim sum, noodles, dessert or char siu, from the wireframe; Q47), the name, the Chinese name, the time (and "Optional"), then every line the itinerary has: why, "Try: …" and the note.
@@ -530,8 +530,10 @@ Seed files are in `data/`:
 | 3 Nov | Amap for Shenzhen addresses ("google maps doesn't work in Shenzhen"), Google Maps for Hong Kong. Keep Open-Meteo for the weather (Q45) [stated] |
 | 3 Nov | All four phones set up (setup visit done); the camera scan worked on Mama's and Papa's phones (Q43) [stated] |
 | 16 Nov | **Tue 17 Nov after landing** [stated]: check in at The Stellar; lunch at Kong Chai Kee; Apple Causeway Bay and the shopping around it; dinner at Mak's Noodle on Percival Street; dessert at Yee Shun Milk Company. No times given. Replaces Peninsula Ice Room, Sister Wah and Fook Yuen |
+| 17 Nov | **Wed 18 Nov replaced** [stated]: 10:00 dim sum brunch at Kam Kong (Dundas St); 11:45 Shanghai Street kitchenware (Chan Chi Kee, Man Kee, Wing On Ho, Nos. 316–342); 13:00 In's Point (530 Nathan Rd; no toilets); 14:30 Sino Centre (optional, 582 Nathan Rd); 15:30 snack, Kai Kai (Mong Kok) or 仁之初; 16:15 Kowloon Park and the Heritage Discovery Centre (closes 18:00); 17:30 Avenue of Stars (sunset ~17:40); 18:15 Mak's Noodle, Lock Rd, TST (open to 23:00); 20:00 Symphony of Lights farewell (fireworks; projections 20:45). Replaces Central, Apple IFC and Victoria Peak |
 
 ## 11. Changelog
+- **v0.42 (17 Nov 2026):** Wed 18 Nov replaced with Chan's Kowloon plan (`data/itinerary.json`, §10); two Kowloon map areas, Tsim Sha Tsui and Mong Kok (`art/art-manifest.json`, F4) [assumption: read off the drawing by eye]; data only.
 - **v0.41 (16 Nov 2026):** Tue 17 Nov plan after landing replaced (`data/itinerary.json`, §10); data only.
 - **v0.40 (6 Nov 2026):** Shenzhen "Open in maps" goes straight into the Amap app (iPhone: Amap's own link; Android: an app link that falls back to the web page), since the web link opened a browser page (F4, Q46).
 - **v0.39 (3 Nov 2026):** All four phones set up (§5.5, §7, §10); Q43 answered (the camera scan worked on Mama's and Papa's phones).

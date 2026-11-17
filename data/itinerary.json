@@ -60,91 +60,95 @@
       "date": "2026-11-18",
       "city": "HK",
       "label": "Hong Kong",
-      "title": "Old Hong Kong, dim sum, Apple Store and Victoria Peak",
-      "tip": "If anyone is tired, skip the waterfront, sit down at IFC and go straight to the Peak.",
+      "title": "Kowloon: Mong Kok to the harbour lights",
       "stops": [
         {
-          "id": "chun-yeung-market",
-          "time": "09:00",
-          "name": "Chun Yeung Street market",
-          "name_zh": "春秧街街市",
-          "why": "Right by the hotel: trams, market stalls and old streets",
-          "search": "春秧街街市 北角春秧街",
-          "map_area": "north-point"
-        },
-        {
-          "id": "lee-keung-kee",
-          "time": "09:30",
-          "name": "Egg waffles at Lee Keung Kee",
-          "name_zh": "利強記北角雞蛋仔",
-          "try": "Original egg waffle (原味雞蛋仔), freshly made",
-          "search": "利強記北角雞蛋仔 北角英皇道492號",
-          "map_area": "north-point"
-        },
-        {
-          "id": "to-central",
-          "time": "10:15",
-          "name": "Taxi or MTR to Central"
-        },
-        {
-          "id": "maxims-city-hall",
-          "time": "11:00",
-          "name": "Dim sum at Maxim’s Palace, City Hall",
-          "name_zh": "大會堂美心皇宮",
-          "why": "Classic banquet-hall dim sum with comfortable seats. Pushcarts are not guaranteed.",
-          "try": "Har gow, siu mai, char siu bao, spare ribs, turnip cake, egg tarts",
-          "search": "大會堂美心皇宮 香港中環愛丁堡廣場5-7號香港大會堂低座2樓",
-          "map_area": "central",
+          "id": "kam-kong",
+          "time": "10:00",
+          "name": "Dim sum brunch at Kam Kong",
+          "name_zh": "襟江酒家",
+          "why": "On Dundas Street",
+          "search": "襟江酒家 登打士街",
+          "map_area": "mong-kok",
           "card_art": "dimsum"
         },
         {
-          "id": "apple-ifc",
-          "time": "12:45",
-          "name": "Apple Store, IFC mall",
-          "search": "Apple ifc mall 8 Finance Street Central Hong Kong",
-          "map_area": "central"
+          "id": "shanghai-street",
+          "time": "11:45",
+          "name": "Kitchenware shops on Shanghai Street",
+          "why": "Chan Chi Kee, Man Kee and Wing On Ho (Nos. 316–342)",
+          "search": "九龍上海街316號",
+          "map_area": "mong-kok"
         },
         {
-          "id": "waterfront-break",
-          "time": "13:30",
-          "until": "14:30",
-          "name": "Waterfront, coffee and a sit-down"
+          "id": "ins-point",
+          "time": "13:00",
+          "name": "In’s Point: cards and toys",
+          "note": "No toilets in the building.",
+          "search": "In's Point 530 Nathan Road Kowloon",
+          "map_area": "mong-kok"
         },
         {
-          "id": "victoria-peak",
-          "time": "15:00",
-          "until": "17:45",
-          "name": "Victoria Peak, staying for sunset if clear",
-          "name_zh": "山頂凌霄閣",
-          "why": "Harbour views from the Peak Tower, no long walks. Take a taxi up if the Peak Tram queue is long.",
-          "search": "山頂凌霄閣 香港山頂山頂道128號",
-          "map_area": "peak",
-          "options_title": "Peak Tram",
+          "id": "sino-centre",
+          "time": "14:30",
+          "name": "Sino Centre",
+          "optional": true,
+          "why": "About 5 minutes’ walk north, at 582 Nathan Road",
+          "search": "Sino Centre 582 Nathan Road Kowloon",
+          "map_area": "mong-kok"
+        },
+        {
+          "id": "snack-18",
+          "time": "15:30",
+          "name": "Snack near Sino Centre",
+          "map_area": "mong-kok",
+          "options_title": "Choose one",
           "options": [
             {
-              "name": "Peak Tram, lower station",
-              "name_zh": "山頂纜車中環總站",
-              "search": "山頂纜車中環總站 33 Garden Road Central Hong Kong"
+              "name": "Kai Kai (Mong Kok)",
+              "search": "Kai Kai Mong Kok"
+            },
+            {
+              "name": "仁之初",
+              "search": "仁之初 旺角"
             }
           ]
         },
         {
-          "id": "maks-noodle",
-          "time": "18:30",
-          "until": "19:00",
-          "name": "Dinner at Mak’s Noodle",
+          "id": "kowloon-park",
+          "time": "16:15",
+          "name": "Kowloon Park and the Heritage Discovery Centre",
+          "note": "Take the MTR to Tsim Sha Tsui. The centre closes at 18:00.",
+          "search": "Hong Kong Heritage Discovery Centre Kowloon Park",
+          "map_area": "tsim-sha-tsui"
+        },
+        {
+          "id": "avenue-of-stars",
+          "time": "17:30",
+          "name": "Avenue of Stars",
+          "note": "Sunset about 17:40.",
+          "search": "Avenue of Stars Tsim Sha Tsui",
+          "map_area": "tsim-sha-tsui"
+        },
+        {
+          "id": "maks-lock-road",
+          "time": "18:15",
+          "name": "Dinner at Mak’s Noodle, Lock Road (Tsim Sha Tsui)",
           "name_zh": "麥奀雲吞麵世家",
-          "try": "Wonton noodle soup; a small bowl is enough after a big lunch",
-          "search": "麥奀雲吞麵世家 中環威靈頓街77號",
-          "map_area": "central",
+          "try": "Wonton noodle soup",
+          "note": "Open until 23:00.",
+          "search": "Mak's Noodle Lock Road Tsim Sha Tsui",
+          "map_area": "tsim-sha-tsui",
           "card_art": "noodles"
         },
         {
-          "id": "back-18",
+          "id": "symphony-of-lights",
           "time": "20:00",
-          "name": "Back to The Stellar"
+          "name": "Symphony of Lights farewell",
+          "note": "Fireworks, with projections at 20:45."
         }
-      ]
+      ],
+      "_note": "Plan from Chan, 17 Nov [stated]; replaces the 2 Nov plan (Central, Apple IFC, Victoria Peak, Mak's in Central). Chinese names only where Chan gave them or the itinerary already had them."
     },
     {
       "date": "2026-11-19",
