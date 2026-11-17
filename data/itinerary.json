@@ -60,63 +60,166 @@
       "date": "2026-11-18",
       "city": "HK",
       "label": "Hong Kong",
-      "title": "Old Hong Kong, dim sum, Apple Store and Victoria Peak",
-      "tip": "If anyone is tired, skip the waterfront, sit down at IFC and go straight to the Peak.",
+      "title": "Kowloon: Mong Kok to the harbour lights",
       "stops": [
         {
-          "id": "chun-yeung-market",
-          "time": "09:00",
-          "name": "Chun Yeung Street market",
-          "name_zh": "春秧街街市",
-          "why": "Right by the hotel: trams, market stalls and old streets",
-          "search": "春秧街街市 北角春秧街",
-          "map_area": "north-point"
-        },
-        {
-          "id": "lee-keung-kee",
-          "time": "09:30",
-          "name": "Egg waffles at Lee Keung Kee",
-          "name_zh": "利強記北角雞蛋仔",
-          "try": "Original egg waffle (原味雞蛋仔), freshly made",
-          "search": "利強記北角雞蛋仔 北角英皇道492號",
-          "map_area": "north-point"
-        },
-        {
-          "id": "to-central",
-          "time": "10:15",
-          "name": "Taxi or MTR to Central"
-        },
-        {
-          "id": "maxims-city-hall",
-          "time": "11:00",
-          "name": "Dim sum at Maxim’s Palace, City Hall",
-          "name_zh": "大會堂美心皇宮",
-          "why": "Classic banquet-hall dim sum with comfortable seats. Pushcarts are not guaranteed.",
-          "try": "Har gow, siu mai, char siu bao, spare ribs, turnip cake, egg tarts",
-          "search": "大會堂美心皇宮 香港中環愛丁堡廣場5-7號香港大會堂低座2樓",
-          "map_area": "central",
+          "id": "kam-kong",
+          "time": "10:00",
+          "name": "Dim sum brunch at Kam Kong",
+          "name_zh": "襟江酒家",
+          "why": "On Dundas Street",
+          "search": "襟江酒家 登打士街",
+          "map_area": "mong-kok",
           "card_art": "dimsum"
         },
         {
-          "id": "apple-ifc",
-          "time": "12:45",
-          "name": "Apple Store, IFC mall",
-          "search": "Apple ifc mall 8 Finance Street Central Hong Kong",
+          "id": "shanghai-street",
+          "time": "11:45",
+          "name": "Kitchenware shops on Shanghai Street",
+          "why": "Chan Chi Kee, Man Kee and Wing On Ho (Nos. 316–342)",
+          "search": "九龍上海街316號",
+          "map_area": "mong-kok"
+        },
+        {
+          "id": "ins-point",
+          "time": "13:00",
+          "name": "In’s Point: cards and toys",
+          "note": "No toilets in the building.",
+          "search": "In's Point 530 Nathan Road Kowloon",
+          "map_area": "mong-kok"
+        },
+        {
+          "id": "sino-centre",
+          "time": "14:30",
+          "name": "Sino Centre",
+          "optional": true,
+          "why": "About 5 minutes’ walk north, at 582 Nathan Road",
+          "search": "Sino Centre 582 Nathan Road Kowloon",
+          "map_area": "mong-kok"
+        },
+        {
+          "id": "snack-18",
+          "time": "15:30",
+          "name": "Snack near Sino Centre",
+          "map_area": "mong-kok",
+          "options_title": "Choose one",
+          "options": [
+            {
+              "name": "Kai Kai (Mong Kok)",
+              "search": "Kai Kai Mong Kok"
+            },
+            {
+              "name": "仁之初",
+              "search": "仁之初 旺角"
+            }
+          ]
+        },
+        {
+          "id": "kowloon-park",
+          "time": "16:15",
+          "name": "Kowloon Park and the Heritage Discovery Centre",
+          "note": "Take the MTR to Tsim Sha Tsui. The centre closes at 18:00.",
+          "search": "Hong Kong Heritage Discovery Centre Kowloon Park",
+          "map_area": "tsim-sha-tsui"
+        },
+        {
+          "id": "avenue-of-stars",
+          "time": "17:30",
+          "name": "Avenue of Stars",
+          "note": "Sunset about 17:40.",
+          "search": "Avenue of Stars Tsim Sha Tsui",
+          "map_area": "tsim-sha-tsui"
+        },
+        {
+          "id": "maks-lock-road",
+          "time": "18:15",
+          "name": "Dinner at Mak’s Noodle, Lock Road (Tsim Sha Tsui)",
+          "name_zh": "麥奀雲吞麵世家",
+          "try": "Wonton noodle soup",
+          "note": "Open until 23:00.",
+          "search": "Mak's Noodle Lock Road Tsim Sha Tsui",
+          "map_area": "tsim-sha-tsui",
+          "card_art": "noodles"
+        },
+        {
+          "id": "symphony-of-lights",
+          "time": "20:00",
+          "name": "Symphony of Lights farewell",
+          "note": "Fireworks, with projections at 20:45."
+        }
+      ],
+      "_note": "Plan from Chan, 17 Nov [stated]; replaces the 2 Nov plan (Central, Apple IFC, Victoria Peak, Mak's in Central). Chinese names only where Chan gave them or the itinerary already had them."
+    },
+    {
+      "date": "2026-11-19",
+      "city": "HK",
+      "label": "Hong Kong",
+      "title": "Wan Chai, Central and the Peak at night",
+      "stops": [
+        {
+          "id": "yeaffee",
+          "time": "09:30",
+          "name": "Coffee at Yeaffee",
+          "search": "Yeaffee Wan Chai",
+          "map_area": "wan-chai"
+        },
+        {
+          "id": "bakehouse",
+          "time": "09:45",
+          "name": "Bakehouse, Wan Chai",
+          "why": "About 300 m away",
+          "try": "Sourdough egg tart. Buy pastries for later rather than filling up before lunch.",
+          "search": "Bakehouse 灣仔大王東街14號",
+          "map_area": "wan-chai"
+        },
+        {
+          "id": "chukfo-taipan",
+          "time": "11:00",
+          "name": "Early lunch at Chukfo Taipan",
+          "name_zh": "竺扶大班燒味",
+          "try": "Roast goose, char siu, crispy pork belly or the mixed roast rice",
+          "search": "竺扶大班燒味 灣仔三角街2-3號華欣閣地下3號舖",
+          "map_area": "wan-chai",
+          "card_art": "charsiu"
+        },
+        {
+          "id": "pmq",
+          "time": "12:30",
+          "name": "Central and PMQ",
+          "note": "The shops open at noon. It’s uphill.",
+          "search": "PMQ Central Hong Kong",
           "map_area": "central"
         },
         {
-          "id": "waterfront-break",
-          "time": "13:30",
-          "until": "14:30",
-          "name": "Waterfront, coffee and a sit-down"
+          "id": "donki-central",
+          "time": "14:30",
+          "name": "DON DON DONKI Central",
+          "why": "About 330 m from PMQ, at 100 Queen’s Road Central",
+          "search": "DON DON DONKI 100 Queen's Road Central",
+          "map_area": "central"
+        },
+        {
+          "id": "ifc",
+          "time": "15:30",
+          "name": "ifc mall: a rest stop",
+          "optional": true,
+          "search": "ifc mall 8 Finance Street Central Hong Kong",
+          "map_area": "central"
+        },
+        {
+          "id": "the-diplomat",
+          "time": "18:00",
+          "name": "Burgers at The Diplomat",
+          "note": "Arrive when it opens.",
+          "search": "The Diplomat 45 Pottinger Street Central",
+          "map_area": "central"
         },
         {
           "id": "victoria-peak",
-          "time": "15:00",
-          "until": "17:45",
-          "name": "Victoria Peak, staying for sunset if clear",
+          "time": "19:30",
+          "name": "Victoria Peak at night",
           "name_zh": "山頂凌霄閣",
-          "why": "Harbour views from the Peak Tower, no long walks. Take a taxi up if the Peak Tram queue is long.",
+          "why": "Peak Tram up for the night view",
           "search": "山頂凌霄閣 香港山頂山頂道128號",
           "map_area": "peak",
           "options_title": "Peak Tram",
@@ -127,118 +230,9 @@
               "search": "山頂纜車中環總站 33 Garden Road Central Hong Kong"
             }
           ]
-        },
-        {
-          "id": "maks-noodle",
-          "time": "18:30",
-          "until": "19:00",
-          "name": "Dinner at Mak’s Noodle",
-          "name_zh": "麥奀雲吞麵世家",
-          "try": "Wonton noodle soup; a small bowl is enough after a big lunch",
-          "search": "麥奀雲吞麵世家 中環威靈頓街77號",
-          "map_area": "central",
-          "card_art": "noodles"
-        },
-        {
-          "id": "back-18",
-          "time": "20:00",
-          "name": "Back to The Stellar"
         }
-      ]
-    },
-    {
-      "date": "2026-11-19",
-      "city": "HK",
-      "label": "Hong Kong",
-      "title": "Wan Chai, roast meats and Causeway Bay food",
-      "tip": "Kong Chai Kee, Yee Shun and Keung Kee are tasting stops: share portions and skip any if everyone is full.",
-      "stops": [
-        {
-          "id": "leave-19",
-          "time": "09:00",
-          "name": "Leave The Stellar"
-        },
-        {
-          "id": "bakehouse",
-          "time": "09:30",
-          "name": "Bakehouse, Wan Chai",
-          "try": "Sourdough egg tart. Buy pastries for later rather than filling up before lunch.",
-          "search": "Bakehouse 灣仔大王東街14號",
-          "map_area": "wan-chai"
-        },
-        {
-          "id": "blue-house",
-          "time": "10:15",
-          "name": "Blue House and nearby streets",
-          "name_zh": "藍屋",
-          "optional": true,
-          "why": "Colourful heritage building; a short look outside is enough",
-          "search": "藍屋 香港灣仔石水渠街72號",
-          "map_area": "wan-chai"
-        },
-        {
-          "id": "chukfo-taipan",
-          "time": "11:30",
-          "name": "Roast-meat lunch at Chukfo Taipan",
-          "name_zh": "竺扶大班燒味",
-          "try": "Roast goose, char siu, crispy pork belly or the mixed roast rice",
-          "search": "竺扶大班燒味 灣仔三角街2-3號華欣閣地下3號舖",
-          "map_area": "wan-chai",
-          "card_art": "charsiu"
-        },
-        {
-          "id": "to-causeway-bay",
-          "time": "12:45",
-          "name": "To Causeway Bay for browsing"
-        },
-        {
-          "id": "kong-chai-kee",
-          "time": "14:30",
-          "name": "Fishball noodles at Kong Chai Kee: share a light portion",
-          "name_zh": "江仔記粉麵專家",
-          "try": "Fishball noodles, fish-skin dumplings, chilli oil",
-          "note": "Search by the restaurant name: nearby street numbers get mixed up.",
-          "search": "江仔記粉麵專家 銅鑼灣堅拿道東2號",
-          "map_area": "causeway-bay",
-          "card_art": "noodles",
-          "options_title": "Instead",
-          "options": [
-            {
-              "name": "Keung Kee: old-school street snacks",
-              "name_zh": "強記美食",
-              "try": "Pan-fried dried-shrimp rice rolls (香煎蝦米腸粉) or preserved-meat sticky rice (臘味糯米飯)",
-              "search": "強記美食 灣仔駱克道406號"
-            }
-          ]
-        },
-        {
-          "id": "yee-shun",
-          "time": "15:30",
-          "name": "Yee Shun Milk Company",
-          "name_zh": "港澳義順牛奶公司",
-          "try": "Steamed milk pudding: try it hot and chilled",
-          "search": "港澳義順牛奶公司 銅鑼灣駱克道506號",
-          "map_area": "causeway-bay",
-          "card_art": "dessert"
-        },
-        {
-          "id": "victoria-park",
-          "time": "16:15",
-          "name": "Victoria Park",
-          "optional": true
-        },
-        {
-          "id": "rest-19",
-          "time": "17:00",
-          "name": "Back to the hotel to rest"
-        },
-        {
-          "id": "dinner-19",
-          "time": "18:30",
-          "name": "Local dinner, only if hungry",
-          "optional": true
-        }
-      ]
+      ],
+      "_note": "Tentative plan from Chan, 17 Nov [stated]; replaces the 2 Nov plan (Blue House, Causeway Bay food stops, Victoria Park). Bakehouse, Chukfo Taipan, the ifc address and the Peak keep the details from Chan's 2 Nov itinerary."
     },
     {
       "date": "2026-11-20",
