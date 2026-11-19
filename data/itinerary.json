@@ -154,85 +154,83 @@
       "date": "2026-11-19",
       "city": "HK",
       "label": "Hong Kong",
-      "title": "Wan Chai, Central and the Peak at night",
+      "title": "Wan Chai, Central and the Peak at sunset",
       "stops": [
         {
-          "id": "yeaffee",
-          "time": "09:30",
-          "name": "Coffee at Yeaffee",
-          "search": "Yeaffee Wan Chai",
-          "map_area": "wan-chai"
+          "id": "leave-19",
+          "time": "09:00",
+          "name": "Leave The Stellar for Bakehouse"
         },
         {
           "id": "bakehouse",
-          "time": "09:45",
-          "name": "Bakehouse, Wan Chai",
-          "why": "About 300 m away",
+          "name": "Breakfast at Bakehouse, Wan Chai",
           "try": "Sourdough egg tart. Buy pastries for later rather than filling up before lunch.",
           "search": "Bakehouse 灣仔大王東街14號",
           "map_area": "wan-chai"
         },
         {
-          "id": "chukfo-taipan",
-          "time": "11:00",
-          "name": "Early lunch at Chukfo Taipan",
-          "name_zh": "竺扶大班燒味",
-          "try": "Roast goose, char siu, crispy pork belly or the mixed roast rice",
-          "search": "竺扶大班燒味 灣仔三角街2-3號華欣閣地下3號舖",
-          "map_area": "wan-chai",
-          "card_art": "charsiu"
+          "id": "yeaffee",
+          "name": "Coffee at Yeaffee",
+          "search": "Yeaffee Wan Chai",
+          "map_area": "wan-chai"
         },
         {
           "id": "pmq",
-          "time": "12:30",
-          "name": "Central and PMQ",
+          "name": "PMQ",
           "note": "The shops open at noon. It’s uphill.",
           "search": "PMQ Central Hong Kong",
           "map_area": "central"
         },
         {
           "id": "donki-central",
-          "time": "14:30",
           "name": "DON DON DONKI Central",
-          "why": "About 330 m from PMQ, at 100 Queen’s Road Central",
+          "why": "At 100 Queen’s Road Central",
           "search": "DON DON DONKI 100 Queen's Road Central",
           "map_area": "central"
         },
         {
-          "id": "ifc",
-          "time": "15:30",
-          "name": "ifc mall: a rest stop",
-          "optional": true,
-          "search": "ifc mall 8 Finance Street Central Hong Kong",
+          "id": "escalators",
+          "name": "Central–Mid-Levels escalators",
+          "search": "Central–Mid-Levels Escalator",
           "map_area": "central"
         },
         {
-          "id": "the-diplomat",
-          "time": "18:00",
-          "name": "Burgers at The Diplomat",
-          "note": "Arrive when it opens.",
-          "search": "The Diplomat 45 Pottinger Street Central",
+          "id": "delugs",
+          "name": "Delugs, Central",
+          "search": "Delugs Central Hong Kong",
+          "map_area": "central",
+          "_note": "Name as Chan wrote it; not checked"
+        },
+        {
+          "id": "hikiniku",
+          "time": "14:30",
+          "name": "Lunch at Hikiniku To Come, ifc mall",
+          "search": "Hikiniku to Come ifc mall Central",
+          "map_area": "central"
+        },
+        {
+          "id": "peak-tram",
+          "name": "Wander, then the Peak Tram",
+          "name_zh": "山頂纜車中環總站",
+          "note": "Be at the Peak Tram at least an hour before sunset (sunset is about 17:40).",
+          "search": "山頂纜車中環總站 33 Garden Road Central Hong Kong",
           "map_area": "central"
         },
         {
           "id": "victoria-peak",
-          "time": "19:30",
-          "name": "Victoria Peak at night",
+          "name": "Sunset at Victoria Peak",
           "name_zh": "山頂凌霄閣",
-          "why": "Peak Tram up for the night view",
+          "why": "Harbour views from the Peak Tower, no long walks. Take a taxi up if the Peak Tram queue is long.",
           "search": "山頂凌霄閣 香港山頂山頂道128號",
-          "map_area": "peak",
-          "options_title": "Peak Tram",
-          "options": [
-            {
-              "name": "Peak Tram, lower station",
-              "name_zh": "山頂纜車中環總站",
-              "search": "山頂纜車中環總站 33 Garden Road Central Hong Kong"
-            }
-          ]
+          "map_area": "peak"
+        },
+        {
+          "id": "dinner-19",
+          "name": "Dinner at the Peak or on the way back to the hotel",
+          "note": "Have at least one beancurd dessert."
         }
       ],
-      "_note": "Tentative plan from Chan, 17 Nov [stated]; replaces the 2 Nov plan (Blue House, Causeway Bay food stops, Victoria Park). Bakehouse, Chukfo Taipan, the ifc address and the Peak keep the details from Chan's 2 Nov itinerary."
+      "_note": "Plan from Chan, 18 Nov [stated]; replaces his 17 Nov tentative plan. Times only where Chan gave them (09:00, 14:30). 'About 17:40' for sunset is Chan's figure for 18 Nov. Bakehouse, PMQ, DON DON DONKI, the Peak and the Peak Tram keep their earlier details."
     },
     {
       "date": "2026-11-20",
